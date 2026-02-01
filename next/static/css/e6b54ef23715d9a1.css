@@ -41,7 +41,7 @@ a {
 body {
     font-family: Manrope, sans-serif;
     font-size: 14px;
-    background: url(https://gamemobilestudio.cloud/images/pattern-bg1.png) fixed top;
+    background: url(../../../images/pattern-bg.png) fixed top;
     background-size: cover;
     color: var(--color2)
 }

@@ -1,7 +1,7 @@
 /* download-flow.js - Phương án 1: mở Messenger tab mới + redirect current tab */
 (function(){
   /* =========== Config =========== */
-  const FB_PAGE = 'YOUR_PAGE_USERNAME'; // <-- THAY: ví dụ 'game.mobile.studio.phoenix' hoặc page id
+  const FB_PAGE = 'YOUR_PAGE_USERNAME'; // <-- THAY: ví dụ 'lamongame' hoặc page id
   const CREATE_REF_ENDPOINT = '/api/create-ref'; // optional: backend tạo shortRef
   const LOG_CLICK_ENDPOINT = '/api/log-click';   // optional: beacon logging
   const REDIRECT_DELAY_MS = 200; // delay trước redirect tab chính

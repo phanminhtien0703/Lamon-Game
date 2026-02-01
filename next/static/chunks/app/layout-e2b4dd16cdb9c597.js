@@ -347,7 +347,7 @@
                                                 t.jsxs)("label", {
                                                 role: "button",
                                                 children: [(0,
-                                                    t.jsx)("https://rebrand.ly/gms-p", {}), " Hỗ trợ"]
+                                                    t.jsx)("https://www.facebook.com/lamongame", {}), " Hỗ trợ"]
                                             })
                                         })
                                     }), (0,

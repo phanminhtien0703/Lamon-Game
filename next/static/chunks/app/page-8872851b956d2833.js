@@ -42,8 +42,7 @@
             const data = {
                 data: [
                     { image: '/images/tmgt/tmgt-banner1.png', link: 'https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html' },
-                    { image: './images/ltg/ltg-banner.jpg', link: 'http://www.poopogame.com/url/wIveb7A6' },
-                    { image: './images/tcq4d/tcq4d-banner.jpg', link: 'https://t.skeideng.com/oRZS82.html' }
+                    { image: './images/psm/psm-banner.jpg', link: 'https://t.skeideng.com/oRZS82.html' }
                 ],
                 note: false // Hoặc true nếu muốn style khác cho pagination
             };
@@ -137,8 +136,8 @@
                 },
                 {
                     id: 2,
-                    name: "Thần Cơ Ấn",
-                    logoImage: "./images/tcq4d/tcq4d-logo.jpg",
+                    name: "Phù Sinh Mộng",
+                    logoImage: "./images/psm/psm-logo.jpg",
                     type: 2,
                     gameType: { name: "Game hot" },
                     href: "https://t.skeideng.com/oRZS82.html"
@@ -158,14 +157,6 @@
                     type: 4,
                     gameType: { name: "game mới" },
                     href: "https://app.adjust.com/1sokpzx5"
-                },
-                {
-                    id: 5,
-                    name: "Linh Tiêu Giới",
-                    logoImage: "./images/ltg/ltg-logo.png",
-                    type: 5,
-                    gameType: { name: "Ngừng phát hành" },
-                    href: "https://www.facebook.com/share/p/1BVRK3hVUv/"
                 }
             ];
 
@@ -182,12 +173,12 @@
                 },
                 {
                     id: 2,
-                    name: "Thần Cơ Ấn",
-                    image: "./images/tcq4d/tcq4d-logo.jpg",
+                    name: "Phù Sinh Mộng",
+                    image: "./images/psm/psm-logo.jpg",
                     totalGiftcode: 200,
                     totalReceived: 114,
                     type: 2,
-                    text: "Mình muốn nhận code game Thần Cơ Ấn",
+                    text: "Mình muốn nhận code game Phù Sinh Mộng",
                     value: "Nhận code",
                 },
                 {
@@ -212,12 +203,7 @@
                 }
             ];
 
-            const dataWelfare = [{
-                id: 1,
-                title: "Hỗ Trợ Chuyển Game",
-                image: "./images/welfare/ho-tro-chuyen-doi.jpg",
-                href: "https://www.facebook.com/share/p/19wsN8g2Ey/"
-            },
+            const dataWelfare = [
             {
                 id: 1,
                 title: "Hỗ trợ nạp x4",
@@ -245,9 +231,9 @@
                 },
                 {
                     id: 2,
-                    name: "Thần Cơ Ấn",
-                    title: "Thần Cơ Ấn - Khai mở server lúc 13:00 Thứ 3-5-7 hàng tuần",
-                    image: "./images/tcq4d/tcq4d-banner.jpg",
+                    name: "Phù Sinh Mộng",
+                    title: "Phù Sinh Mộng - Khai mở server lúc 13:00 Thứ 3-5-7 hàng tuần",
+                    image: "./images/psm/psm-banner.jpg",
                     tag: [
                         { id: "tag2", name: "Cập nhật: 15-10-2025" }
                     ],
@@ -278,7 +264,7 @@
             const dataMenu = [{
                 id: 1,
                 name: "Hỗ trợ",
-                link: "https://rebrand.ly/gms-p"
+                link: "https://www.facebook.com/lamongame"
             },]
 
             let N = () => {
@@ -392,7 +378,7 @@
                                                                 (0, i.jsxs)("div", {
                                                                     className: "item ".concat(s >= y ? "d-none" : ""),
                                                                     onClick: () => {
-                                                                        const page = "game.mobile.studio.phoenix"; // 👉 thay bằng username hoặc ID fanpage của bạn
+                                                                        const page = "lamongame"; // 👉 thay bằng username hoặc ID fanpage của bạn
                                                                         const msg = `Mình muốn nhận code game ${e.name}`;
                                                                         const messengerUrl = `https://m.me/${page}?text=${encodeURIComponent(msg)}`;
                                                                         const download = e.href || (e.type === 3 ? `/play/${e.id}` : `/games/${e.id}`);
@@ -502,49 +488,49 @@
                                                             })
                                                     ]
                                                 }),
-                                            (0, i.jsxs)("div", {
-                                                className: "welfare",
-                                                children: [
-                                                    (0, i.jsxs)("div", {
-                                                        className: "d-flex justify-content-between align-items-center mb-3 text-white",
-                                                        children: [
-                                                            (0, i.jsx)("h3", {
-                                                                className: "text-title",
-                                                                children: "KHUYẾN MÃI"
-                                                            })
-                                                        ]
-                                                    }),
-                                                    (0, i.jsx)("div", {
-                                                        className: "list-product-info",
-                                                        children: (0, i.jsx)(c.RC, { // RC = Swiper
-                                                            spaceBetween: 24,
-                                                            slidesPerView: "auto",
-                                                            freeMode: !0,
-                                                            keyboard: !0,
-                                                            noSwiping: !0,
-                                                            children: dataWelfare.map((e) =>
-                                                                (0, i.jsx)(c.qr, { // qr = SwiperSlide
-                                                                    children: (0, i.jsx)("a", {
-                                                                        className: "promo_item",
-                                                                        href: e.href,
-                                                                        target: "_blank",
-                                                                        children: (0, i.jsx)("img", {
-                                                                            src: e.image,
-                                                                            alt: e.title,
-                                                                            style: {
-                                                                                maxWidth: "505px",
-                                                                                maxHeight: "266px",
-                                                                                objectFit: "cover",
-                                                                                borderRadius: "8px"
-                                                                            }
-                                                                        })
-                                                                    })
-                                                                }, e.id)
-                                                            )
-                                                        })
-                                                    })
-                                                ]
-                                            }),
+                                            // (0, i.jsxs)("div", {
+                                            //     className: "welfare",
+                                            //     children: [
+                                            //         (0, i.jsxs)("div", {
+                                            //             className: "d-flex justify-content-between align-items-center mb-3 text-white",
+                                            //             children: [
+                                            //                 (0, i.jsx)("h3", {
+                                            //                     className: "text-title",
+                                            //                     children: "KHUYẾN MÃI"
+                                            //                 })
+                                            //             ]
+                                            //         }),
+                                            //         (0, i.jsx)("div", {
+                                            //             className: "list-product-info",
+                                            //             children: (0, i.jsx)(c.RC, { // RC = Swiper
+                                            //                 spaceBetween: 24,
+                                            //                 slidesPerView: "auto",
+                                            //                 freeMode: !0,
+                                            //                 keyboard: !0,
+                                            //                 noSwiping: !0,
+                                            //                 children: dataWelfare.map((e) =>
+                                            //                     (0, i.jsx)(c.qr, { // qr = SwiperSlide
+                                            //                         children: (0, i.jsx)("a", {
+                                            //                             className: "promo_item",
+                                            //                             href: e.href,
+                                            //                             target: "_blank",
+                                            //                             children: (0, i.jsx)("img", {
+                                            //                                 src: e.image,
+                                            //                                 alt: e.title,
+                                            //                                 style: {
+                                            //                                     maxWidth: "505px",
+                                            //                                     maxHeight: "266px",
+                                            //                                     objectFit: "cover",
+                                            //                                     borderRadius: "8px"
+                                            //                                 }
+                                            //                             })
+                                            //                         })
+                                            //                     }, e.id)
+                                            //                 )
+                                            //             })
+                                            //         })
+                                            //     ]
+                                            // }),
 
                                             (0, i.jsxs)("div", {
                                                 className: "giftcode_list",
@@ -584,7 +570,7 @@
                                                                                 (0, i.jsx)("p", { children: `Người nhận: ${e.totalReceived || 0}` }),
                                                                                 (0, i.jsx)("a", {
                                                                                     className: "btn",
-                                                                                    href: `https://m.me/game.mobile.studio.phoenix?text=${encodeURIComponent(e.text)}`,
+                                                                                    href: `https://m.me/lamongame?text=${encodeURIComponent(e.text)}`,
                                                                                     target: "_blank",
                                                                                     rel: "noopener noreferrer",
                                                                                     children: `${e.value}`
@@ -614,7 +600,7 @@
                                                                 className: "col-sm-6 mb-3",
                                                                 style: { cursor: "pointer" },
                                                                 onClick: () => {
-                                                                    const page = "game.mobile.studio.phoenix"; // 👉 thay bằng username hoặc ID fanpage của bạn
+                                                                    const page = "lamongame"; // 👉 thay bằng username hoặc ID fanpage của bạn
                                                                     const msg = `Mình muốn nhận code game ${news.name}`;
                                                                     const messengerUrl = `https://m.me/${page}?text=${encodeURIComponent(msg)}`;
 
