@@ -41,8 +41,8 @@
                 c = a.n(n);
             const data = {
                 data: [
-                    { image: '/images/tmgt/tmgt-banner1.png', link: 'https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html' },
-                    { image: './images/psm/psm-banner.jpg', link: 'https://t.skeideng.com/oRZS82.html' }
+                    { image: '/images/tmgt/tmgt-banner-mobile.jpg', link: 'https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html' },
+                    { image: './images/psm/psm-banner-mobile.jpg', link: 'https://t.skeideng.com/oRZS82.html' }
                 ],
                 note: false // Hoặc true nếu muốn style khác cho pagination
             };
