@@ -136,6 +136,14 @@
                 },
                 {
                     id: 2,
+                    name: "Tân Binh Thức Tỉnh",
+                    logoImage: "./images/tbtt/tbtt-logo.jpg",
+                    type: 2,
+                    gameType: { name: "Mới Ra Mắt" },
+                    href: "https://t.skeideng.com/MHoxs.html"
+                },
+                {
+                    id: 3,
                     name: "Phù Sinh Mộng",
                     logoImage: "./images/psm/psm-logo.jpg",
                     type: 2,
@@ -143,7 +151,7 @@
                     href: "https://t.skeideng.com/oRZS82.html"
                 },
                 {
-                    id: 3,
+                    id: 4,
                     name: "Infinity Kingdom",
                     logoImage: "./images/ik/ik-logo.png",
                     type: 3,
@@ -151,7 +159,7 @@
                     href: "https://yzdpik.onelink.me/Llhn?af_xp=social&pid=IK-CPS&c=IFK-CPS-13902&af_dp=yzdpik%3A%2F%2F"
                 },
                 {
-                    id: 4,
+                    id: 5,
                     name: "Ethereal Slayer",
                     logoImage: "./images/es/es-logo.jpg",
                     type: 4,
@@ -165,24 +173,34 @@
                     id: 1,
                     name: "Thần Ma Giáng Thế",
                     image: "./images/tmgt/tmgt-logo.png",
-                    totalGiftcode: 500,
-                    totalReceived: 412,
+                    totalGiftcode: 1000,
+                    totalReceived: 7322,
                     type: 1,
                     text: "Mình muốn nhận code game Thần Ma Giáng Thế",
                     value: "Nhận code",
                 },
                 {
                     id: 2,
+                    name: "Tân Binh Thức Tỉnh",
+                    image: "./images/tbtt/tbtt-logo.jpg",
+                    totalGiftcode: 1000,
+                    totalReceived: 624,
+                    type: 2,
+                    text: "Mình muốn nhận code game Tân Binh Thức Tỉnh",
+                    value: "Nhận code",
+                },
+                {
+                    id: 3,
                     name: "Phù Sinh Mộng",
                     image: "./images/psm/psm-logo.jpg",
-                    totalGiftcode: 200,
-                    totalReceived: 114,
+                    totalGiftcode: 1000,
+                    totalReceived: 954,
                     type: 2,
                     text: "Mình muốn nhận code game Phù Sinh Mộng",
                     value: "Nhận code",
                 },
                 {
-                    id: 3,
+                    id: 4,
                     name: "Infinity Kingdom",
                     image: "./images/ik/ik-logo.png",
                     totalGiftcode: 200,
@@ -192,7 +210,7 @@
                     value: "Nhận code",
                 },
                 {
-                    id: 4,
+                    id: 5,
                     name: "Ethereal Slayer",
                     image: "./images/es/es-logo.jpg",
                     totalGiftcode: 200,
@@ -231,6 +249,16 @@
                 },
                 {
                     id: 2,
+                    name: "Tân Binh Thức Tỉnh",
+                    title: "Tân Binh Thức Tỉnh - Khai mở server S1 vào lúc 13:00 Ngày 11-03-2026",
+                    image: "./images/tbtt/tbtt-banner.jpg",
+                    tag: [
+                        { id: "tag2", name: "Cập nhật: 10-03-2026" }
+                    ],
+                    href: "https://t.skeideng.com/oRZS82.html"
+                },
+                {
+                    id: 3,
                     name: "Phù Sinh Mộng",
                     title: "Phù Sinh Mộng - Khai mở server lúc 13:00 Thứ 3-5-7 hàng tuần",
                     image: "./images/psm/psm-banner.jpg",
@@ -240,7 +268,7 @@
                     href: "https://t.skeideng.com/oRZS82.html"
                 },
                 {
-                    id: 3,
+                    id: 4,
                     name: "Infinity Kingdom",
                     title: "Infinity Kingdom - is a real-time strategy game based in a land of magic and alchemy.",
                     image: "./images/ik/ik-banner.png",
@@ -250,7 +278,7 @@
                     href: "https://yzdpik.onelink.me/Llhn?af_xp=social&pid=IK-CPS&c=IFK-CPS-13902&af_dp=yzdpik%3A%2F%2F"
                 },
                 {
-                    id: 4,
+                    id: 5,
                     name: "Ethereal Slayer",
                     title: "Ethereal Slayer - A Xianxia-inspired 3D MMORPG with real-time aerial combat, 100+ skills, and epic realms to explore.",
                     image: "./images/es/es-banner.jpg",
