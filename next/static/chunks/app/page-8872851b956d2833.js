@@ -127,20 +127,20 @@
 
             const dataGame = [
                 {
-                    id: 1,
-                    name: "Thần Ma Giáng Thế",
-                    logoImage: "./images/tmgt/tmgt-logo.png",
-                    type: 1,
-                    gameType: { name: "game hot" },
-                    href: "https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html"
-                },
-                {
                     id: 2,
                     name: "Tân Binh Thức Tỉnh",
                     logoImage: "./images/tbtt/tbtt-logo.jpg",
                     type: 2,
                     gameType: { name: "Mới Ra Mắt" },
                     href: "https://t.skeideng.com/MHoxs.html"
+                },
+                {
+                    id: 1,
+                    name: "Thần Ma Giáng Thế",
+                    logoImage: "./images/tmgt/tmgt-logo.png",
+                    type: 1,
+                    gameType: { name: "game hot" },
+                    href: "https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html"
                 },
                 {
                     id: 3,
