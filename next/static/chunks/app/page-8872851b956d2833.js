@@ -125,22 +125,34 @@
             var g = a(40364),
                 v = a(66766);
 
+            // Fanpage ID mapping
+            const dataIDFanpage = {
+                tmgt: "lamongame",
+                tbtt: "lamongame",
+                psm: "lamongame",
+                ik: "lamongame",
+                es: "lamongame",
+                tyhm: "tranyeuhangma"
+            };
+
             const dataGame = [
-                {
-                    id: 2,
-                    name: "Tân Binh Thức Tỉnh",
-                    logoImage: "./images/tbtt/tbtt-logo.jpg",
-                    type: 2,
-                    gameType: { name: "Mới Ra Mắt" },
-                    href: "https://t.skeideng.com/MHoxs.html"
-                },
                 {
                     id: 1,
                     name: "Thần Ma Giáng Thế",
                     logoImage: "./images/tmgt/tmgt-logo.png",
                     type: 1,
                     gameType: { name: "game hot" },
-                    href: "https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html"
+                    href: "https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html",
+                    gameKey: "tmgt"
+                },
+                {
+                    id: 2,
+                    name: "Tân Binh Thức Tỉnh",
+                    logoImage: "./images/tbtt/tbtt-logo.jpg",
+                    type: 2,
+                    gameType: { name: "Mới Ra Mắt" },
+                    href: "https://t.skeideng.com/MHoxs.html",
+                    gameKey: "tbtt"
                 },
                 {
                     id: 3,
@@ -148,7 +160,8 @@
                     logoImage: "./images/psm/psm-logo.jpg",
                     type: 2,
                     gameType: { name: "Game hot" },
-                    href: "https://t.skeideng.com/oRZS82.html"
+                    href: "https://t.skeideng.com/oRZS82.html",
+                    gameKey: "psm"
                 },
                 {
                     id: 4,
@@ -156,7 +169,8 @@
                     logoImage: "./images/ik/ik-logo.png",
                     type: 3,
                     gameType: { name: "game mới" },
-                    href: "https://yzdpik.onelink.me/Llhn?af_xp=social&pid=IK-CPS&c=IFK-CPS-13902&af_dp=yzdpik%3A%2F%2F"
+                    href: "https://yzdpik.onelink.me/Llhn?af_xp=social&pid=IK-CPS&c=IFK-CPS-13902&af_dp=yzdpik%3A%2F%2F",
+                    gameKey: "ik"
                 },
                 {
                     id: 5,
@@ -164,7 +178,17 @@
                     logoImage: "./images/es/es-logo.jpg",
                     type: 4,
                     gameType: { name: "game mới" },
-                    href: "https://app.adjust.com/1sokpzx5"
+                    href: "https://app.adjust.com/1sokpzx5",
+                    gameKey: "es"
+                },
+                {
+                    id: 5,
+                    name: "Trấn Yêu Hàng Ma",
+                    logoImage: "./images/loading.png",
+                    type: 4,
+                    gameType: { name: "game sắp ra" },
+                    href: "https://www.facebook.com/tranyeuhangma/",
+                    gameKey: "tyhm"
                 }
             ];
 
@@ -178,6 +202,7 @@
                     type: 1,
                     text: "Mình muốn nhận code game Thần Ma Giáng Thế",
                     value: "Nhận code",
+                    gameKey: "tmgt"
                 },
                 {
                     id: 2,
@@ -188,6 +213,7 @@
                     type: 2,
                     text: "Mình muốn nhận code game Tân Binh Thức Tỉnh",
                     value: "Nhận code",
+                    gameKey: "tbtt"
                 },
                 {
                     id: 3,
@@ -198,6 +224,7 @@
                     type: 2,
                     text: "Mình muốn nhận code game Phù Sinh Mộng",
                     value: "Nhận code",
+                    gameKey: "psm"
                 },
                 {
                     id: 4,
@@ -208,6 +235,7 @@
                     type: 3,
                     text: "Mình muốn nhận code game Infinity Kingdom",
                     value: "Nhận code",
+                    gameKey: "ik"
                 },
                 {
                     id: 5,
@@ -218,6 +246,18 @@
                     type: 4,
                     text: "Mình muốn nhận code game Ethereal Slayer",
                     value: "Nhận code",
+                    gameKey: "es"
+                },
+                {
+                    id: 6,
+                    name: "Trấn Yêu Hàng Ma",
+                    image: "./images/loading.png",
+                    totalGiftcode: 10000,
+                    totalReceived: 2352,
+                    type: 4,
+                    text: "Mình muốn nhận code game Trấn Yêu Hàng Ma",
+                    value: "Nhận code",
+                    gameKey: "tyhm"
                 }
             ];
 
@@ -245,7 +285,8 @@
                     tag: [
                         { id: "tag1", name: "Cập nhật: 15-10-2025" }
                     ],
-                    href: "https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html"
+                    href: "https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html",
+                    gameKey: "tmgt"
                 },
                 {
                     id: 2,
@@ -255,7 +296,8 @@
                     tag: [
                         { id: "tag2", name: "Cập nhật: 10-03-2026" }
                     ],
-                    href: "https://t.skeideng.com/oRZS82.html"
+                    href: "https://t.skeideng.com/oRZS82.html",
+                    gameKey: "tbtt"
                 },
                 {
                     id: 3,
@@ -265,7 +307,8 @@
                     tag: [
                         { id: "tag2", name: "Cập nhật: 15-10-2025" }
                     ],
-                    href: "https://t.skeideng.com/oRZS82.html"
+                    href: "https://t.skeideng.com/oRZS82.html",
+                    gameKey: "psm"
                 },
                 {
                     id: 4,
@@ -275,7 +318,8 @@
                     tag: [
                         { id: "tag3", name: "Cập nhật: 15-09-2025" }
                     ],
-                    href: "https://yzdpik.onelink.me/Llhn?af_xp=social&pid=IK-CPS&c=IFK-CPS-13902&af_dp=yzdpik%3A%2F%2F"
+                    href: "https://yzdpik.onelink.me/Llhn?af_xp=social&pid=IK-CPS&c=IFK-CPS-13902&af_dp=yzdpik%3A%2F%2F",
+                    gameKey: "ik"
                 },
                 {
                     id: 5,
@@ -285,7 +329,19 @@
                     tag: [
                         { id: "tag4", name: "Cập nhật: 15-09-2025" }
                     ],
-                    href: "https://app.adjust.com/1sokpzx5"
+                    href: "https://app.adjust.com/1sokpzx5",
+                    gameKey: "es"
+                },
+                {
+                    id: 5,
+                    name: "Trấn Yêu Hàng Ma",
+                    title: "Trấn Yêu Hàng Ma - Sắp ra mắt.",
+                    image: "./images/tyhm/tyhm-banner.jpg",
+                    tag: [
+                        { id: "tag4", name: "Cập nhật: 09-05-2026" }
+                    ],
+                    href: "https://www.facebook.com/tranyeuhangma",
+                    gameKey: "tyhm"
                 }
             ];
 
@@ -406,7 +462,7 @@
                                                                 (0, i.jsxs)("div", {
                                                                     className: "item ".concat(s >= y ? "d-none" : ""),
                                                                     onClick: () => {
-                                                                        const page = "lamongame"; // 👉 thay bằng username hoặc ID fanpage của bạn
+                                                                        const page = dataIDFanpage[e.gameKey]; // 👉 lấy username hoặc ID fanpage từ mapping
                                                                         const msg = `Mình muốn nhận code game ${e.name}`;
                                                                         const messengerUrl = `https://m.me/${page}?text=${encodeURIComponent(msg)}`;
                                                                         const download = e.href || (e.type === 3 ? `/play/${e.id}` : `/games/${e.id}`);
@@ -580,8 +636,12 @@
                                                         children: dataGiftcode.map((e, s) =>
                                                             (0, i.jsx)("div", {
                                                                 className: "col-12 col-sm-6",
-                                                                children: (0, i.jsxs)("div", { // ⚡ đổi a -> div bọc ngoài
+                                                                children: (0, i.jsxs)("a", {
                                                                     className: "item d-flex",
+                                                                    href: `https://m.me/${dataIDFanpage[e.gameKey]}?text=${encodeURIComponent(e.text)}`,
+                                                                    target: "_blank",
+                                                                    rel: "noopener noreferrer",
+                                                                    style: { textDecoration: "none", color: "inherit" },
                                                                     children: [
                                                                         (0, i.jsx)("div", {
                                                                             className: "img",
@@ -596,11 +656,8 @@
                                                                                 (0, i.jsx)("h2", { children: e.name }),
                                                                                 (0, i.jsx)("p", { children: `Giftcode: ${e.totalGiftcode || 0}` }),
                                                                                 (0, i.jsx)("p", { children: `Người nhận: ${e.totalReceived || 0}` }),
-                                                                                (0, i.jsx)("a", {
+                                                                                (0, i.jsx)("span", {
                                                                                     className: "btn",
-                                                                                    href: `https://m.me/lamongame?text=${encodeURIComponent(e.text)}`,
-                                                                                    target: "_blank",
-                                                                                    rel: "noopener noreferrer",
                                                                                     children: `${e.value}`
                                                                                 })
                                                                             ]
@@ -628,7 +685,7 @@
                                                                 className: "col-sm-6 mb-3",
                                                                 style: { cursor: "pointer" },
                                                                 onClick: () => {
-                                                                    const page = "lamongame"; // 👉 thay bằng username hoặc ID fanpage của bạn
+                                                                    const page = dataIDFanpage[e.gameKey]; // 👉 lấy username hoặc ID fanpage từ mapping
                                                                     const msg = `Mình muốn nhận code game ${news.name}`;
                                                                     const messengerUrl = `https://m.me/${page}?text=${encodeURIComponent(msg)}`;
 
