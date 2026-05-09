@@ -208,8 +208,8 @@
                     id: 1,
                     name: "Thần Ma Giáng Thế",
                     image: "./images/tmgt/tmgt-logo.png",
-                    totalGiftcode: 1000,
-                    totalReceived: 7322,
+                    totalGiftcode: 50000,
+                    totalReceived: 47322,
                     type: 1,
                     text: "Mình muốn nhận code game Thần Ma Giáng Thế",
                     value: "Nhận code",
@@ -219,8 +219,8 @@
                     id: 2,
                     name: "Tân Binh Thức Tỉnh",
                     image: "./images/tbtt/tbtt-logo.jpg",
-                    totalGiftcode: 1000,
-                    totalReceived: 624,
+                    totalGiftcode: 10000,
+                    totalReceived: 6274,
                     type: 2,
                     text: "Mình muốn nhận code game Tân Binh Thức Tỉnh",
                     value: "Nhận code",
@@ -230,8 +230,8 @@
                     id: 3,
                     name: "Phù Sinh Mộng",
                     image: "./images/psm/psm-logo.jpg",
-                    totalGiftcode: 1000,
-                    totalReceived: 954,
+                    totalGiftcode: 10000,
+                    totalReceived: 9254,
                     type: 2,
                     text: "Mình muốn nhận code game Phù Sinh Mộng",
                     value: "Nhận code",
@@ -241,8 +241,8 @@
                     id: 4,
                     name: "Infinity Kingdom",
                     image: "./images/ik/ik-logo.png",
-                    totalGiftcode: 200,
-                    totalReceived: 151,
+                    totalGiftcode: 20000,
+                    totalReceived: 15321,
                     type: 3,
                     text: "Mình muốn nhận code game Infinity Kingdom",
                     value: "Nhận code",
@@ -252,8 +252,8 @@
                     id: 5,
                     name: "Ethereal Slayer",
                     image: "./images/es/es-logo.jpg",
-                    totalGiftcode: 200,
-                    totalReceived: 124,
+                    totalGiftcode: 20000,
+                    totalReceived: 10734,
                     type: 4,
                     text: "Mình muốn nhận code game Ethereal Slayer",
                     value: "Nhận code",
@@ -291,10 +291,10 @@
                 {
                     id: 1,
                     name: "Thần Ma Giáng Thế",
-                    title: "Thần Ma Giáng Thế - Khai mở server lúc 13:00 Thứ 2-4-6 hàng tuần",
+                    title: "Thần Ma Giáng Thế - Khai mở server lúc 13:00 Thứ 3-5-7 hàng tuần",
                     image: "./images/tmgt/tmgt-banner1.png",
                     tag: [
-                        { id: "tag1", name: "Cập nhật: 15-10-2025" }
+                        { id: "tag1", name: "Cập nhật: 10-05-2026" }
                     ],
                     href: "https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html",
                     gameKey: "tmgt"
@@ -302,7 +302,7 @@
                 {
                     id: 2,
                     name: "Tân Binh Thức Tỉnh",
-                    title: "Tân Binh Thức Tỉnh - Khai mở server S1 vào lúc 13:00 Ngày 11-03-2026",
+                    title: "Tân Binh Thức Tỉnh - Khai mở server vào lúc 00:15' thứ 4 hàng tuần",
                     image: "./images/tbtt/tbtt-banner.jpg",
                     tag: [
                         { id: "tag2", name: "Cập nhật: 10-03-2026" }
@@ -313,10 +313,10 @@
                 {
                     id: 3,
                     name: "Phù Sinh Mộng",
-                    title: "Phù Sinh Mộng - Khai mở server lúc 13:00 Thứ 3-5-7 hàng tuần",
+                    title: "Phù Sinh Mộng - Khai mở server lúc 13:00 Thứ 3-6 hàng tuần",
                     image: "./images/psm/psm-banner.jpg",
                     tag: [
-                        { id: "tag2", name: "Cập nhật: 15-10-2025" }
+                        { id: "tag2", name: "Cập nhật: 10-05-2026" }
                     ],
                     href: "https://t.skeideng.com/oRZS82.html",
                     gameKey: "psm"
