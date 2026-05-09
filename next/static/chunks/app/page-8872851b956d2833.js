@@ -137,6 +137,15 @@
 
             const dataGame = [
                 {
+                    id: 5,
+                    name: "Trấn Yêu Hàng Ma",
+                    logoImage: "./images/tyhm/tyhm-logo.jpg",
+                    type: 4,
+                    gameType: { name: "game mới ra" },
+                    href: "https://p.googlelik.com/?p=Jje6Fj",
+                    gameKey: "tyhm"
+                },
+                {
                     id: 1,
                     name: "Thần Ma Giáng Thế",
                     logoImage: "./images/tmgt/tmgt-logo.png",
@@ -150,7 +159,7 @@
                     name: "Tân Binh Thức Tỉnh",
                     logoImage: "./images/tbtt/tbtt-logo.jpg",
                     type: 2,
-                    gameType: { name: "Mới Ra Mắt" },
+                    gameType: { name: "game hot" },
                     href: "https://t.skeideng.com/MHoxs.html",
                     gameKey: "tbtt"
                 },
@@ -168,7 +177,7 @@
                     name: "Infinity Kingdom",
                     logoImage: "./images/ik/ik-logo.png",
                     type: 3,
-                    gameType: { name: "game mới" },
+                    gameType: { name: "game hot" },
                     href: "https://yzdpik.onelink.me/Llhn?af_xp=social&pid=IK-CPS&c=IFK-CPS-13902&af_dp=yzdpik%3A%2F%2F",
                     gameKey: "ik"
                 },
@@ -177,22 +186,24 @@
                     name: "Ethereal Slayer",
                     logoImage: "./images/es/es-logo.jpg",
                     type: 4,
-                    gameType: { name: "game mới" },
+                    gameType: { name: "game hot" },
                     href: "https://app.adjust.com/1sokpzx5",
                     gameKey: "es"
-                },
-                {
-                    id: 5,
-                    name: "Trấn Yêu Hàng Ma",
-                    logoImage: "./images/loading.png",
-                    type: 4,
-                    gameType: { name: "game sắp ra" },
-                    href: "https://www.facebook.com/tranyeuhangma/",
-                    gameKey: "tyhm"
                 }
             ];
 
             const dataGiftcode = [
+                {
+                    id: 6,
+                    name: "Trấn Yêu Hàng Ma",
+                    image: "./images/tyhm/tyhm-logo.jpg",
+                    totalGiftcode: 10000,
+                    totalReceived: 2352,
+                    type: 4,
+                    text: "Mình muốn nhận code game Trấn Yêu Hàng Ma",
+                    value: "Nhận code",
+                    gameKey: "tyhm"
+                },
                 {
                     id: 1,
                     name: "Thần Ma Giáng Thế",
@@ -247,36 +258,36 @@
                     text: "Mình muốn nhận code game Ethereal Slayer",
                     value: "Nhận code",
                     gameKey: "es"
-                },
-                {
-                    id: 6,
-                    name: "Trấn Yêu Hàng Ma",
-                    image: "./images/loading.png",
-                    totalGiftcode: 10000,
-                    totalReceived: 2352,
-                    type: 4,
-                    text: "Mình muốn nhận code game Trấn Yêu Hàng Ma",
-                    value: "Nhận code",
-                    gameKey: "tyhm"
                 }
             ];
 
             const dataWelfare = [
-            {
-                id: 1,
-                title: "Hỗ trợ nạp x4",
-                image: "./images/welfare/ho-tro-nap-x4.png",
-                href: "https://www.facebook.com/share/p/16XdXvQTcm/"
-            },
-            {
-                id: 2,
-                title: "Người cũ quay về",
-                image: "./images/welfare/nguoi-cu-quay-ve.png",
-                href: "https://www.facebook.com/share/p/18Cjx6PyqD/"
-            }
+                {
+                    id: 1,
+                    title: "Hỗ trợ nạp x4",
+                    image: "./images/welfare/ho-tro-nap-x4.png",
+                    href: "https://www.facebook.com/share/p/16XdXvQTcm/"
+                },
+                {
+                    id: 2,
+                    title: "Người cũ quay về",
+                    image: "./images/welfare/nguoi-cu-quay-ve.png",
+                    href: "https://www.facebook.com/share/p/18Cjx6PyqD/"
+                }
             ];
 
             const dataNews = [
+                {
+                    id: 5,
+                    name: "Trấn Yêu Hàng Ma",
+                    title: "Trấn Yêu Hàng Ma - Open Server 1 lúc: **13:00 ngày 11-05-2026**.",
+                    image: "./images/tyhm/tyhm-banner.jpg",
+                    tag: [
+                        { id: "tag4", name: "Cập nhật: 10-05-2026" }
+                    ],
+                    href: "https://p.googlelik.com/?p=Jje6Fj",
+                    gameKey: "tyhm"
+                },
                 {
                     id: 1,
                     name: "Thần Ma Giáng Thế",
@@ -331,17 +342,6 @@
                     ],
                     href: "https://app.adjust.com/1sokpzx5",
                     gameKey: "es"
-                },
-                {
-                    id: 5,
-                    name: "Trấn Yêu Hàng Ma",
-                    title: "Trấn Yêu Hàng Ma - Sắp ra mắt.",
-                    image: "./images/tyhm/tyhm-banner.jpg",
-                    tag: [
-                        { id: "tag4", name: "Cập nhật: 09-05-2026" }
-                    ],
-                    href: "https://www.facebook.com/tranyeuhangma",
-                    gameKey: "tyhm"
                 }
             ];
 
@@ -685,7 +685,7 @@
                                                                 className: "col-sm-6 mb-3",
                                                                 style: { cursor: "pointer" },
                                                                 onClick: () => {
-                                                                    const page = dataIDFanpage[e.gameKey]; // 👉 lấy username hoặc ID fanpage từ mapping
+                                                                    const page = dataIDFanpage[news.gameKey]; // 👉 lấy username hoặc ID fanpage từ mapping
                                                                     const msg = `Mình muốn nhận code game ${news.name}`;
                                                                     const messengerUrl = `https://m.me/${page}?text=${encodeURIComponent(msg)}`;
 
