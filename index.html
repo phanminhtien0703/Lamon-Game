@@ -597,4 +597,23 @@
     });
 </script>
 
+<script>
+const params = new URLSearchParams(window.location.search);
+
+fetch("https://lamongamebot.phanminhtien070302.workers.dev", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    url: window.location.href,
+    title: document.title,
+    referrer: document.referrer,
+    utm_source: params.get("utm_source"),
+    utm_medium: params.get("utm_medium"),
+    utm_campaign: params.get("utm_campaign"),
+    userAgent: navigator.userAgent,
+    time: new Date().toLocaleString()
+  })
+});
+</script>
+
 </html>
