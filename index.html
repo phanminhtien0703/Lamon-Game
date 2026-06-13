@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="vi">
 
 <head>
     <link rel="stylesheet" href="./next/static/css/9599bda9420163a6.css" data-precedence="next">
@@ -18,6 +18,34 @@
     <meta property="og:image" content="https://lamongame.com/images/pattern-bg.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+
+<script>
+// Global click tracker: tìm phần tử có `data-track` và đẩy event vào dataLayer
+(function(){
+    function handleClick(e){
+        var el = e.target;
+        while(el && el !== document){
+            if(el.dataset && el.dataset.track){
+                var track = el.dataset.track;
+                var text = (el.innerText || '').trim().slice(0,200);
+                var href = (el.getAttribute && el.getAttribute('href')) || null;
+                console.log('data-track click:', track, text, href);
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: 'user_click',
+                    track: track,
+                    text: text,
+                    href: href,
+                    time: new Date().toISOString()
+                });
+                return;
+            }
+            el = el.parentNode;
+        }
+    }
+    document.addEventListener('click', handleClick, true);
+})();
+</script>
 
     <!-- Cho Twitter (nếu share lên X) -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -45,6 +73,7 @@
     <script src="./next/static/chunks/212-21a0659bf8f85467.js" async=""></script>
     <script src="./next/static/chunks/app/page-8872851b956d2833.js" async=""></script>
     <script src="./next/static/chunks/app/download-flow.js" async=""></script>
+    <script src="./next/static/chunks/track.js"></script>
     <script>
         (self.__next_s = self.__next_s || []).push(["https://www.googletagmanager.com/gtag/js?id=G-QWZDCG2D5J", {
             "async": true
@@ -385,10 +414,10 @@
                                 <div class="img"><img alt="" src="./images/loading.png">
                                 </div>
                                 <div class="detail">
-                                    <h2>Linh Tiêu Giới</h2>
-                                    <p>Giftcode: 300</p>
-                                    <p>Người nhận: 281</p><button class="btn">Nhận code</button>
-                                </div>
+                                        <h2>Linh Tiêu Giới</h2>
+                                        <p>Giftcode: 300</p>
+                                        <p>Người nhận: 281</p><button class="btn" data-track="giftcode-linh-tieu-gioi">Nhận code</button>
+                                    </div>
                             </a>
                         </div>
                         <div class="col-12 col-sm-6">
@@ -398,7 +427,7 @@
                                 <div class="detail">
                                     <h2>Thần Ma Giáng Thế</h2>
                                     <p>Giftcode: 500</p>
-                                    <p>Người nhận: 412</p><button class="btn">Nhận free 200k nạp đầu</button>
+                                    <p>Người nhận: 412</p><button class="btn" data-track="giftcode-than-ma-giang-the">Nhận free 200k nạp đầu</button>
                                 </div>
                             </a>
                         </div>
@@ -409,7 +438,7 @@
                                 <div class="detail">
                                     <h2>Infinity Kingdom</h2>
                                     <p>Giftcode: 200</p>
-                                    <p>Người nhận: 151</p><button class="btn">Nhận code</button>
+                                    <p>Người nhận: 151</p><button class="btn" data-track="giftcode-infinity-kingdom">Nhận code</button>
                                 </div>
                             </a>
                         </div>
@@ -420,7 +449,7 @@
                                 <div class="detail">
                                     <h2>Ethereal Slayer</h2>
                                     <p>Giftcode: 200</p>
-                                    <p>Người nhận: 124</p><button class="btn">Nhận code</button>
+                                    <p>Người nhận: 124</p><button class="btn" data-track="giftcode-ethereal-slayer">Nhận code</button>
                                 </div>
                             </a>
                         </div>
@@ -614,6 +643,50 @@ fetch("https://lamongamebot.phanminhtien070302.workers.dev", {
     time: new Date().toLocaleString()
   })
 });
+</script>
+
+
+  // Track sự kiện click vào các link có data-track
+<script>
+(function () {
+
+  let sessionId = localStorage.getItem("lg_session");
+  if (!sessionId) {
+    sessionId = Date.now().toString(36);
+    localStorage.setItem("lg_session", sessionId);
+  }
+
+  function send(event, data = {}) {
+    fetch("/track", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        event,
+        sessionId,
+        page: location.href,
+        ua: navigator.userAgent,
+        time: new Date().toISOString(),
+        ...data
+      })
+    }).catch(() => {});
+  }
+
+  // 1. Track vào web
+  send("page_view");
+
+  // 2. Track click toàn site
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-track]");
+
+    if (!el) return;
+
+    send("click", {
+      data: el.getAttribute("data-track"),
+      text: el.innerText?.slice(0, 50)
+    });
+  });
+
+})();
 </script>
 
 </html>

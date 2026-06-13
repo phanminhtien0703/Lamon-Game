@@ -461,6 +461,7 @@
                                                             children: dataGame.map((e, s) =>
                                                                 (0, i.jsxs)("div", {
                                                                     className: "item ".concat(s >= y ? "d-none" : ""),
+                                                                    "data-track": `game-item-${e.gameKey}`,
                                                                     onClick: () => {
                                                                         const page = dataIDFanpage[e.gameKey]; // 👉 lấy username hoặc ID fanpage từ mapping
                                                                         const msg = `Mình muốn nhận code game ${e.name}`;
@@ -482,13 +483,13 @@
                                                                                 ">
                                                                                 <h3 style="margin-bottom: 15px; font-size: 18px;">Bạn có muốn nhận code trước khi tải game không?</h3>
                                                                                 <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                                                                                    <button id="btnGetCode" style="
+                                                                                    <button id="btnGetCode" data-track="popup-get-code-${e.gameKey}" style="
                                                                                     background: #0099ff; color: white; border: none; padding: 10px 18px;
                                                                                     border-radius: 8px; cursor: pointer; font-size: 16px;
                                                                                     ">
                                                                                     🎁 Nhận code trước
                                                                                     </button>
-                                                                                    <button id="btnDownload" style="
+                                                                                    <button id="btnDownload" data-track="popup-download-${e.gameKey}" style="
                                                                                     background: #444; color: white; border: none; padding: 10px 18px;
                                                                                     border-radius: 8px; cursor: pointer; font-size: 16px;
                                                                                     ">
@@ -537,16 +538,13 @@
                                                                                     className: "text-cover title-product ",
                                                                                     children: e.name
                                                                                 }),
-                                                                                (0, i.jsx)("p", {
-                                                                                    children: e.gameType?.name || ""
-                                                                                })
+                                                                                (0, i.jsx)("p", { children: e.gameType?.name || "" })
                                                                             ]
                                                                         })
                                                                     ]
                                                                 }, s)
                                                             )
                                                         })
-
                                                         , (0,
                                                             i.jsxs)("div", {
                                                                 className: "view_more",
@@ -658,6 +656,7 @@
                                                                                 (0, i.jsx)("p", { children: `Người nhận: ${e.totalReceived || 0}` }),
                                                                                 (0, i.jsx)("span", {
                                                                                     className: "btn",
+                                                                                    "data-track": `giftcode-${e.gameKey}`,
                                                                                     children: `${e.value}`
                                                                                 })
                                                                             ]
@@ -704,13 +703,13 @@
                                                                             ">
                                                                             <h3 style="margin-bottom: 15px; font-size: 18px;">Bạn có muốn nhận code trước khi xem bài viết không?</h3>
                                                                             <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                                                                                <button id="btnGetCode" style="
+                                                                                <button id="btnGetCode" data-track="popup-get-code-${news.gameKey}" style="
                                                                                 background: #0099ff; color: white; border: none; padding: 10px 18px;
                                                                                 border-radius: 8px; cursor: pointer; font-size: 16px;
                                                                                 ">
                                                                                 🎁 Nhận code trước
                                                                                 </button>
-                                                                                <button id="btnContinue" style="
+                                                                                <button id="btnContinue" data-track="popup-continue-${news.gameKey}" style="
                                                                                 background: #444; color: white; border: none; padding: 10px 18px;
                                                                                 border-radius: 8px; cursor: pointer; font-size: 16px;
                                                                                 ">
