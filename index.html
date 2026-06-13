@@ -19,34 +19,6 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
-<script>
-// Global click tracker: tìm phần tử có `data-track` và đẩy event vào dataLayer
-(function(){
-    function handleClick(e){
-        var el = e.target;
-        while(el && el !== document){
-            if(el.dataset && el.dataset.track){
-                var track = el.dataset.track;
-                var text = (el.innerText || '').trim().slice(0,200);
-                var href = (el.getAttribute && el.getAttribute('href')) || null;
-                console.log('data-track click:', track, text, href);
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                    event: 'user_click',
-                    track: track,
-                    text: text,
-                    href: href,
-                    time: new Date().toISOString()
-                });
-                return;
-            }
-            el = el.parentNode;
-        }
-    }
-    document.addEventListener('click', handleClick, true);
-})();
-</script>
-
     <!-- Cho Twitter (nếu share lên X) -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Lamon Game" />
@@ -650,41 +622,98 @@ fetch("https://lamongamebot.phanminhtien070302.workers.dev", {
 <script>
 (function () {
 
+  // =========================
+  // SESSION ID
+  // =========================
   let sessionId = localStorage.getItem("lg_session");
+
   if (!sessionId) {
-    sessionId = Date.now().toString(36);
+    sessionId =
+      Date.now().toString(36) + Math.random().toString(36).substring(2);
+
     localStorage.setItem("lg_session", sessionId);
   }
 
+  // =========================
+  // SEND FUNCTION
+  // =========================
   function send(event, data = {}) {
-    fetch("/track", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        event,
-        sessionId,
-        page: location.href,
-        ua: navigator.userAgent,
-        time: new Date().toISOString(),
-        ...data
-      })
-    }).catch(() => {});
+        var payload = Object.assign({
+            event: event,
+            sessionId: sessionId,
+            page: location.href,
+            ua: navigator.userAgent,
+            time: new Date().toISOString()
+        }, data || {});
+
+        var body = JSON.stringify(payload);
+
+        // Use sendBeacon for click events to improve delivery before navigation
+        try {
+            if (event === 'click' && navigator && navigator.sendBeacon) {
+                var ok = navigator.sendBeacon('https://data-track-lamongame.phanminhtien070302.workers.dev/track', body);
+                if (ok) return;
+            }
+        } catch (e) {}
+
+        // fallback to fetch with keepalive
+        fetch('https://data-track-lamongame.phanminhtien070302.workers.dev/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            keepalive: true,
+            body: body
+        }).catch(function (err) {
+            console.log('TRACK ERROR:', err);
+        });
   }
 
-  // 1. Track vào web
-  send("page_view");
+  // =========================
+  // CLICK TRACK (DELEGATION)
+  // =========================
+    // helper: robustly extract visible text from element or descendants
+    function extractText(el, maxLen) {
+        if (!el) return '';
+        maxLen = maxLen || 60;
+        var t = (el.innerText || el.textContent || '') + '';
+        t = t.trim();
+        if (t) return t.slice(0, maxLen);
 
-  // 2. Track click toàn site
-  document.addEventListener("click", (e) => {
-    const el = e.target.closest("[data-track]");
+        // try common attributes
+        t = el.getAttribute && (el.getAttribute('aria-label') || el.getAttribute('title') || el.getAttribute('alt') || el.value || '');
+        if (t) return ('' + t).trim().slice(0, maxLen);
 
-    if (!el) return;
+        // gather visible text nodes under element
+        try {
+            var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+                acceptNode: function (node) {
+                    return node.nodeValue && node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+                }
+            });
+            var parts = [];
+            while (walker.nextNode()) {
+                parts.push(walker.currentNode.nodeValue.trim());
+                if (parts.join(' ').length >= maxLen) break;
+            }
+            if (parts.length) return parts.join(' ').slice(0, maxLen);
+        } catch (e) {}
 
-    send("click", {
-      data: el.getAttribute("data-track"),
-      text: el.innerText?.slice(0, 50)
+        return '';
+    }
+
+    document.addEventListener("click", function (e) {
+        const el = e.target.closest("[data-track]");
+        if (!el) return;
+
+        const trackValue = el.getAttribute("data-track");
+
+        var text = extractText(el, 60);
+        console.log("TRACK CLICK:", trackValue, 'TEXT:', text);
+
+        send("click", {
+            data: trackValue,
+            text: text
+        });
     });
-  });
 
 })();
 </script>
