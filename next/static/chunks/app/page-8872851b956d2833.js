@@ -428,6 +428,7 @@
                                                 href: (
                                                     dataMenu[0].link),
                                                 className: "item",
+                                                "data-track": "home-support",
                                                 children: [(0,
                                                     i.jsx)(p.VA, {}), " ", (0,
                                                         i.jsx)("span", {
@@ -437,6 +438,7 @@
                                                 i.jsxs)(j(), {
                                                     href: (dataMenu[0].link),
                                                     className: "item",
+                                                    "data-track": "home-giftcode",
                                                     children: [(0,
                                                         i.jsx)(p.ok, {}), " ", (0,
                                                             i.jsx)("span", {
