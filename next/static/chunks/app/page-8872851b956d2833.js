@@ -483,13 +483,13 @@
                                                                                 background: #222; padding: 20px 25px; border-radius: 12px;
                                                                                 max-width: 90%; text-align: center; box-shadow: 0 0 15px rgba(0,0,0,0.5);
                                                                                 ">
-                                                                                <h3 style="margin-bottom: 15px; font-size: 18px;">Bạn có muốn nhận code trước khi tải game không?</h3>
+                                                                                <h3 style="margin-bottom: 15px; font-size: 18px;">Nhận code tại đây</h3>
                                                                                 <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                                                                                     <button id="btnGetCode" data-track="popup-get-code-${e.gameKey}" style="
                                                                                     background: #0099ff; color: white; border: none; padding: 10px 18px;
                                                                                     border-radius: 8px; cursor: pointer; font-size: 16px;
                                                                                     ">
-                                                                                    🎁 Nhận code trước
+                                                                                    🎁 Nhận code
                                                                                     </button>
                                                                                     <button id="btnDownload" data-track="popup-download-${e.gameKey}" style="
                                                                                     background: #444; color: white; border: none; padding: 10px 18px;
