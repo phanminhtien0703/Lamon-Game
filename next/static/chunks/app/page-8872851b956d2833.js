@@ -351,6 +351,178 @@
                 link: "https://www.facebook.com/lamongame"
             },]
 
+            // Show a popup listing available games to receive giftcode
+            function showGiftcodePopup() {
+                try {
+                    const list = Array.isArray(dataGiftcode) ? dataGiftcode : [];
+                    const overlay = document.createElement('div');
+                    overlay.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;background:rgba(0,0,0,0.82);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;box-sizing:border-box;overflow-y:auto;';
+
+                    const inner = document.createElement('div');
+                    inner.style.cssText = 'background:linear-gradient(180deg,#1f1f1f 0%,#171717 100%);padding:18px 18px 20px;border:1px solid rgba(255,255,255,0.08);border-radius:18px;max-width:980px;width:100%;color:#fff;max-height:calc(100vh - 40px);overflow:auto;box-shadow:0 20px 45px rgba(0,0,0,0.55);margin:auto;';
+
+                    const title = document.createElement('h3');
+                    title.textContent = 'Chọn game nhận Giftcode';
+                    title.style.cssText = 'margin:0 0 6px;font-size:20px;font-weight:700;color:#fff;text-align:center;letter-spacing:0.2px;';
+                    inner.appendChild(title);
+
+                    const container = document.createElement('div');
+                    container.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;align-items:stretch;width:100%;';
+
+                    list.forEach(g => {
+                        const row = document.createElement('div');
+                        row.style.cssText = 'display:flex;align-items:center;justify-content:flex-start;text-align:left;gap:12px;background:linear-gradient(180deg,#161616 0%,#111 100%);padding:12px;border:1px solid rgba(255,255,255,0.06);border-radius:12px;min-width:0;width:100%;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02);';
+
+                        const img = document.createElement('img');
+                        img.src = g.image || 'https://via.placeholder.com/64';
+                        img.alt = g.name || '';
+                        img.style.cssText = 'width:62px;height:62px;object-fit:cover;border-radius:10px;flex:0 0 62px;border:1px solid rgba(255,255,255,0.08);background:#0f0f0f;';
+
+                        const info = document.createElement('div');
+                        info.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;min-width:0;';
+
+                        const nameEl = document.createElement('div');
+                        nameEl.textContent = g.name || '';
+                        nameEl.style.cssText = 'font-weight:700;font-size:14px;margin-bottom:6px;color:#fff;line-height:1.2;text-align:center;width:100%;';
+
+                        const btnWrap = document.createElement('div');
+                        btnWrap.style.cssText = 'display:flex;justify-content:center;align-items:center;width:100%;';
+
+                        const page = dataIDFanpage[g.gameKey] || '';
+                        const msg = g.text || `Mình muốn nhận code game ${g.name || ''}`;
+                        const link = document.createElement('a');
+                        link.href = `https://m.me/${page}?text=${encodeURIComponent(msg)}`;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.setAttribute('data-track', `giftcode-popup-${g.gameKey || 'game'}`);
+                        link.textContent = `🎁 Nhận code ${g.name || ''}`;
+                        link.style.cssText = 'background:linear-gradient(135deg,#00a2ff 0%,#0078ff 100%);color:#fff;padding:8px 12px;border-radius:999px;text-decoration:none;display:inline-block;font-size:13px;font-weight:600;box-shadow:0 8px 16px rgba(0, 120, 255, 0.25);';
+
+                        btnWrap.appendChild(link);
+                        info.appendChild(nameEl);
+                        info.appendChild(btnWrap);
+
+                        row.appendChild(img);
+                        row.appendChild(info);
+                        container.appendChild(row);
+                    });
+
+                    inner.appendChild(container);
+
+                    const footer = document.createElement('div');
+                    footer.style.cssText = 'display:flex;justify-content:flex-end;margin-top:14px;';
+                    const closeBtn = document.createElement('button');
+                    closeBtn.id = 'giftcodeCloseBtn';
+                    closeBtn.setAttribute('data-track', 'giftcode-popup-close');
+                    closeBtn.textContent = 'Đóng';
+                    closeBtn.style.cssText = 'background:#2a2a2a;color:#fff;border:1px solid rgba(255,255,255,0.08);padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:600;';
+                    footer.appendChild(closeBtn);
+                    inner.appendChild(footer);
+
+                    overlay.appendChild(inner);
+
+                    overlay.addEventListener('click', function (e) {
+                        if (e.target === overlay) {
+                            document.body.removeChild(overlay);
+                        }
+                    });
+
+                    closeBtn.addEventListener('click', function () {
+                        if (overlay.parentNode) document.body.removeChild(overlay);
+                    });
+
+                    document.body.appendChild(overlay);
+                } catch (err) {
+                    console.error('showGiftcodePopup error', err);
+                }
+            }
+
+            // Show a popup listing available games to request support
+            function showSupportPopup() {
+                try {
+                    const list = Array.isArray(dataGiftcode) ? dataGiftcode : [];
+                    const overlay = document.createElement('div');
+                    overlay.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;background:rgba(0,0,0,0.82);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;box-sizing:border-box;overflow-y:auto;';
+
+                    const inner = document.createElement('div');
+                    inner.style.cssText = 'background:linear-gradient(180deg,#1f1f1f 0%,#171717 100%);padding:18px 18px 20px;border:1px solid rgba(255,255,255,0.08);border-radius:18px;max-width:980px;width:100%;color:#fff;max-height:calc(100vh - 40px);overflow:auto;box-shadow:0 20px 45px rgba(0,0,0,0.55);margin:auto;';
+
+                    const title = document.createElement('h3');
+                    title.textContent = 'Chọn game cần hỗ trợ';
+                    title.style.cssText = 'margin:0 0 6px;font-size:20px;font-weight:700;color:#fff;text-align:center;letter-spacing:0.2px;';
+                    inner.appendChild(title);
+
+                    const container = document.createElement('div');
+                    container.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;align-items:stretch;width:100%;';
+
+                    list.forEach(g => {
+                        const row = document.createElement('div');
+                        row.style.cssText = 'display:flex;align-items:center;justify-content:flex-start;text-align:left;gap:12px;background:linear-gradient(180deg,#161616 0%,#111 100%);padding:12px;border:1px solid rgba(255,255,255,0.06);border-radius:12px;min-width:0;width:100%;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02);';
+
+                        const img = document.createElement('img');
+                        img.src = g.image || 'https://via.placeholder.com/64';
+                        img.alt = g.name || '';
+                        img.style.cssText = 'width:62px;height:62px;object-fit:cover;border-radius:10px;flex:0 0 62px;border:1px solid rgba(255,255,255,0.08);background:#0f0f0f;';
+
+                        const info = document.createElement('div');
+                        info.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;min-width:0;';
+
+                        const nameEl = document.createElement('div');
+                        nameEl.textContent = g.name || '';
+                        nameEl.style.cssText = 'font-weight:700;font-size:14px;margin-bottom:6px;color:#fff;line-height:1.2;text-align:center;width:100%;';
+
+                        const btnWrap = document.createElement('div');
+                        btnWrap.style.cssText = 'display:flex;justify-content:center;align-items:center;width:100%;';
+
+                        const page = dataIDFanpage[g.gameKey] || '';
+                        const msg = `Mình cần hỗ trợ game ${g.name || ''}`;
+                        const link = document.createElement('a');
+                        link.href = `https://m.me/${page}?text=${encodeURIComponent(msg)}`;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.setAttribute('data-track', `support-popup-${g.gameKey || 'game'}`);
+                        link.textContent = `💬 Hỗ trợ ${g.name || ''}`;
+                        link.style.cssText = 'background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff;padding:8px 12px;border-radius:999px;text-decoration:none;display:inline-block;font-size:13px;font-weight:600;box-shadow:0 8px 16px rgba(16, 185, 129, 0.25);';
+
+                        btnWrap.appendChild(link);
+                        info.appendChild(nameEl);
+                        info.appendChild(btnWrap);
+
+                        row.appendChild(img);
+                        row.appendChild(info);
+                        container.appendChild(row);
+                    });
+
+                    inner.appendChild(container);
+
+                    const footer = document.createElement('div');
+                    footer.style.cssText = 'display:flex;justify-content:flex-end;margin-top:14px;';
+                    const closeBtn = document.createElement('button');
+                    closeBtn.id = 'supportCloseBtn';
+                    closeBtn.setAttribute('data-track', 'support-popup-close');
+                    closeBtn.textContent = 'Đóng';
+                    closeBtn.style.cssText = 'background:#2a2a2a;color:#fff;border:1px solid rgba(255,255,255,0.08);padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:600;';
+                    footer.appendChild(closeBtn);
+                    inner.appendChild(footer);
+
+                    overlay.appendChild(inner);
+
+                    overlay.addEventListener('click', function (e) {
+                        if (e.target === overlay) {
+                            document.body.removeChild(overlay);
+                        }
+                    });
+
+                    closeBtn.addEventListener('click', function () {
+                        if (overlay.parentNode) document.body.removeChild(overlay);
+                    });
+
+                    document.body.appendChild(overlay);
+                } catch (err) {
+                    console.error('showSupportPopup error', err);
+                }
+            }
+
             let N = () => {
                 let e = (0,
                     n.A)(),
@@ -425,8 +597,11 @@
                                         className: "home_menu",
                                         children: [(0,
                                             i.jsxs)(j(), {
-                                                href: (
-                                                    dataMenu[0].link),
+                                                href: "#",
+                                                onClick: function (e) {
+                                                    e.preventDefault();
+                                                    try { showSupportPopup(); } catch (err) { console.error(err); }
+                                                },
                                                 className: "item",
                                                 "data-track": "home-support",
                                                 children: [(0,
@@ -436,7 +611,10 @@
                                                         })]
                                             }), (0,
                                                 i.jsxs)(j(), {
-                                                    href: (dataMenu[0].link),
+                                                    href: "#",
+                                                    onClick: function () {
+                                                        try { showGiftcodePopup(); } catch (err) { console.error(err); }
+                                                    },
                                                     className: "item",
                                                     "data-track": "home-giftcode",
                                                     children: [(0,
