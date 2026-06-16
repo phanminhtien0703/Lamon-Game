@@ -128,8 +128,8 @@
             // Fanpage ID mapping
             const dataIDFanpage = {
                 tmgt: "lamongame",
-                tbtt: "lamongame",
-                psm: "lamongame",
+                tbtt: "gametanbinhthuctinh",
+                psm: "gamephusinhmong",
                 ik: "lamongame",
                 es: "lamongame",
                 tyhm: "tranyeuhangma"
