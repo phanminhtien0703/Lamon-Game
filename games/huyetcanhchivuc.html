@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huyết Vực Chi Cảnh - Tải Game</title>
+    <style>
+        :root {
+            --bg: #0b1020;
+            --surface: #131b35;
+            --surface-2: #0f1630;
+            --surface-3: #1a2452;
+            --text: #f7f8fc;
+            --muted: #a9b3d6;
+            --primary: #ff5c8a;
+            --primary-2: #ff9f43;
+            --accent: #34d399;
+            --border: rgba(255, 255, 255, .08);
+            --shadow: 0 18px 50px rgba(0, 0, 0, .38);
+            --radius: 18px;
+            --radius-sm: 12px;
+            --max-width: 1180px
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at top, rgba(255, 92, 138, .1), transparent 18%), linear-gradient(180deg, #0a1022 0%, #0d1530 100%);
+            color: var(--text);
+            min-height: 100vh
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        .page-shell {
+            width: min(100%, var(--max-width));
+            margin: 0 auto;
+            padding: 24px 16px 48px
+        }
+
+        .hero-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            background: linear-gradient(90deg, rgba(255, 92, 138, .08), rgba(52, 211, 153, .06)), linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 28px
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            inset: auto -60px -80px auto;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(255, 92, 138, .18), transparent 70%);
+            pointer-events: none
+        }
+
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 1.2fr .95fr;
+            gap: 24px;
+            align-items: center
+        }
+
+        .game-info {
+            position: relative;
+            z-index: 1
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px
+        }
+
+        .tag {
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .06);
+            color: var(--muted);
+            font-size: .86rem;
+            border: 1px solid var(--border)
+        }
+
+        .title-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px
+        }
+
+        .game-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, .04)
+        }
+
+        .game-title {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            line-height: 1.1;
+            max-width: 16ch
+        }
+
+        .game-desc {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 18px;
+            max-width: 58ch
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 0;
+            border-radius: 999px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .18s ease, box-shadow .18s ease
+        }
+
+        .btn:hover {
+            transform: translateY(-1px)
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            color: #fff;
+            padding: 14px 18px;
+            box-shadow: 0 10px 24px rgba(255, 92, 138, .32)
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, .06);
+            color: var(--text);
+            padding: 14px 18px;
+            border: 1px solid var(--border)
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px
+        }
+
+        .meta-box {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 10px;
+            text-align: center
+        }
+
+        .meta-box strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 4px
+        }
+
+        .meta-box span {
+            color: var(--muted);
+            font-size: .88rem
+        }
+
+        .visual-panel {
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .visual-card {
+            width: min(100%, 480px);
+            background: linear-gradient(180deg, #111b3d 0%, #0d1331 100%);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), var(--shadow)
+        }
+
+        .visual-card img {
+            width: 100%;
+            display: block;
+            border-radius: 16px;
+            object-fit: cover;
+            aspect-ratio: 16/10
+        }
+
+        .download-card {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px
+        }
+
+        .download-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .05);
+            color: var(--text);
+            font-weight: 600;
+            border: 1px solid var(--border)
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 18px;
+            margin-top: 18px
+        }
+
+        .panel {
+            background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow)
+        }
+
+        .panel h3 {
+            font-size: 1.1rem;
+            margin-bottom: 12px
+        }
+
+        .support-box {
+            background: linear-gradient(90deg, rgba(255, 92, 138, .08), rgba(52, 211, 153, .08));
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            color: var(--muted);
+            line-height: 1.6
+        }
+
+        .support-box strong {
+            color: var(--text)
+        }
+
+        .step-list {
+            display: grid;
+            gap: 10px
+        }
+
+        .step-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            color: #fff;
+            flex: 0 0 32px;
+            font-weight: 700;
+            font-size: .92rem
+        }
+
+        .step-text {
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 10px
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .05);
+            color: var(--muted)
+        }
+
+        .feature-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: linear-gradient(90deg, rgba(255, 92, 138, .14), rgba(52, 211, 153, .14));
+            color: var(--text);
+            font-size: 1rem
+        }
+
+        @media (max-width:900px) {
+
+            .hero-layout,
+            .content-grid {
+                grid-template-columns: 1fr
+            }
+
+            .visual-panel {
+                min-height: 320px
+            }
+        }
+
+        @media (max-width:640px) {
+            .page-shell {
+                padding: 12px 10px 32px
+            }
+
+            .hero-card {
+                padding: 18px
+            }
+
+            .title-row {
+                align-items: flex-start
+            }
+
+            .game-logo {
+                width: 52px;
+                height: 52px
+            }
+
+            .game-title {
+                max-width: 100%
+            }
+
+            .button-group,
+            .meta-grid,
+            .download-card {
+                grid-template-columns: 1fr
+            }
+
+            .button-group {
+                display: grid
+            }
+
+            .btn,
+            .download-link {
+                width: 100%
+            }
+
+            .meta-grid {
+                display: grid
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page-shell">
+        <section class="hero-card">
+            <div class="hero-layout">
+                <div class="game-info">
+                    <div class="tag-row"><span class="tag">MMORPG</span><span class="tag">Phiêu lưu</span><span
+                            class="tag">PvP</span></div>
+                    <div class="title-row">
+                        <img class="game-logo" src="../images/hvcc/hvcc-logo.jpg" alt="Huyết Vực Chi Cảnh">
+                        <h1 class="game-title">Huyết Vực Chi Cảnh</h1>
+                    </div>
+                    <p class="game-desc">Khám phá thế giới huyền bí, chiến đấu với quái vật nguy hiểm và chinh phục
+                        những vùng đất đầy bí ẩn. Tải ngay để trải nghiệm hành trình hoành tráng trên mọi thiết bị.</p>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-box"><strong>3D</strong><span>Đồ họa</span></div>
+                        <div class="meta-box"><strong>Online</strong><span>Chơi cùng bạn bè</span></div>
+                        <div class="meta-box"><strong>iOS / Android</strong><span>Hỗ trợ đa nền tảng</span></div>
+                    </div>
+                </div>
+                <div class="visual-panel">
+                    <div class="visual-card"><img src="../images/hvcc/hvcc-banner.png" alt="Huyết Vực Chi Cảnh">
+                        <div class="download-card" id="download">
+                            <a class="download-link" href="https://t.skeideng.com/yyii03.html">📱 Tải Android</a>
+                            <a class="download-link" href="https://apps.apple.com/vn/app/huy%E1%BA%BFt-c%E1%BA%A3nh-chi-v%E1%BB%B1c/id6775741385?l=vi">🍎 Tải iOS</a>
+                            <a class="download-link" href="https://m.me/huyetvucchicanh?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Huy%E1%BA%BFt%20V%E1%BB%B1c%20Chi%20C%E1%BA%A3nh" target="_blank" rel="noopener noreferrer">🎁 Nhận Code</a>
+                            <a class="download-link" href="https://www.facebook.com/huyetvucchicanh">🛠️ Hỗ trợ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-grid">
+            <div class="panel">
+                <h3>Cách tải game</h3>
+                <div class="step-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Chọn nút <strong>Android</strong> hoặc <strong>iOS</strong> phù hợp với thiết bị của bạn.</div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Cài đặt ứng dụng và cho phép quyền cần thiết để game chạy ổn định.
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Mở game, đăng nhập và bắt đầu hành trình của bạn.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel" id="support">
+                <h3>Thông tin hỗ trợ</h3>
+                <div class="support-box">
+                    <strong>Hỗ trợ code trong 24h đầu tiên:</strong><br>
+                    Gửi <strong>tên nhân vật</strong> + <strong>server</strong> qua Messenger để được hỗ trợ nhận code nhanh nhất.
+                </div>
+                <div class="feature-list" style="margin-top: 12px;">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div><span>Hỗ trợ đăng nhập và cập nhật</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🎁</div><span>Nhận giftcode nhanh chóng</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📞</div><span>Liên hệ hỗ trợ qua Messenger</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

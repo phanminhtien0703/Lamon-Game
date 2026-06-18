@@ -132,7 +132,8 @@
                 psm: "gamephusinhmong",
                 ik: "lamongame",
                 es: "lamongame",
-                tyhm: "tranyeuhangma"
+                tyhm: "tranyeuhangma",
+                huyetvucchicanh: "huyetvucchicanh"
             };
 
             const dataGame = [
@@ -189,6 +190,15 @@
                     gameType: { name: "game hot" },
                     href: "https://app.adjust.com/1sokpzx5",
                     gameKey: "es"
+                },
+                {
+                    id: 7,
+                    name: "Huyết Vực Chi Cảnh",
+                    logoImage: "./images/hvcc/hvcc-logo.jpg",
+                    type: 4,
+                    gameType: { name: "chiến thuật" },
+                    href: "./games/huyetcanhchivuc.html",
+                    gameKey: "huyetvucchicanh"
                 }
             ];
 
@@ -258,6 +268,17 @@
                     text: "Mình muốn nhận code game Ethereal Slayer",
                     value: "Nhận code",
                     gameKey: "es"
+                },
+                {
+                    id: 7,
+                    name: "Huyết Vực Chi Cảnh",
+                    image: "./images/hvcc/hvcc-logo.jpg",
+                    totalGiftcode: 8000,
+                    totalReceived: 1234,
+                    type: 4,
+                    text: "Mình muốn nhận code game Huyết Vực Chi Cảnh",
+                    value: "Nhận code",
+                    gameKey: "huyetvucchicanh"
                 }
             ];
 
@@ -342,6 +363,17 @@
                     ],
                     href: "https://app.adjust.com/1sokpzx5",
                     gameKey: "es"
+                },
+                {
+                    id: 6,
+                    name: "Huyết Vực Chi Cảnh",
+                    title: "Huyết Vực Chi Cảnh - Chính thức khai mở SERVER 1 lúc 13:08' ngày 18-06-2026",
+                    image: "./images/hvcc/hvcc-banner.png",
+                    tag: [
+                        { id: "tag5", name: "Cập nhật: 18-06-2026" }
+                    ],
+                    href: "./games/huyetcanhchivuc.html",
+                    gameKey: "huyetvucchicanh"
                 }
             ];
 
