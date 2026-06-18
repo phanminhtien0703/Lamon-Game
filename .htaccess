@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Chuyển link .html sang link đẹp
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# Cho phép truy cập không cần .html
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]

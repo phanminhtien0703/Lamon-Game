@@ -197,7 +197,7 @@
                     logoImage: "./images/hvcc/hvcc-logo.jpg",
                     type: 4,
                     gameType: { name: "chiến thuật" },
-                    href: "./games/huyetcanhchivuc.html",
+                    href: "./games/huyet-vuc-chi-canh.html",
                     gameKey: "huyetvucchicanh"
                 }
             ];
@@ -372,7 +372,7 @@
                     tag: [
                         { id: "tag5", name: "Cập nhật: 18-06-2026" }
                     ],
-                    href: "./games/huyetcanhchivuc.html",
+                    href: "./games/huyet-vuc-chi-canh.html",
                     gameKey: "huyetvucchicanh"
                 }
             ];
