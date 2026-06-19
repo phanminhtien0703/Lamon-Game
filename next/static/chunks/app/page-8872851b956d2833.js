@@ -174,24 +174,6 @@
                     gameKey: "psm"
                 },
                 {
-                    id: 4,
-                    name: "Infinity Kingdom",
-                    logoImage: "./images/ik/ik-logo.png",
-                    type: 3,
-                    gameType: { name: "game hot" },
-                    href: "https://yzdpik.onelink.me/Llhn?af_xp=social&pid=IK-CPS&c=IFK-CPS-13902&af_dp=yzdpik%3A%2F%2F",
-                    gameKey: "ik"
-                },
-                {
-                    id: 5,
-                    name: "Ethereal Slayer",
-                    logoImage: "./images/es/es-logo.jpg",
-                    type: 4,
-                    gameType: { name: "game hot" },
-                    href: "https://app.adjust.com/1sokpzx5",
-                    gameKey: "es"
-                },
-                {
                     id: 7,
                     name: "Huyết Vực Chi Cảnh",
                     logoImage: "./images/hvcc/hvcc-logo.jpg",
@@ -246,28 +228,6 @@
                     text: "Mình muốn nhận code game Phù Sinh Mộng",
                     value: "Nhận code",
                     gameKey: "psm"
-                },
-                {
-                    id: 4,
-                    name: "Infinity Kingdom",
-                    image: "./images/ik/ik-logo.png",
-                    totalGiftcode: 20000,
-                    totalReceived: 15321,
-                    type: 3,
-                    text: "Mình muốn nhận code game Infinity Kingdom",
-                    value: "Nhận code",
-                    gameKey: "ik"
-                },
-                {
-                    id: 5,
-                    name: "Ethereal Slayer",
-                    image: "./images/es/es-logo.jpg",
-                    totalGiftcode: 20000,
-                    totalReceived: 10734,
-                    type: 4,
-                    text: "Mình muốn nhận code game Ethereal Slayer",
-                    value: "Nhận code",
-                    gameKey: "es"
                 },
                 {
                     id: 7,
@@ -341,28 +301,6 @@
                     ],
                     href: "https://t.skeideng.com/oRZS82.html",
                     gameKey: "psm"
-                },
-                {
-                    id: 4,
-                    name: "Infinity Kingdom",
-                    title: "Infinity Kingdom - is a real-time strategy game based in a land of magic and alchemy.",
-                    image: "./images/ik/ik-banner.png",
-                    tag: [
-                        { id: "tag3", name: "Cập nhật: 15-09-2025" }
-                    ],
-                    href: "https://yzdpik.onelink.me/Llhn?af_xp=social&pid=IK-CPS&c=IFK-CPS-13902&af_dp=yzdpik%3A%2F%2F",
-                    gameKey: "ik"
-                },
-                {
-                    id: 5,
-                    name: "Ethereal Slayer",
-                    title: "Ethereal Slayer - A Xianxia-inspired 3D MMORPG with real-time aerial combat, 100+ skills, and epic realms to explore.",
-                    image: "./images/es/es-banner.jpg",
-                    tag: [
-                        { id: "tag4", name: "Cập nhật: 15-09-2025" }
-                    ],
-                    href: "https://app.adjust.com/1sokpzx5",
-                    gameKey: "es"
                 },
                 {
                     id: 6,
