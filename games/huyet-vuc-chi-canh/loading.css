@@ -1,0 +1,135 @@
+:root{
+  --loader-bg: rgba(255,255,255,0.95);
+  --card-bg: #ffffff;
+  --accent: #0b84ff;
+  --muted: #6b7280;
+  --glass: rgba(15,23,42,0.03);
+}
+
+/* Fullscreen loader overlay */
+.game-loader-overlay{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--loader-bg);
+  z-index:9999;
+  padding:1.5rem;
+}
+
+.game-loader{
+  width:100%;
+  max-width:920px;
+  background:var(--card-bg);
+  border-radius:12px;
+  box-shadow:0 8px 30px rgba(11,17,23,0.06);
+  color:#071427;
+  display:flex;
+  gap:1.25rem;
+  align-items:center;
+  padding:1.25rem;
+  box-sizing:border-box;
+}
+
+.loader-media{
+  flex:0 0 140px;
+  height:100px;
+  background:var(--glass);
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.loader-media img{width:100%;height:100%;object-fit:cover}
+
+.loader-body{
+  flex:1 1 auto;
+  min-width:0;
+}
+
+.loader-title{
+  font-size:1.2rem;
+  font-weight:700;
+  margin:0 0 0.25rem 0;
+  color:#071427;
+}
+.loader-sub{
+  color:var(--muted);
+  font-size:1rem;
+  margin:0 0 0.75rem 0;
+}
+
+.loader-actions{
+  display:flex;
+  gap:.75rem;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.download-btn{
+  background:linear-gradient(90deg,var(--accent),#0aa0ff);
+  color:#ffffff;
+  padding:.65rem 1rem;
+  border-radius:10px;
+  font-weight:700;
+  font-size:15px;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 8px 22px rgba(11,132,255,0.12);
+  text-decoration:none;
+}
+.secondary-btn{
+  background:transparent;
+  color:var(--muted);
+  padding:.55rem .85rem;
+  border-radius:10px;
+  font-size:14px;
+  border:1px solid rgba(11,17,23,0.06);
+  text-decoration:none;
+}
+
+.loader-progress{
+  margin-top:.9rem;
+}
+.progress-bar{
+  height:8px;
+  background:rgba(11,17,23,0.04);
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress-fill{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),#0aa0ff);
+  transition:width .6s ease;
+}
+.progress-meta{font-size:.9rem;color:var(--muted);margin-top:.5rem}
+
+/* Center small spinner for minimal layouts */
+.loader-spinner{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:4px solid rgba(11,17,23,0.06);
+  border-top-color:var(--accent);
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Responsive rules */
+@media (max-width:780px){
+  .game-loader{flex-direction:column;align-items:center;padding:1rem}
+  .loader-media{flex:0 0 220px;height:120px;width:100%;border-radius:10px}
+  .loader-body{width:100%;text-align:center}
+  .loader-actions{justify-content:center}
+}
+
+@media (max-width:420px){
+  .game-loader{padding:.75rem;border-radius:10px}
+  .loader-title{font-size:1rem}
+  .download-btn{padding:.5rem .8rem}
+}
+
+/* Utility: hide loader when not needed */
+.game-loader-overlay.hidden{display:none}
