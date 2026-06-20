@@ -140,7 +140,21 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helv
 .feature-slot .feature-link{display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 14px;border-radius:10px;text-decoration:none;width:100%;height:100%;box-sizing:border-box}
 .feature-slot .feature-icon{font-size:22px}
 .feature-slot .feature-label{font-weight:700;font-size:15px}
-.feature-link.primary{background:linear-gradient(90deg,var(--accent),#0AA10E);color:#fff}
+.feature-link.primary{background:linear-gradient(90deg,var(--accent),#0AA10E);color:#fff;border:2px solid rgba(6,18,12,0.12);box-shadow:0 6px 14px rgba(6,18,12,0.06), inset 0 1px 0 rgba(255,255,255,0.22);position:relative;overflow:hidden;cursor:pointer;transition:transform .16s cubic-bezier(.2,.9,.2,1),box-shadow .16s cubic-bezier(.2,.9,.2,1);will-change:transform,box-shadow}
+.feature-link.primary:active{transform:translateY(1px) scale(.994);box-shadow:0 3px 8px rgba(6,18,12,0.06), inset 0 6px 12px rgba(0,0,0,0.12);transition:transform .06s linear,box-shadow .06s linear}
+
+/* keyboard focus for accessibility */
+.feature-link.primary:focus-visible{outline:none;box-shadow:0 10px 28px rgba(6,18,12,0.08),0 0 0 4px rgba(11,132,255,0.12)}
+
+/* glossy sheen overlay and stronger hover lift */
+.feature-link.primary{overflow:hidden}
+.feature-link.primary::after{content:"";position:absolute;top:0;left:-60%;width:60%;height:140%;background:linear-gradient(120deg,rgba(255,255,255,0.34) 0%,rgba(255,255,255,0.14) 45%,rgba(255,255,255,0.02) 100%);transform:skewX(-18deg) translateX(0);transition:transform .6s cubic-bezier(.2,.9,.2,1),opacity .3s;pointer-events:none;mix-blend-mode:screen;border-radius:inherit;opacity:0.95}
+.feature-link.primary:hover::after{transform:skewX(-18deg) translateX(220%);opacity:1}
+.feature-link.primary:hover{transform:translateY(-3px) scale(1.004);box-shadow:0 10px 24px rgba(6,18,12,0.10)}
+.feature-link.primary:active::after{transform:skewX(-18deg) translateX(120%);opacity:0.7}
+
+.feature-slot{transition:transform .12s ease,box-shadow .12s ease}
+.feature-slot:active{transform:translateY(2px)}
 .feature-link.secondary{background:transparent;color:var(--muted);border:1px solid rgba(11,17,23,0.06)}
 
 /* Hide old floating download card to avoid duplicate controls */
