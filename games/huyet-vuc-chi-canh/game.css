@@ -8,7 +8,10 @@
 }
 
 html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial,sans-serif;background-image:url('https://lamongame.com/images/pattern-bg.png');background-size:cover;background-repeat:no-repeat;background-position:center top;color:#0b1720;overflow-y:auto !important;-webkit-overflow-scrolling:touch}
-.vplay-wrap{padding-bottom:84px}
+.vplay-wrap{padding-bottom:12px}
+/* Ensure bottom nav is fixed and overlaps content correctly */
+.sidebottom.fixed-bottom{position:fixed;left:0;right:0;bottom:0;z-index:50}
+
 
 /* HERO */
 .hero-card{padding:28px 12px}
