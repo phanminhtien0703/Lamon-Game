@@ -143,7 +143,7 @@
                     logoImage: "./images/tyhm/tyhm-logo.jpg",
                     type: 4,
                     gameType: { name: "game mới ra" },
-                    href: "https://p.googlelik.com/?p=Jje6Fj",
+                    href: "./games/tran-yeu-hang-ma",
                     gameKey: "tyhm"
                 },
                 {
@@ -152,7 +152,7 @@
                     logoImage: "./images/tmgt/tmgt-logo.png",
                     type: 1,
                     gameType: { name: "game hot" },
-                    href: "https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html",
+                    href: "./games/than-ma-giang-the",
                     gameKey: "tmgt"
                 },
                 {
