@@ -62,7 +62,7 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helv
 
 /* when a content grid should be full width (single column) */
 .content-grid.full-width{grid-template-columns:1fr}
-.panel{background:var(--card);padding:14px;border-radius:10px;border:1px solid rgba(11,17,23,0.04)}
+.panel{background:var(--glass);padding:14px;border-radius:10px;border:1px solid rgba(11,17,23,0.04)}
 
 /* Utility */
 .text-center{text-align:center;margin-bottom:4px}
@@ -172,4 +172,69 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helv
 @media (max-width:420px){
   .feature-row{gap:10px}
   .feature-slot{height:56px;max-width:calc(50% - 10px)}
+}
+
+/* Feature grid for responsive layout */
+.feature-grid{
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+
+.feature-grid .feature-list-game{
+  flex:1 1 45%;
+  min-width:220px;
+  margin:0;
+}
+
+.feature-grid .image-box{
+  flex:1 1 45%;
+  min-width:220px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.feature-grid .image-box img{
+  width:100%;
+  height:auto;
+  border-radius:8px;
+  display:block;
+  max-width:100%;
+}
+
+.feature-list-game{
+    list-style: none;
+    padding-left: 0;
+    margin: 0 0 20px;
+}
+
+.image-caption{
+  color:var(--muted);
+  margin-top:8px;
+  font-size:0.95rem;
+}
+
+/* Text size utilities */
+.text-small{font-size:0.9rem;line-height:1.5}
+.text-smaller{font-size:0.85rem;line-height:1.5}
+/* utility for danger / red text */
+.text-danger{color:#e11d48}
+
+@media (max-width:780px){
+  .feature-grid{
+    flex-direction:column;
+    gap:12px;
+  }
+  .feature-grid .feature-list-game,
+  .feature-grid .image-box{
+    flex:1 1 100%;
+    min-width:0;
+  }
+  .image-caption{
+    text-align:center;
+  }
 }
