@@ -219,8 +219,13 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helv
 }
 
 /* Text size utilities */
-.text-small{font-size:0.9rem;line-height:1.5}
-.text-smaller{font-size:0.85rem;line-height:1.5}
+.text-small{font-size:0.85rem;line-height:1.5}
+.text-smaller{
+    font-size: 0.65rem;
+    line-height: 1.5;
+    font-style: italic;
+    color: #666;
+}
 /* utility for danger / red text */
 .text-danger{color:#e11d48}
 
