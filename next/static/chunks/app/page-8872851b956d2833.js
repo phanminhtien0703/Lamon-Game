@@ -266,7 +266,7 @@
                     tag: [
                         { id: "tag4", name: "Cập nhật: 10-05-2026" }
                     ],
-                    href: "https://p.googlelik.com/?p=Jje6Fj",
+                    href: "./games/tran-yeu-hang-ma/",
                     gameKey: "tyhm"
                 },
                 {
@@ -277,7 +277,7 @@
                     tag: [
                         { id: "tag1", name: "Cập nhật: 10-05-2026" }
                     ],
-                    href: "https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/Icch.html",
+                    href: "./games/than-ma-giang-the/",
                     gameKey: "tmgt"
                 },
                 {
