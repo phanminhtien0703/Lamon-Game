@@ -262,7 +262,7 @@
                     id: 5,
                     name: "Trấn Yêu Hàng Ma",
                     title: "Trấn Yêu Hàng Ma - Open Server 1 lúc: **13:00 ngày 11-05-2026**.",
-                    image: "./images/tyhm/tyhm-banner.jpg",
+                    image: "./images/tyhm/tyhm-banner.png",
                     tag: [
                         { id: "tag4", name: "Cập nhật: 10-05-2026" }
                     ],
