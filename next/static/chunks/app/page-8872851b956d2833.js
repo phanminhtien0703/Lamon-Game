@@ -138,6 +138,15 @@
 
             const dataGame = [
                 {
+                    id: 5,
+                    name: "Trấn Yêu Hàng Ma",
+                    logoImage: "./images/tyhm/tyhm-logo.jpg",
+                    type: 4,
+                    gameType: { name: "game mới ra" },
+                    href: "./games/tran-yeu-hang-ma",
+                    gameKey: "tyhm"
+                },
+                {
                     id: 1,
                     name: "Thần Ma Giáng Thế",
                     logoImage: "./images/tmgt/tmgt-logo.png",
@@ -176,6 +185,17 @@
             ];
 
             const dataGiftcode = [
+                {
+                    id: 6,
+                    name: "Trấn Yêu Hàng Ma",
+                    image: "./images/tyhm/tyhm-logo.jpg",
+                    totalGiftcode: 10000,
+                    totalReceived: 2352,
+                    type: 4,
+                    text: "Mình muốn nhận code game Trấn Yêu Hàng Ma",
+                    value: "Nhận code",
+                    gameKey: "tyhm"
+                },
                 {
                     id: 1,
                     name: "Thần Ma Giáng Thế",
@@ -238,6 +258,17 @@
             ];
 
             const dataNews = [
+                {
+                    id: 5,
+                    name: "Trấn Yêu Hàng Ma",
+                    title: "Trấn Yêu Hàng Ma - Open Server 1 lúc: **13:00 ngày 11-05-2026**.",
+                    image: "./images/tyhm/tyhm-banner.png",
+                    tag: [
+                        { id: "tag4", name: "Cập nhật: 10-05-2026" }
+                    ],
+                    href: "./games/tran-yeu-hang-ma/",
+                    gameKey: "tyhm"
+                },
                 {
                     id: 1,
                     name: "Thần Ma Giáng Thế",
