@@ -9,13 +9,17 @@
     <link rel="stylesheet" href="../../next/static/css/9706cae02c06bb94.css" data-precedence="next">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Thần Ma Giáng Thế</title>
+    <title>Thần Ma Giáng Thế | Lamon Game</title>
+    <meta name="description" content="Thần Ma Giáng Thế — MMORPG hành động 3D với 8 class đa dạng, chiến trường PvP sôi động, ấp trứng hóa rồng và hoạt động bang hội hấp dẫn. Tải miễn phí trên iOS, Android và PC.">
+    <meta name="theme-color" content="#0b84ff">
+    <link rel="canonical" href="https://lamongame.com/games/than-ma-giang-the/">
     <!-- Title & Description -->
-    <meta property="og:title" content="Thần Ma Giáng Thế" />
+    <meta property="og:title" content="Thần Ma Giáng Thế | Lamon Game" />
     <meta property="og:description"
-        content="Thần Ma Giáng Thế — MMORPG hành động 3D với hệ thống kỹ năng đa dạng, chiến trường PvP sôi động cùng hoạt động bang hội và event hấp dẫn" />
-    <meta property="og:url" content="https://lamongame.com/images/tmgt/tmgt-banner1.png" />
+        content="Thần Ma Giáng Thế — MMORPG hành động 3D với 8 class đa dạng, chiến trường PvP sôi động, ấp trứng hóa rồng và hoạt động bang hội hấp dẫn." />
+    <meta property="og:url" content="https://lamongame.com/games/than-ma-giang-the/" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Lamon Game" />
 
     <!-- Banner hiển thị khi share -->
     <meta property="og:image" content="https://lamongame.com/images/tmgt/tmgt-banner1.png" />
@@ -60,11 +64,11 @@
         <section class="hero-card">
             <div class="hero-layout">
                 <div class="game-info">
-                    <div class="tag-row"><span class="tag">MMORPG</span><span class="tag">Nhập Vai</span><span
+                    <div class="tag-row"><button class="back-btn" onclick="window.history.back()" title="Quay lại">← Quay lại</button><span class="tag">MMORPG</span><span class="tag">Nhập Vai</span><span
                             class="tag">PvP</span></div>
                     <div class="title-row">
                         <img class="game-logo" src="../../images/tmgt/tmgt-logo.png" alt="Thần Ma Giáng Thế">
-                        <h1 class="game-title">Thần Ma Giáng Thế</h1>
+                        <h1 class="game-title">Thần Ma Giáng Thế - Lamon Game</h1>
                     </div>
                     <p class="game-desc">Thần Ma Giáng Thế — MMORPG hành động 3D với hệ thống kỹ năng đa dạng,
                         chiến trường PvP sôi động cùng hoạt động bang hội và event hấp dẫn.</p>
@@ -156,7 +160,7 @@
                     </ul>
 
                     <div class="image-box text-center">
-                        <img src="/images/tmgt/tmgt-1.jpg" alt="Game nhập vai đạo sĩ diệt cương thi độc đáo">
+                        <img src="/images/tmgt/tmgt-1.jpg" alt="8 class nhân vật trong Thần Ma Giáng Thế" loading="lazy">
                         <p class="image-caption text-smaller">
                             <em>Tự do chuyển đổi 8 Class nhân vật cực ngầu trong game</em>
                         </p>
@@ -177,7 +181,7 @@
                     </ul>
 
                     <div class="image-box text-center">
-                        <img src="/images/tmgt/tmgt-2.jpg" alt="Game nhập vai đạo sĩ diệt cương thi độc đáo">
+                        <img src="/images/tmgt/tmgt-2.jpg" alt="Ấp trứng hóa rồng và không chiến trong Thần Ma Giáng Thế" loading="lazy">
                         <p class="image-caption text-smaller">
                             <em>Không chiến đỉnh cao mô phỏng chuẩn bản gốc Chiến Thần Kỷ Nguyên VTC</em>
                         </p>
@@ -195,7 +199,7 @@
                     </ul>
 
                     <div class="image-box text-center">
-                        <img src="/images/tmgt/tmgt-3.jpg" alt="Game nhập vai đạo sĩ diệt cương thi độc đáo">
+                        <img src="/images/tmgt/tmgt-3.jpg" alt="Dàn ảo hóa đa dạng phong cách trong Thần Ma Giáng Thế" loading="lazy">
                         <p class="image-caption text-smaller">
                             <em>Dàn ảo hóa đa dạng, phong cách tổng tài duy nhất tại Thần Ma Giáng Thế Mobile
                                 (Private).</em>
@@ -219,7 +223,7 @@
                     </ul>
 
                     <div class="image-box text-center">
-                        <img src="/images/tmgt/tmgt-4.jpg" alt="Game nhập vai đạo sĩ diệt cương thi độc đáo">
+                        <img src="/images/tmgt/tmgt-4.jpg" alt="Thẻ nạp Kim Cương và Ruby miễn phí mỗi ngày" loading="lazy">
                         <p class="image-caption text-smaller">
                             <em>Làm giàu không khó với thẻ nạp Kim Cương và Ruby miễn phí mỗi ngày khi tải game Thần Ma
                                 Giáng Thế.</em>
@@ -356,6 +360,104 @@
         </div>
     </div>
     <script>
+    (function () {
+
+      // =========================
+      // SESSION ID
+      // =========================
+      let sessionId = localStorage.getItem("lg_session");
+
+      if (!sessionId) {
+        sessionId =
+          Date.now().toString(36) + Math.random().toString(36).substring(2);
+
+        localStorage.setItem("lg_session", sessionId);
+      }
+
+      // =========================
+      // SEND FUNCTION
+      // =========================
+      function send(event, data = {}) {
+            var payload = Object.assign({
+                event: event,
+                sessionId: sessionId,
+                page: location.href,
+                ua: navigator.userAgent,
+                time: new Date().toISOString()
+            }, data || {});
+
+            var body = JSON.stringify(payload);
+
+            // Use sendBeacon for click events to improve delivery before navigation
+            try {
+                if (event === 'click' && navigator && navigator.sendBeacon) {
+                    var ok = navigator.sendBeacon('https://data-track-lamongame.phanminhtien070302.workers.dev/track', body);
+                    if (ok) return;
+                }
+            } catch (e) {}
+
+            // fallback to fetch with keepalive
+            fetch('https://data-track-lamongame.phanminhtien070302.workers.dev/track', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                keepalive: true,
+                body: body
+            }).catch(function (err) {
+                console.log('TRACK ERROR:', err);
+            });
+      }
+
+      // =========================
+      // CLICK TRACK (DELEGATION)
+      // =========================
+        // helper: robustly extract visible text from element or descendants
+        function extractText(el, maxLen) {
+            if (!el) return '';
+            maxLen = maxLen || 60;
+            var t = (el.innerText || el.textContent || '') + '';
+            t = t.trim();
+            if (t) return t.slice(0, maxLen);
+
+            // try common attributes
+            t = el.getAttribute && (el.getAttribute('aria-label') || el.getAttribute('title') || el.getAttribute('alt') || el.value || '');
+            if (t) return ('' + t).trim().slice(0, maxLen);
+
+            // gather visible text nodes under element
+            try {
+                var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+                    acceptNode: function (node) {
+                        return node.nodeValue && node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+                    }
+                });
+                var parts = [];
+                while (walker.nextNode()) {
+                    parts.push(walker.currentNode.nodeValue.trim());
+                    if (parts.join(' ').length >= maxLen) break;
+                }
+                if (parts.length) return parts.join(' ').slice(0, maxLen);
+            } catch (e) {}
+
+            return '';
+        }
+
+        document.addEventListener("click", function (e) {
+            const el = e.target.closest("[data-track]");
+            if (!el) return;
+
+            const trackValue = el.getAttribute("data-track");
+
+            var text = extractText(el, 60);
+            console.log("TRACK CLICK:", trackValue, 'TEXT:', text);
+
+            send("click", {
+                data: trackValue,
+                text: text
+            });
+        });
+
+    })();
+    </script>
+    <script>
         (function () {
             const carousel = document.querySelector('.carousel');
             if (!carousel) return;
@@ -403,103 +505,5 @@
     </script>
 
 </body>
-<script>
-(function () {
-
-  // =========================
-  // SESSION ID
-  // =========================
-  let sessionId = localStorage.getItem("lg_session");
-
-  if (!sessionId) {
-    sessionId =
-      Date.now().toString(36) + Math.random().toString(36).substring(2);
-
-    localStorage.setItem("lg_session", sessionId);
-  }
-
-  // =========================
-  // SEND FUNCTION
-  // =========================
-  function send(event, data = {}) {
-        var payload = Object.assign({
-            event: event,
-            sessionId: sessionId,
-            page: location.href,
-            ua: navigator.userAgent,
-            time: new Date().toISOString()
-        }, data || {});
-
-        var body = JSON.stringify(payload);
-
-        // Use sendBeacon for click events to improve delivery before navigation
-        try {
-            if (event === 'click' && navigator && navigator.sendBeacon) {
-                var ok = navigator.sendBeacon('https://data-track-lamongame.phanminhtien070302.workers.dev/track', body);
-                if (ok) return;
-            }
-        } catch (e) {}
-
-        // fallback to fetch with keepalive
-        fetch('https://data-track-lamongame.phanminhtien070302.workers.dev/track', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            keepalive: true,
-            body: body
-        }).catch(function (err) {
-            console.log('TRACK ERROR:', err);
-        });
-  }
-
-  // =========================
-  // CLICK TRACK (DELEGATION)
-  // =========================
-    // helper: robustly extract visible text from element or descendants
-    function extractText(el, maxLen) {
-        if (!el) return '';
-        maxLen = maxLen || 60;
-        var t = (el.innerText || el.textContent || '') + '';
-        t = t.trim();
-        if (t) return t.slice(0, maxLen);
-
-        // try common attributes
-        t = el.getAttribute && (el.getAttribute('aria-label') || el.getAttribute('title') || el.getAttribute('alt') || el.value || '');
-        if (t) return ('' + t).trim().slice(0, maxLen);
-
-        // gather visible text nodes under element
-        try {
-            var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
-                acceptNode: function (node) {
-                    return node.nodeValue && node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-                }
-            });
-            var parts = [];
-            while (walker.nextNode()) {
-                parts.push(walker.currentNode.nodeValue.trim());
-                if (parts.join(' ').length >= maxLen) break;
-            }
-            if (parts.length) return parts.join(' ').slice(0, maxLen);
-        } catch (e) {}
-
-        return '';
-    }
-
-    document.addEventListener("click", function (e) {
-        const el = e.target.closest("[data-track]");
-        if (!el) return;
-
-        const trackValue = el.getAttribute("data-track");
-
-        var text = extractText(el, 60);
-        console.log("TRACK CLICK:", trackValue, 'TEXT:', text);
-
-        send("click", {
-            data: trackValue,
-            text: text
-        });
-    });
-
-})();
-</script>
 
 </html>
