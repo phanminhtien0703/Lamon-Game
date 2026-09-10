@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sự Kiện Đua Top Mở Server | Thần Ma Giáng Thế - Lamon Game</title>
     <meta name="description"
-        content="Chi tiết sự kiện Quà Đua Top Tính Năng 8 ngày đầu mở Server game Thần Ma Giáng Thế từ S40 trở đi. Hàng ngàn Ruby, Thần Binh, Chiến Dực và Tọa Kỵ VIP!">
+        content="Chi tiết sự kiện Quà Đua Top Tính Năng 8 ngày đầu mở Server game Thần Ma Giáng Thế. Hàng ngàn Ruby, Thần Binh, Chiến Dực và Tọa Kỵ VIP!">
     <meta name="theme-color" content="#0f172a">
-    <link rel="canonical" href="https://lamongame.com/games/than-ma-giang-the/dua-top/">
+    <link rel="canonical" href="https://lamongame.com/games/than-ma-giang-the/dua-top-tinh-nang/">
 
     <!-- Open Graph -->
     <meta property="og:title" content="Sự Kiện Đua Top Mở Server | Thần Ma Giáng Thế">
     <meta property="og:description"
         content="Chi tiết sự kiện Quà Đua Top Tính Năng 8 ngày đầu mở Server Thần Ma Giáng Thế. Xem ngay phần thưởng Top 1, Top 2, Top 3-5!">
-    <meta property="og:url" content="https://lamongame.com/games/than-ma-giang-the/dua-top/">
+    <meta property="og:url" content="https://lamongame.com/games/than-ma-giang-the/dua-top-tinh-nang/">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Lamon Game">
     <meta property="og:image" content="https://lamongame.com/images/tmgt/tmgt-banner1.png">
@@ -597,13 +597,28 @@
         }
 
         /* Footer */
-        .event-footer {
+        #footer-root .footer {
             margin-top: 40px;
             text-align: center;
-            color: #94a3b8;
-            font-size: 12px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 24px;
+            margin-bottom: 24px;
+        }
+
+        #footer-root .bg-footer {
+            background: transparent !important;
+        }
+
+        #footer-root .listCertify {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+
+        #footer-root .listCertify li {
+            color: #94a3b8 !important;
+            font-size: 12px;
             line-height: 1.7;
         }
 
@@ -666,7 +681,7 @@
 
             <div class="event-live-badge">
                 <span class="pulse-circle"></span>
-                <span>Áp dụng từ Server S40 trở đi</span>
+                <span>Đang Diễn Ra</span>
             </div>
         </div>
 
@@ -717,7 +732,6 @@
                 <div class="event-scope-card">
                     <strong>💥 PHẠM VI ÁP DỤNG &amp; LƯU Ý:</strong>
                     <ul>
-                        <li>Áp dụng cho sever <strong>Thần Ma S40 trở đi</strong>.</li>
                         <li>Đối với những server đang trong lộ trình đua top 8 ngày mở server sẽ áp dụng theo lộ trình
                             tương ứng và phần thưởng sẽ cập nhật bắt đầu tính từ ngày cập nhật sự kiện (Tức sẽ tính từ
                             ngày <strong>05/11/2025</strong>), những server đã qua top trước đó đều không hỗ trợ chỉ hỗ
@@ -1029,14 +1043,25 @@
             </div>
         </div>
 
-        <!-- Footer -->
-        <footer class="event-footer">
-            <p>Giấy phép cung cấp dịch vụ trò chơi điện tử G1 trên mạng số 349/GP-BTTTT do Bộ Thông tin và Truyền thông
-                cấp ngày 12/7/2022.</p>
-            <p>© 2026 Lamon Game. Bản quyền thuộc về Lamon Game Studio.</p>
-        </footer>
-
+        <!-- Footer & Bottom Navigation -->
+        <div id="footer-root"></div>
+        <div id="sidebottom-root"></div>
     </div>
+
+    <script src="/components/footer.js"></script>
+    <script src="/components/sidebottom.js"></script>
+    <script>
+        renderFooter();
+        renderSidebottom({
+            items: [
+                { href: 'https://zalo.me/g/kbqnel556', icon: 'zalo', label: 'Cộng Đồng', track: 'side-zalo' },
+                { href: 'https://m.me/lamongame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Th%E1%BA%A7n%20Ma%20Gi%C3%A1ng%20Th%E1%BA%BF', icon: 'giftcode', label: 'Giftcode', track: 'side-giftcode', target: '_blank', rel: 'noopener noreferrer', ariaLabel: 'Mở Messenger để nhận giftcode' },
+                { href: '/', icon: 'home', label: 'Trang chủ', track: 'side-home' },
+                { href: 'https://www.facebook.com/lamongame/', icon: 'support', label: 'Hỗ trợ', track: 'side-support' },
+                { href: '', icon: 'moreGames', label: 'Game khác', track: 'side-more-games' }
+            ]
+        });
+    </script>
 
     <!-- Interaction Script -->
     <script>
