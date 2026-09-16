@@ -79,5 +79,26 @@
                 nextSlide();
             }
         }, { passive: true });
+
+        // === 2. Clickable Game Cards (Chuyển nhanh sang giao diện tải game) ===
+        const gameCards = document.querySelectorAll('.portal-game-card');
+        gameCards.forEach(function (card) {
+            card.addEventListener('click', function (e) {
+                // Không can thiệp nếu người dùng click trực tiếp vào các nút hành động con (.portal-game-actions)
+                if (e.target.closest('.portal-game-actions a, .portal-game-actions button')) {
+                    return;
+                }
+
+                const url = card.getAttribute('data-download-url');
+                if (!url) return;
+
+                const isBlank = card.getAttribute('data-target') === '_blank' || e.ctrlKey || e.metaKey;
+                if (isBlank) {
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                } else {
+                    window.location.href = url;
+                }
+            });
+        });
     });
 })();
