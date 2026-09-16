@@ -33,7 +33,7 @@
             margin: 0;
             padding: 0;
             line-height: 1.6;
-            overflow-x: hidden;
+            overflow-x: clip;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -47,6 +47,10 @@
 
         /* Top Bar */
         .tmgt-topbar {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -54,11 +58,12 @@
             gap: 12px;
             margin-bottom: 24px;
             padding: 12px 18px;
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(12px);
+            background: rgba(13, 19, 33, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
         }
 
         .tmgt-topbar-left {
@@ -151,6 +156,14 @@
             color: #ffffff;
             box-shadow: 0 0 16px rgba(234, 88, 12, 0.4);
             transform: translateY(-1px);
+        }
+
+        .tmgt-event-label-short {
+            display: none;
+        }
+
+        .tmgt-event-label-full {
+            display: inline;
         }
 
         /* Hero Main Section */
@@ -297,12 +310,6 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 14px;
-        }
-
-        @media (max-width: 580px) {
-            .tmgt-cta-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         .tmgt-btn {
@@ -1449,11 +1456,37 @@
         @media (max-width: 860px) {
 
             /* Topbar */
+            .tmgt-topbar {
+                position: -webkit-sticky !important;
+                position: sticky !important;
+                top: 6px !important;
+                z-index: 1000 !important;
+                flex-wrap: nowrap !important;
+                padding: 8px 12px !important;
+                gap: 8px !important;
+                margin-bottom: 16px !important;
+                background: rgba(13, 19, 33, 0.95) !important;
+                backdrop-filter: blur(16px) !important;
+                -webkit-backdrop-filter: blur(16px) !important;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55) !important;
+            }
+
+            .tmgt-topbar-left {
+                flex-shrink: 0 !important;
+                gap: 6px !important;
+            }
+
+            .tmgt-topbar-right {
+                flex-shrink: 0 !important;
+                gap: 6px !important;
+            }
+
             .tmgt-back-btn,
             .tmgt-top-event-btn {
-                font-size: 11.5px;
-                padding: 5px 10px;
-                gap: 5px;
+                font-size: 11.5px !important;
+                padding: 5px 9px !important;
+                gap: 4px !important;
+                white-space: nowrap !important;
             }
 
             /* Hero Identity & Content */
@@ -1502,31 +1535,55 @@
                 font-size: 10.5px;
             }
 
-            /* Download CTAs */
+            /* Download CTAs (Compact 2-Column Grid on Mobile) */
+            .tmgt-download-station {
+                gap: 8px;
+            }
+
+            .tmgt-cta-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+
             .tmgt-btn {
-                padding: 10px 14px;
-                gap: 10px;
-                border-radius: 12px;
+                padding: 10px 10px !important;
+                gap: 8px !important;
+                border-radius: 12px !important;
+                min-height: 48px;
             }
 
             .tmgt-btn-icon-wrap {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
-                border-radius: 8px;
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 16px !important;
+                border-radius: 8px !important;
+                flex-shrink: 0;
+            }
+
+            .tmgt-btn-icon-wrap svg {
+                width: 16px !important;
+                height: 16px !important;
             }
 
             .tmgt-btn-main {
-                font-size: 13.5px;
+                font-size: 11.5px !important;
+                font-weight: 800 !important;
+                line-height: 1.25 !important;
+                white-space: nowrap !important;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .tmgt-btn-sub {
-                font-size: 11px;
+                display: none !important;
             }
 
             .tmgt-btn-badge {
-                font-size: 9px;
-                padding: 2px 6px;
+                font-size: 8px !important;
+                padding: 1px 5px !important;
+                top: 2px !important;
+                right: 4px !important;
+                border-radius: 4px !important;
             }
 
             /* Section Headers */
@@ -1693,5 +1750,59 @@
             #sidebottom-root .sidebottom ul li a svg {
                 width: 18px !important;
                 height: 18px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tmgt-topbar {
+                padding: 6px 8px !important;
+                gap: 4px !important;
+            }
+
+            .tmgt-topbar-right {
+                gap: 4px !important;
+            }
+
+            .tmgt-back-btn,
+            .tmgt-top-event-btn {
+                font-size: 11px !important;
+                padding: 5px 8px !important;
+                gap: 3px !important;
+            }
+
+            .tmgt-event-label-full {
+                display: none !important;
+            }
+
+            .tmgt-event-label-short {
+                display: inline !important;
+            }
+
+            .tmgt-cta-grid {
+                gap: 6px !important;
+            }
+
+            .tmgt-btn {
+                padding: 8px 6px !important;
+                gap: 6px !important;
+                border-radius: 10px !important;
+                min-height: 44px;
+            }
+
+            .tmgt-btn-icon-wrap {
+                width: 28px !important;
+                height: 28px !important;
+                font-size: 15px !important;
+                border-radius: 6px !important;
+            }
+
+            .tmgt-btn-icon-wrap svg {
+                width: 15px !important;
+                height: 15px !important;
+            }
+
+            .tmgt-btn-main {
+                font-size: 10.5px !important;
+                letter-spacing: -0.2px;
             }
         }

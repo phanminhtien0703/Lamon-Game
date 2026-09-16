@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đổi Điểm | Thần Ma Giáng Thế - Lamon Game</title>
+    <meta name="description"
+        content="Đổi điểm tra cứu và tính điểm quy đổi vật phẩm game Thần Ma Giáng Thế trực tiếp từ Google Sheets. Tự động cập nhật, lọc danh mục, tìm kiếm và xuất danh sách đổi thưởng.">
+    <link rel="icon" href="/images/tmgt/tmgt-logo.png" type="image/x-icon">
+
+    <!-- Canonical & Open Graph -->
+    <link rel="canonical" href="https://lamongame.com/games/than-ma-giang-the/doi-diem/">
+    <meta property="og:title" content="Đổi Điểm | Thần Ma Giáng Thế - Lamon Game">
+    <meta property="og:description" content="Tra cứu bảng giá & tính điểm quy đổi vật phẩm game Thần Ma Giáng Thế trực tiếp từ Google Sheets.">
+    <meta property="og:image" content="/images/tmgt/tmgt-banner1.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;800;900&family=Alegreya+SC:wght@700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Shared & Game Stylesheets for Portal Header & Sidebottom -->
+    <link rel="stylesheet" href="/games/public/game.css">
+    <link rel="stylesheet" href="/assets/css/pages/home.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            flame: '#ea580c',
+                            'flame-hover': '#c2410c',
+                            gold: '#f59e0b',
+                            'gold-light': '#fcd34d',
+                            emerald: '#10b981',
+                            'emerald-dark': '#059669',
+                            dark: '#070b14',
+                            surface: '#0f172a',
+                            'surface-card': '#162036',
+                            'surface-hover': '#1e2c4a',
+                            border: 'rgba(255, 255, 255, 0.1)',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        fantasy: ['Cinzel', '"Alegreya SC"', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- PapaParse CDN for parsing published Google Sheet CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070b14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-panel-card {
+            background: rgba(20, 28, 48, 0.78);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-card:hover {
+            background: rgba(28, 40, 68, 0.9);
+            border-color: rgba(234, 88, 12, 0.45);
+        }
+
+        /* Subtle pulse for floating cart button */
+        @keyframes subtlePulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.92; }
+        }
+        .animate-subtle-pulse {
+            animation: subtlePulse 2.4s infinite ease-in-out;
+        }
+    </style>
+</head>
+
+<!--
+===================================================================================
+HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 BƯỚC):
+1. Mở file Google Sheet chứa bảng quy đổi vật phẩm Thần Ma Giáng Thế.
+2. Trên thanh menu, chọn: Tệp (File) > Chia sẻ (Share) > Xuất bản lên web (Publish to web).
+3. Trong hộp thoại hiện ra, ở mục định dạng chọn "Giá trị được phân tách bằng dấu phẩy (.csv)" thay vì "Trang web".
+4. Bấm "Xuất bản" (Publish) và Sao chép đường liên kết nhận được.
+5. Dán đường link vào hằng số `GOOGLE_SHEET_CSV_URL` bên dưới hoặc nhập trực tiếp vào ô cấu hình trên giao diện.
+===================================================================================
+-->
+
+<body class="bg-[#070b14] text-slate-100 font-sans min-h-screen antialiased selection:bg-amber-500 selection:text-black flex flex-col">
+
+    <!-- Main Container -->
+    <div class="portal-container" style="max-width: 1280px; padding: 16px 14px 110px; margin: 0 auto; width: 100%;">
+
+        <!-- Hero Header Section -->
+        <section class="glass-panel-card rounded-2xl p-4 sm:p-6 mb-6 border border-white/10 relative overflow-hidden">
+            <div class="absolute -top-12 -right-12 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <!-- Top Action Row: Back to TMGT & Event Link -->
+            <div class="flex items-center justify-between gap-3 pb-3 mb-4 border-b border-white/10">
+                <a href="../" class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-amber-300 transition-colors font-semibold">
+                    <span class="text-amber-400">❮</span>
+                    <span>Về Trang Game TMGT</span>
+                </a>
+                <a href="../dua-top-tinh-nang/" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition-all">
+                    <span>🏆</span>
+                    <span>Sự Kiện Đua Top</span>
+                </a>
+            </div>
+
+            <!-- Main Title & Cart Action -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <img src="/images/tmgt/tmgt-logo.png" alt="Thần Ma Giáng Thế" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl border-2 border-amber-500/40 object-cover shadow-md shadow-amber-950/40 shrink-0">
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h1 class="text-lg sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-100 to-white tracking-wide">
+                                ĐỔI ĐIỂM
+                            </h1>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                Live Google Sheets
+                            </span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-400 mt-1">
+                            Thần Ma Giáng Thế &bull; Tra cứu hệ số &amp; tính điểm quy đổi tức thì
+                        </p>
+                    </div>
+                </div>
+
+                <div class="shrink-0">
+                    <button id="btnOpenDrawer" type="button" class="w-full sm:w-auto text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 border border-emerald-400/30 transition-all transform active:scale-95">
+                        <span class="text-base">🛒</span>
+                        <span>Giỏ Tính Điểm</span>
+                        <span id="headerCartCount" class="w-5 h-5 rounded-full bg-slate-950 text-emerald-400 text-xs font-black flex items-center justify-center border border-emerald-500/40">0</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Container -->
+        <main class="w-full space-y-6">
+
+        <!-- Stats Overview Cards -->
+        <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="glass-panel-card rounded-xl p-3 sm:p-4 border border-white/5 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-lg text-amber-400 shrink-0">
+                    📦
+                </div>
+                <div>
+                    <span class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">Vật phẩm quy đổi</span>
+                    <span id="statTotalItems" class="text-base sm:text-lg font-extrabold text-white">0</span>
+                </div>
+            </div>
+
+            <div class="glass-panel-card rounded-xl p-3 sm:p-4 border border-white/5 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-lg text-emerald-400 shrink-0">
+                    🏷️
+                </div>
+                <div>
+                    <span class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">Danh mục vật phẩm</span>
+                    <span id="statTotalCategories" class="text-base sm:text-lg font-extrabold text-white">0</span>
+                </div>
+            </div>
+
+            <div class="glass-panel-card rounded-xl p-3 sm:p-4 border border-white/5 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-lg text-blue-400 shrink-0">
+                    📉
+                </div>
+                <div>
+                    <span class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">Điểm thấp nhất</span>
+                    <span id="statMinPoints" class="text-base sm:text-lg font-extrabold text-white">0</span>
+                </div>
+            </div>
+
+            <div class="glass-panel-card rounded-xl p-3 sm:p-4 border border-white/5 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-lg text-purple-400 shrink-0">
+                    📈
+                </div>
+                <div>
+                    <span class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block">Điểm cao nhất</span>
+                    <span id="statMaxPoints" class="text-base sm:text-lg font-extrabold text-white">0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search & Control Toolbar -->
+        <section class="glass-panel rounded-2xl p-4 sm:p-5 border border-white/10 space-y-4">
+            <!-- Search & Sort Row -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <!-- Search Input with Instant Clear -->
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Tìm nhanh tên vật phẩm quy đổi Thần Ma Giáng Thế..."
+                        class="w-full bg-slate-950/80 border border-slate-700/80 focus:border-amber-400 rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-400 transition-all">
+                    <button id="btnClearSearch" type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white hidden" title="Xóa tìm kiếm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Sort Selector -->
+                <div class="flex items-center gap-2">
+                    <label for="sortSelect" class="text-xs text-slate-400 font-medium whitespace-nowrap hidden sm:inline">Sắp xếp:</label>
+                    <select id="sortSelect" class="bg-slate-950/80 border border-slate-700/80 focus:border-amber-400 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-400 transition-all font-medium">
+                        <option value="points-desc">Điểm: Cao ➔ Thấp</option>
+                        <option value="points-asc">Điểm: Thấp ➔ Cao</option>
+                        <option value="name-asc">Tên vật phẩm: A ➔ Z</option>
+                        <option value="name-desc">Tên vật phẩm: Z ➔ A</option>
+                        <option value="type-asc">Loại danh mục</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dynamic Category Filter Pills -->
+            <div class="pt-2 border-t border-white/5">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Danh Mục:</span>
+                    <span id="activeCategoryName" class="text-[11px] font-semibold text-amber-400">Tất cả</span>
+                </div>
+                <!-- Pills container with horizontal scroll on mobile -->
+                <div id="categoryPillsContainer" class="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-thin">
+                    <button type="button" class="category-pill active shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 border border-amber-400 transition-all" data-category="ALL">
+                        Tất cả
+                    </button>
+                    <!-- Injected dynamically by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Items Grid Display -->
+        <section id="itemsContainerWrapper" class="space-y-4">
+            <!-- Results Header Info -->
+            <div class="flex items-center justify-between px-1 text-xs text-slate-400 font-medium">
+                <div>
+                    Hiển thị <span id="displayCount" class="font-bold text-white">0</span> / <span id="totalFilteredCount" class="font-bold text-white">0</span> vật phẩm
+                </div>
+                <div class="text-[11px]">
+                    Trang <span id="currentPageNum" class="font-bold text-amber-400">1</span> / <span id="totalPageNum" class="font-bold text-slate-300">1</span>
+                </div>
+            </div>
+
+            <!-- Items Cards Grid -->
+            <div id="itemsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                <!-- Injected by JS or Loading Skeletons -->
+            </div>
+
+            <!-- Empty State Display -->
+            <div id="emptyState" class="hidden glass-panel rounded-2xl p-12 text-center border border-white/10 space-y-3">
+                <div class="text-4xl">🔍</div>
+                <h3 class="text-base font-bold text-white">Không tìm thấy vật phẩm nào phù hợp</h3>
+                <p class="text-xs text-slate-400 max-w-md mx-auto">Vui lòng thử từ khóa tìm kiếm khác hoặc bấm "Tất cả" để xem toàn bộ danh sách quy đổi.</p>
+                <button type="button" id="btnResetFilters" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-400 text-xs font-bold rounded-xl border border-white/10 transition-all">
+                    ↺ Xóa bộ lọc & Tìm lại
+                </button>
+            </div>
+
+            <!-- Error State with Retry -->
+            <div id="errorState" class="hidden glass-panel rounded-2xl p-10 text-center border border-rose-500/30 bg-rose-950/20 space-y-3">
+                <div class="text-4xl">⚠️</div>
+                <h3 class="text-base font-bold text-rose-300">Không thể tải dữ liệu quy đổi</h3>
+                <p id="errorMessageText" class="text-xs text-slate-300 max-w-lg mx-auto leading-relaxed">
+                    Hệ thống đang đồng bộ dữ liệu. Vui lòng bấm thử lại sau giây lát hoặc liên hệ Fanpage để được hỗ trợ.
+                </p>
+                <div class="flex items-center justify-center gap-3 pt-2">
+                    <button type="button" id="btnRetryFetch" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-rose-900/50 transition-all">
+                        🔄 Thử Lại Ngay
+                    </button>
+                    <a href="https://fb.com/lamongame" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-400 text-xs font-bold rounded-xl border border-white/10 transition-all">
+                        💬 Hỗ Trợ Fanpage
+                    </a>
+                </div>
+            </div>
+
+            <!-- Pagination Bar -->
+            <nav id="paginationContainer" class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 px-1">
+                <div class="text-xs text-slate-400">
+                    Phân trang 20 vật phẩm / trang
+                </div>
+                <div class="flex items-center gap-1.5" id="paginationButtons">
+                    <!-- Dynamic Page Buttons -->
+                </div>
+            </nav>
+        </section>
+
+    </main>
+
+        <!-- Footer -->
+        <footer class="glass-panel border-t border-white/10 mt-10 py-5 text-center text-xs text-slate-500 rounded-2xl">
+            <div class="px-4">
+                <p>© 2026 Thần Ma Giáng Thế — Lamon Game Portal. Bảng quy đổi vật phẩm kết nối Google Sheets trực tiếp.</p>
+            </div>
+        </footer>
+
+    </div> <!-- End .portal-container -->
+
+    <!-- Floating Cart Bar (Sticky Bottom Button, above bottom navigation dock) -->
+    <div id="floatingCartTrigger" class="fixed bottom-20 right-4 sm:right-6 z-40">
+        <button type="button" id="btnFloatingOpen" class="bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-extrabold text-sm px-4 py-3 rounded-2xl shadow-2xl shadow-emerald-950/80 border border-emerald-400/40 flex items-center gap-3 transition-all transform hover:-translate-y-1 active:scale-95 animate-subtle-pulse">
+            <span class="text-xl">🛒</span>
+            <span>Giỏ quy đổi:</span>
+            <span id="floatingPointsTotal" class="text-amber-300 font-mono tracking-tight font-black">0 Điểm</span>
+            <span id="floatingBadgeCount" class="w-6 h-6 rounded-full bg-slate-950 text-emerald-400 text-xs font-black flex items-center justify-center border border-emerald-400/50">0</span>
+        </button>
+    </div>
+
+    <!-- Slide-over Drawer / Interactive Calculator -->
+    <div id="cartDrawerBackdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 transition-opacity opacity-0 pointer-events-none duration-300">
+        <aside id="cartDrawer" class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-slate-900 border-l border-white/10 shadow-2xl flex flex-col z-50 transform translate-x-full transition-transform duration-300 ease-out">
+            <!-- Drawer Header -->
+            <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-slate-950/80">
+                <div class="flex items-center gap-2.5">
+                    <span class="text-2xl">🛍️</span>
+                    <div>
+                        <h3 class="text-base font-bold text-white leading-tight">GIỎ TÍNH ĐIỂM QUY ĐỔI</h3>
+                        <p class="text-[11px] text-slate-400">Thần Ma Giáng Thế • Tự động tính điểm</p>
+                    </div>
+                </div>
+                <button type="button" id="btnCloseDrawer" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-all" title="Đóng giỏ">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Drawer Body: Selected Items List -->
+            <div id="cartItemsList" class="flex-1 overflow-y-auto p-4 space-y-2.5 divide-y divide-white/5">
+                <!-- Cart items will be rendered here -->
+            </div>
+
+            <!-- Empty Cart Message in Drawer -->
+            <div id="cartEmptyMessage" class="hidden p-10 text-center space-y-2 my-auto">
+                <div class="text-4xl">🛒</div>
+                <h4 class="text-sm font-bold text-white">Chưa có vật phẩm nào trong giỏ</h4>
+                <p class="text-xs text-slate-400">Bấm dấu [+] trên danh sách vật phẩm để thêm vào giỏ tính điểm.</p>
+            </div>
+
+            <!-- Drawer Footer: Summary & Actions -->
+            <div class="p-4 border-t border-white/10 bg-slate-950/90 space-y-3">
+                <!-- Calculation Breakdown -->
+                <div class="space-y-1.5 text-xs text-slate-300">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-400">Tổng số lượng vật phẩm:</span>
+                        <span id="drawerTotalQuantity" class="font-bold text-white">0 món</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm pt-1 border-t border-white/5">
+                        <span class="font-bold text-slate-200">TỔNG ĐIỂM QUY ĐỔI:</span>
+                        <span id="drawerTotalPoints" class="text-lg font-black text-amber-400 font-mono">0 Điểm</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                    <button type="button" id="btnClearCart" class="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-400 text-xs font-bold border border-rose-500/20 transition-all flex items-center justify-center gap-1.5">
+                        <span>🗑️</span>
+                        <span>Xóa Giỏ</span>
+                    </button>
+                    <button type="button" id="btnCopySummary" class="px-3 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-extrabold shadow-lg shadow-amber-950/50 transition-all flex items-center justify-center gap-1.5">
+                        <span>📋</span>
+                        <span>Sao Chép Danh Sách</span>
+                    </button>
+                </div>
+
+                <!-- Direct Send to Messenger CTV -->
+                <a id="btnSendMessenger" href="https://m.me/lamongame" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-950/50 transition-all">
+                    <span>💬</span>
+                    <span>Gửi Yêu Cầu Cho CTV / CSKH Lamon Game</span>
+                </a>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center space-y-2">
+        <!-- Injected dynamically -->
+    </div>
+
+    <!-- Root container for dynamic sidebottom component -->
+    <div id="sidebottom-root"></div>
+
+    <!-- Application Script Logic -->
+    <script>
+        /**
+         * ===========================================================================
+         * DIRECT GOOGLE SHEET CSV URL CONFIGURATION (THẦN MA GIÁNG THẾ)
+         * Cấu hình liên kết Google Sheet trực tiếp trong mã nguồn:
+         * ===========================================================================
+         */
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrY1AK4tcg5If5_3SDXSPtmRh5enVqcGSDLsZMXSTxRrmn59G4I51iVvK9R6Z9LnHGz0__LBaTU-y0/pub?gid=0&single=true&output=csv";
+
+        // Tự động chuyển đổi các định dạng link Google Sheet thành link tải CSV trực tiếp
+        function normalizeGoogleSheetUrl(url) {
+            if (!url) return '';
+            url = url.trim();
+            // Nếu đã là link CSV direct
+            if (url.includes('output=csv') || url.includes('export?format=csv')) {
+                return url;
+            }
+            // Link chia sẻ Google Sheet thông thường: https://docs.google.com/spreadsheets/d/{ID}/edit...
+            const match = url.match(/https:\/\/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                const sheetId = match[1];
+                const gidMatch = url.match(/[#&?]gid=([0-9]+)/);
+                const gidParam = gidMatch ? `&gid=${gidMatch[1]}` : '';
+                return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv${gidParam}`;
+            }
+            return url;
+        }
+
+        // Global State
+        const state = {
+            rawItems: [],
+            filteredItems: [],
+            categories: ['ALL'],
+            currentCategory: 'ALL',
+            searchKeyword: '',
+            sortBy: 'points-desc',
+            currentPage: 1,
+            pageSize: 20,
+            cart: {}, // { [itemId]: { item, count } }
+            isLoading: true
+        };
+
+        // DOM Element References
+        const elements = {
+            // Stats
+            statTotalItems: document.getElementById('statTotalItems'),
+            statTotalCategories: document.getElementById('statTotalCategories'),
+            statMinPoints: document.getElementById('statMinPoints'),
+            statMaxPoints: document.getElementById('statMaxPoints'),
+
+            // Search & Filters
+            searchInput: document.getElementById('searchInput'),
+            btnClearSearch: document.getElementById('btnClearSearch'),
+            sortSelect: document.getElementById('sortSelect'),
+            categoryPillsContainer: document.getElementById('categoryPillsContainer'),
+            activeCategoryName: document.getElementById('activeCategoryName'),
+
+            // Grid & States
+            itemsGrid: document.getElementById('itemsGrid'),
+            emptyState: document.getElementById('emptyState'),
+            errorState: document.getElementById('errorState'),
+            errorMessageText: document.getElementById('errorMessageText'),
+            btnRetryFetch: document.getElementById('btnRetryFetch'),
+            btnResetFilters: document.getElementById('btnResetFilters'),
+
+            // Counters & Pagination
+            displayCount: document.getElementById('displayCount'),
+            totalFilteredCount: document.getElementById('totalFilteredCount'),
+            currentPageNum: document.getElementById('currentPageNum'),
+            totalPageNum: document.getElementById('totalPageNum'),
+            paginationButtons: document.getElementById('paginationButtons'),
+
+            // Cart Drawer
+            btnOpenDrawer: document.getElementById('btnOpenDrawer'),
+            btnFloatingOpen: document.getElementById('btnFloatingOpen'),
+            floatingCartTrigger: document.getElementById('floatingCartTrigger'),
+            btnCloseDrawer: document.getElementById('btnCloseDrawer'),
+            cartDrawerBackdrop: document.getElementById('cartDrawerBackdrop'),
+            cartDrawer: document.getElementById('cartDrawer'),
+            cartItemsList: document.getElementById('cartItemsList'),
+            cartEmptyMessage: document.getElementById('cartEmptyMessage'),
+            drawerTotalQuantity: document.getElementById('drawerTotalQuantity'),
+            drawerTotalPoints: document.getElementById('drawerTotalPoints'),
+            btnClearCart: document.getElementById('btnClearCart'),
+            btnCopySummary: document.getElementById('btnCopySummary'),
+            btnSendMessenger: document.getElementById('btnSendMessenger'),
+            headerCartCount: document.getElementById('headerCartCount'),
+            floatingBadgeCount: document.getElementById('floatingBadgeCount'),
+            floatingPointsTotal: document.getElementById('floatingPointsTotal'),
+
+            toastContainer: document.getElementById('toastContainer')
+        };
+
+        // Format helper: format number with dot (e.g. 15000 -> 15.000)
+        function formatPoints(num) {
+            if (num === null || num === undefined || isNaN(num)) return '0';
+            return Number(num).toLocaleString('vi-VN');
+        }
+
+        // Distinct category color mapping
+        function getCategoryColor(type) {
+            const colors = {
+                'Tinh Hoa': 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+                'Thuộc Tính Đơn': 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+                'Trang Bị': 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+                'Tọa Kỵ': 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+                'Cánh': 'bg-teal-500/15 text-teal-300 border-teal-500/30',
+                'Đan Dược': 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+                'Nguyên Liệu': 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+                'Thần Binh': 'bg-red-500/15 text-red-300 border-red-500/30',
+                'Pháp Bảo': 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+                'Phúc Lợi': 'bg-yellow-500/15 text-yellow-300 border-yellow-500/30'
+            };
+            return colors[type] || 'bg-slate-700/30 text-slate-300 border-slate-600/30';
+        }
+
+        /**
+         * ===========================================================================
+         * DATA TRANSFORMATION FUNCTION
+         * Xử lý cấu trúc Google Sheet 3 khối song song:
+         * Block 1: Col A (index 0), Col B (index 1), Col C (index 2)
+         * Block 2: Col F (index 5), Col G (index 6), Col H (index 7)
+         * Block 3: Col K (index 10), Col L (index 11), Col M (index 12)
+         * ===========================================================================
+         */
+        function transformGoogleSheetData(rawRows) {
+            if (!Array.isArray(rawRows) || rawRows.length === 0) return [];
+
+            const extractedItems = [];
+
+            function parseBlock(row, typeColIdx, nameColIdx, pointsColIdx, blockNumber, rowIndex) {
+                if (!row || row.length <= nameColIdx) return null;
+
+                const type = (row[typeColIdx] || '').toString().trim();
+                const name = (row[nameColIdx] || '').toString().trim();
+                const rawPoints = (row[pointsColIdx] || '').toString().trim();
+
+                // Skip empty names
+                if (!name) return null;
+
+                // Skip header rows
+                const lowerName = name.toLowerCase();
+                const lowerType = type.toLowerCase();
+                if (
+                    lowerName === 'tên vật phẩm' || lowerName === 'vật phẩm' || lowerName === 'tên' ||
+                    lowerName === 'item name' || lowerName === 'name' ||
+                    lowerType === 'loại' || lowerType === 'loại vật phẩm' || lowerType === 'category'
+                ) {
+                    return null;
+                }
+
+                // Clean and parse points (handle "1.000", "1,000", "1000 điểm", "5000đ")
+                const cleanedDigits = rawPoints.replace(/[^0-9]/g, '');
+                if (!cleanedDigits) return null;
+                const points = parseInt(cleanedDigits, 10);
+                if (isNaN(points) || points <= 0) return null;
+
+                const itemId = `tmgt-b${blockNumber}-r${rowIndex}-${name.replace(/[^a-zA-Z0-9]/g, '_')}`;
+
+                return {
+                    id: itemId,
+                    type: type || 'Khác',
+                    name: name,
+                    points: points
+                };
+            }
+
+            rawRows.forEach((row, rowIndex) => {
+                // Block 1: Col A, B, C
+                const item1 = parseBlock(row, 0, 1, 2, 1, rowIndex);
+                if (item1) extractedItems.push(item1);
+
+                // Block 2: Col F, G, H
+                const item2 = parseBlock(row, 5, 6, 7, 2, rowIndex);
+                if (item2) extractedItems.push(item2);
+
+                // Block 3: Col K, L, M
+                const item3 = parseBlock(row, 10, 11, 12, 3, rowIndex);
+                if (item3) extractedItems.push(item3);
+            });
+
+            return extractedItems;
+        }
+
+        // Render Skeletons during loading
+        function renderSkeletons() {
+            elements.itemsGrid.innerHTML = Array(8).fill(0).map(() => `
+                <div class="glass-panel-card rounded-2xl p-4 border border-white/5 space-y-3 animate-pulse">
+                    <div class="flex items-center justify-between">
+                        <div class="h-4 w-20 bg-slate-800 rounded-md"></div>
+                        <div class="h-5 w-16 bg-slate-800 rounded-full"></div>
+                    </div>
+                    <div class="h-5 w-4/5 bg-slate-800 rounded-md"></div>
+                    <div class="h-4 w-1/2 bg-slate-800/60 rounded-md"></div>
+                    <div class="pt-3 border-t border-white/5 flex items-center justify-between">
+                        <div class="h-7 w-20 bg-slate-800 rounded-lg"></div>
+                        <div class="h-7 w-24 bg-slate-800 rounded-lg"></div>
+                    </div>
+                </div>
+            `).join('');
+            elements.emptyState.classList.add('hidden');
+            elements.errorState.classList.add('hidden');
+        }
+
+        // Fetch and Parse CSV Data using PapaParse directly from configured Google Sheet URL
+        function fetchSheetData() {
+            renderSkeletons();
+            state.isLoading = true;
+
+            const normalizedUrl = normalizeGoogleSheetUrl(GOOGLE_SHEET_CSV_URL);
+            const isPlaceholder = !normalizedUrl || normalizedUrl.trim() === '' || normalizedUrl.includes('PASTE_YOUR_PUBLISHED_GOOGLE_SHEET_CSV_LINK_HERE');
+
+            if (isPlaceholder) {
+                showFetchError('Hệ thống đang đồng bộ dữ liệu bảng đổi điểm từ Google Sheet. Vui lòng quay lại sau ít phút!');
+                return;
+            }
+
+            Papa.parse(normalizedUrl.trim(), {
+                download: true,
+                skipEmptyLines: true,
+                error: function (error) {
+                    console.error('PapaParse error:', error);
+                    showFetchError('Lỗi kết nối tải dữ liệu từ Google Sheet. Vui lòng đảm bảo quyền chia sẻ trang tính đã được mở hoặc liên hệ Fanpage.');
+                },
+                complete: function (results) {
+                    try {
+                        const parsedItems = transformGoogleSheetData(results.data);
+                        if (!parsedItems || parsedItems.length === 0) {
+                            showFetchError('Đã kết nối được file Google Sheet nhưng không bóc tách được vật phẩm nào ở 3 khối cột (Col A-C, Col F-H, Col K-M). Vui lòng kiểm tra lại cấu trúc hàng và cột.');
+                            return;
+                        }
+                        loadItems(parsedItems);
+                        showToast(`Đã tải thành công ${parsedItems.length} vật phẩm từ Google Sheet!`);
+                    } catch (err) {
+                        console.error('Parse processing error:', err);
+                        showFetchError('Có lỗi xảy ra khi bóc tách dữ liệu từ Google Sheet.');
+                    }
+                }
+            });
+        }
+
+        function showFetchError(message) {
+            state.isLoading = false;
+            elements.itemsGrid.innerHTML = '';
+            elements.emptyState.classList.add('hidden');
+            elements.errorState.classList.remove('hidden');
+            elements.errorMessageText.textContent = message;
+        }
+
+        // Load items into state and initialize view
+        function loadItems(items) {
+            state.rawItems = items;
+            state.isLoading = false;
+            elements.errorState.classList.add('hidden');
+
+            // Extract unique categories
+            const cats = new Set(['ALL']);
+            items.forEach(item => {
+                if (item.type) cats.add(item.type);
+            });
+            state.categories = Array.from(cats);
+
+            // Update stats
+            elements.statTotalItems.textContent = items.length;
+            elements.statTotalCategories.textContent = state.categories.length - 1;
+
+            if (items.length > 0) {
+                const pointsArr = items.map(i => i.points);
+                elements.statMinPoints.textContent = formatPoints(Math.min(...pointsArr));
+                elements.statMaxPoints.textContent = formatPoints(Math.max(...pointsArr));
+            } else {
+                elements.statMinPoints.textContent = '0';
+                elements.statMaxPoints.textContent = '0';
+            }
+
+            // Render category pills
+            renderCategoryPills();
+
+            // Apply search & sort
+            applyFiltersAndSort();
+        }
+
+        // Render dynamic category pills
+        function renderCategoryPills() {
+            elements.categoryPillsContainer.innerHTML = state.categories.map(cat => {
+                const isActive = state.currentCategory === cat;
+                const count = cat === 'ALL' ? state.rawItems.length : state.rawItems.filter(i => i.type === cat).length;
+                const label = cat === 'ALL' ? 'Tất cả' : cat;
+
+                return `
+                    <button type="button" 
+                        class="category-pill shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
+                            isActive 
+                            ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 border-amber-400' 
+                            : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border-white/10 hover:border-white/20'
+                        }" 
+                        data-category="${cat}">
+                        ${label} <span class="text-[10px] opacity-75 ml-0.5">(${count})</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Apply filters, search and sort
+        function applyFiltersAndSort() {
+            let result = [...state.rawItems];
+
+            // 1. Filter by category
+            if (state.currentCategory !== 'ALL') {
+                result = result.filter(item => item.type === state.currentCategory);
+            }
+
+            // 2. Filter by search keyword
+            if (state.searchKeyword.trim()) {
+                const kw = state.searchKeyword.toLowerCase().trim();
+                result = result.filter(item =>
+                    item.name.toLowerCase().includes(kw) ||
+                    item.type.toLowerCase().includes(kw)
+                );
+            }
+
+            // 3. Sort
+            switch (state.sortBy) {
+                case 'points-desc':
+                    result.sort((a, b) => b.points - a.points);
+                    break;
+                case 'points-asc':
+                    result.sort((a, b) => a.points - b.points);
+                    break;
+                case 'name-asc':
+                    result.sort((a, b) => a.name.localeCompare(b.name, 'vi'));
+                    break;
+                case 'name-desc':
+                    result.sort((a, b) => b.name.localeCompare(a.name, 'vi'));
+                    break;
+                case 'type-asc':
+                    result.sort((a, b) => a.type.localeCompare(b.type, 'vi'));
+                    break;
+            }
+
+            state.filteredItems = result;
+            state.currentPage = 1;
+            renderItemsGrid();
+            renderPagination();
+        }
+
+        // Render current page items into the grid
+        function renderItemsGrid() {
+            const total = state.filteredItems.length;
+            elements.totalFilteredCount.textContent = total;
+
+            if (total === 0) {
+                elements.itemsGrid.innerHTML = '';
+                elements.emptyState.classList.remove('hidden');
+                elements.displayCount.textContent = '0';
+                elements.currentPageNum.textContent = '0';
+                elements.totalPageNum.textContent = '0';
+                return;
+            }
+
+            elements.emptyState.classList.add('hidden');
+
+            const totalPages = Math.ceil(total / state.pageSize);
+            const startIdx = (state.currentPage - 1) * state.pageSize;
+            const endIdx = Math.min(startIdx + state.pageSize, total);
+            const pageItems = state.filteredItems.slice(startIdx, endIdx);
+
+            elements.displayCount.textContent = `${startIdx + 1} - ${endIdx}`;
+            elements.currentPageNum.textContent = state.currentPage;
+            elements.totalPageNum.textContent = totalPages;
+
+            elements.itemsGrid.innerHTML = pageItems.map(item => {
+                const inCartCount = state.cart[item.id] ? state.cart[item.id].count : 0;
+                const isSelected = inCartCount > 0;
+                const categoryClass = getCategoryColor(item.type);
+
+                return `
+                    <div class="glass-panel-card rounded-2xl p-4 flex flex-col justify-between transition-all group ${
+                        isSelected ? 'ring-2 ring-emerald-500/80 border-emerald-500/50 bg-slate-900/90 shadow-lg shadow-emerald-950/40' : ''
+                    }" data-item-id="${item.id}">
+                        <!-- Card Top: Category Badge & Points -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold border ${categoryClass}">
+                                    ${item.type}
+                                </span>
+                                <div class="flex items-center gap-1 text-xs font-black text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
+                                    <span>${formatPoints(item.points)} Điểm</span>
+                                </div>
+                            </div>
+
+                            <!-- Card Middle: Item Name -->
+                            <h3 class="text-sm font-bold text-slate-100 group-hover:text-amber-300 transition-colors line-clamp-2 leading-snug pt-1" title="${item.name}">
+                                ${item.name}
+                            </h3>
+                        </div>
+
+                        <!-- Card Bottom: Quantity Stepper -->
+                        <div class="pt-4 mt-3 border-t border-white/5 flex items-center justify-between gap-2">
+                            <span class="text-[11px] text-slate-400 font-medium">Số lượng:</span>
+                            <div class="flex items-center gap-1 bg-slate-950/80 rounded-xl p-1 border border-white/10">
+                                <button type="button" class="btn-step-minus w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-slate-800 active:scale-95" 
+                                    data-id="${item.id}" ${inCartCount === 0 ? 'disabled' : ''}>
+                                    -
+                                </button>
+                                <input type="number" min="0" max="999" value="${inCartCount}" 
+                                    class="input-qty w-10 text-center bg-transparent text-xs font-black text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    data-id="${item.id}">
+                                <button type="button" class="btn-step-plus w-7 h-7 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center justify-center transition-all active:scale-95 shadow-sm" 
+                                    data-id="${item.id}">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render pagination controls (20 items/page)
+        function renderPagination() {
+            const total = state.filteredItems.length;
+            const totalPages = Math.ceil(total / state.pageSize);
+
+            if (totalPages <= 1) {
+                elements.paginationButtons.innerHTML = '';
+                return;
+            }
+
+            let buttonsHtml = '';
+
+            // Prev Button
+            buttonsHtml += `
+                <button type="button" class="btn-page px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-white/10 disabled:opacity-30 disabled:pointer-events-none transition-all"
+                    data-page="${state.currentPage - 1}" ${state.currentPage === 1 ? 'disabled' : ''}>
+                    ‹ Trước
+                </button>
+            `;
+
+            // Smart page numbers window
+            const maxVisible = 5;
+            let startPage = Math.max(1, state.currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+            if (endPage - startPage + 1 < maxVisible) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            if (startPage > 1) {
+                buttonsHtml += `<button type="button" class="btn-page w-8 h-8 rounded-lg bg-slate-900 text-xs font-semibold text-slate-400 hover:bg-slate-800 border border-white/10" data-page="1">1</button>`;
+                if (startPage > 2) buttonsHtml += `<span class="px-1 text-slate-500 text-xs">...</span>`;
+            }
+
+            for (let p = startPage; p <= endPage; p++) {
+                const isCurrent = p === state.currentPage;
+                buttonsHtml += `
+                    <button type="button" class="btn-page w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                        isCurrent 
+                        ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 border border-amber-400' 
+                        : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 border border-white/10'
+                    }" data-page="${p}">
+                        ${p}
+                    </button>
+                `;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) buttonsHtml += `<span class="px-1 text-slate-500 text-xs">...</span>`;
+                buttonsHtml += `<button type="button" class="btn-page w-8 h-8 rounded-lg bg-slate-900 text-xs font-semibold text-slate-400 hover:bg-slate-800 border border-white/10" data-page="${totalPages}">${totalPages}</button>`;
+            }
+
+            // Next Button
+            buttonsHtml += `
+                <button type="button" class="btn-page px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-white/10 disabled:opacity-30 disabled:pointer-events-none transition-all"
+                    data-page="${state.currentPage + 1}" ${state.currentPage === totalPages ? 'disabled' : ''}>
+                    Sau ›
+                </button>
+            `;
+
+            elements.paginationButtons.innerHTML = buttonsHtml;
+        }
+
+        /**
+         * ===========================================================================
+         * INTERACTIVE EXCHANGE CALCULATOR (GIỎ TÍNH ĐIỂM)
+         * ===========================================================================
+         */
+        function updateCartQuantity(itemId, newCount) {
+            const count = Math.max(0, parseInt(newCount, 10) || 0);
+
+            if (count === 0) {
+                delete state.cart[itemId];
+            } else {
+                const item = state.rawItems.find(i => i.id === itemId);
+                if (item) {
+                    state.cart[itemId] = { item, count };
+                }
+            }
+
+            renderCartDrawer();
+            renderItemsGrid();
+            updateCartHeaderStats();
+        }
+
+        function updateCartHeaderStats() {
+            let totalQty = 0;
+            let totalPts = 0;
+
+            Object.values(state.cart).forEach(entry => {
+                totalQty += entry.count;
+                totalPts += (entry.count * entry.item.points);
+            });
+
+            elements.headerCartCount.textContent = totalQty;
+            elements.floatingBadgeCount.textContent = totalQty;
+            elements.floatingPointsTotal.textContent = `${formatPoints(totalPts)} Điểm`;
+
+            if (totalQty > 0) {
+                elements.floatingCartTrigger.classList.remove('hidden');
+            }
+        }
+
+        function renderCartDrawer() {
+            const entries = Object.values(state.cart);
+            let totalQuantity = 0;
+            let totalPoints = 0;
+
+            if (entries.length === 0) {
+                elements.cartItemsList.innerHTML = '';
+                elements.cartEmptyMessage.classList.remove('hidden');
+                elements.drawerTotalQuantity.textContent = '0 món';
+                elements.drawerTotalPoints.textContent = '0 Điểm';
+                return;
+            }
+
+            elements.cartEmptyMessage.classList.add('hidden');
+
+            elements.cartItemsList.innerHTML = entries.map(({ item, count }) => {
+                const subtotal = count * item.points;
+                totalQuantity += count;
+                totalPoints += subtotal;
+
+                return `
+                    <div class="py-2.5 flex items-center justify-between gap-3 group">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-1.5">
+                                <span class="px-1.5 py-0.2 rounded text-[10px] font-bold ${getCategoryColor(item.type)}">
+                                    ${item.type}
+                                </span>
+                                <span class="text-xs font-bold text-white truncate" title="${item.name}">${item.name}</span>
+                            </div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">
+                                <span>${formatPoints(item.points)} đ/món</span> × <span class="font-bold text-slate-200">${count}</span> = 
+                                <span class="font-bold text-amber-400">${formatPoints(subtotal)} Điểm</span>
+                            </div>
+                        </div>
+
+                        <!-- Stepper in Drawer -->
+                        <div class="flex items-center gap-1 shrink-0">
+                            <button type="button" class="btn-drawer-minus w-6 h-6 rounded bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 flex items-center justify-center transition-all" data-id="${item.id}">
+                                -
+                            </button>
+                            <span class="w-6 text-center text-xs font-black text-white">${count}</span>
+                            <button type="button" class="btn-drawer-plus w-6 h-6 rounded bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white flex items-center justify-center transition-all" data-id="${item.id}">
+                                +
+                            </button>
+                            <button type="button" class="btn-drawer-remove w-6 h-6 rounded bg-rose-950/40 hover:bg-rose-900 text-rose-400 text-xs flex items-center justify-center ml-1 transition-all" data-id="${item.id}" title="Xóa món này">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            elements.drawerTotalQuantity.textContent = `${totalQuantity} món`;
+            elements.drawerTotalPoints.textContent = `${formatPoints(totalPoints)} Điểm`;
+
+            // Update Messenger deep link with pre-filled message
+            const summaryText = buildSummaryText(entries, totalQuantity, totalPoints);
+            const encodedText = encodeURIComponent(summaryText);
+            elements.btnSendMessenger.href = `https://m.me/lamongame?text=${encodedText}`;
+        }
+
+        // Build clean formatted text for clipboard copying
+        function buildSummaryText(entries, totalQuantity, totalPoints) {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+            let text = `🎮 [THẦN MA GIÁNG THẾ] DANH SÁCH QUY ĐỔI VẬT PHẨM\n`;
+            text += `📅 Thời gian: ${dateStr}\n`;
+            text += `------------------------------------------\n`;
+            entries.forEach((e, idx) => {
+                const subtotal = e.count * e.item.points;
+                text += `${idx + 1}. [${e.item.type}] ${e.item.name}\n`;
+                text += `   ↳ Số lượng: ${e.count} | Điểm: ${formatPoints(subtotal)} Điểm (${formatPoints(e.item.points)}đ/món)\n`;
+            });
+            text += `------------------------------------------\n`;
+            text += `📦 Tổng số lượng: ${totalQuantity} món\n`;
+            text += `💎 TỔNG ĐIỂM QUY ĐỔI: ${formatPoints(totalPoints)} ĐIỂM\n`;
+            text += `------------------------------------------\n`;
+            text += `Gửi tới CTV/Admin Lamon Game để nhận thưởng!`;
+            return text;
+        }
+
+        // Copy summary to clipboard
+        function copySummaryToClipboard() {
+            const entries = Object.values(state.cart);
+            if (entries.length === 0) {
+                showToast('Giỏ hàng trống! Vui lòng chọn vật phẩm trước.');
+                return;
+            }
+
+            let totalQuantity = 0;
+            let totalPoints = 0;
+            entries.forEach(e => {
+                totalQuantity += e.count;
+                totalPoints += (e.count * e.item.points);
+            });
+
+            const text = buildSummaryText(entries, totalQuantity, totalPoints);
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 Đã sao chép danh sách đổi điểm vào bộ nhớ tạm!');
+            }).catch(() => {
+                prompt('Sao chép danh sách bên dưới:', text);
+            });
+        }
+
+        // Toast notification system
+        function showToast(message, duration = 3000) {
+            const toast = document.createElement('div');
+            toast.className = 'glass-panel text-slate-100 text-xs font-semibold px-4 py-2.5 rounded-xl border border-amber-500/40 shadow-2xl flex items-center gap-2 transform transition-all duration-300 opacity-0 translate-y-2';
+            toast.innerHTML = `<span>✨</span><span>${message}</span>`;
+            elements.toastContainer.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('opacity-0', 'translate-y-2');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // Drawer toggle animations
+        function openDrawer() {
+            elements.cartDrawerBackdrop.classList.remove('pointer-events-none', 'opacity-0');
+            elements.cartDrawer.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            elements.cartDrawerBackdrop.classList.add('opacity-0');
+            elements.cartDrawer.classList.add('translate-x-full');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                elements.cartDrawerBackdrop.classList.add('pointer-events-none');
+            }, 300);
+        }
+
+        /**
+         * ===========================================================================
+         * EVENT LISTENERS & INITIALIZATION
+         * ===========================================================================
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tải dữ liệu trực tiếp từ Google Sheet cấu hình trong code
+            fetchSheetData();
+
+            // Retry fetch khi có lỗi kết nối
+            elements.btnRetryFetch.addEventListener('click', () => {
+                fetchSheetData();
+            });
+
+            // Search input real-time
+            elements.searchInput.addEventListener('input', (e) => {
+                state.searchKeyword = e.target.value;
+                if (state.searchKeyword.length > 0) {
+                    elements.btnClearSearch.classList.remove('hidden');
+                } else {
+                    elements.btnClearSearch.classList.add('hidden');
+                }
+                applyFiltersAndSort();
+            });
+
+            elements.btnClearSearch.addEventListener('click', () => {
+                elements.searchInput.value = '';
+                state.searchKeyword = '';
+                elements.btnClearSearch.classList.add('hidden');
+                applyFiltersAndSort();
+            });
+
+            // Sort change
+            elements.sortSelect.addEventListener('change', (e) => {
+                state.sortBy = e.target.value;
+                applyFiltersAndSort();
+            });
+
+            // Reset filters
+            elements.btnResetFilters.addEventListener('click', () => {
+                state.searchKeyword = '';
+                elements.searchInput.value = '';
+                elements.btnClearSearch.classList.add('hidden');
+                state.currentCategory = 'ALL';
+                elements.activeCategoryName.textContent = 'Tất cả';
+                renderCategoryPills();
+                applyFiltersAndSort();
+            });
+
+            // Category pills delegation
+            elements.categoryPillsContainer.addEventListener('click', (e) => {
+                const btn = e.target.closest('.category-pill');
+                if (!btn) return;
+                const cat = btn.getAttribute('data-category');
+                state.currentCategory = cat;
+                elements.activeCategoryName.textContent = cat === 'ALL' ? 'Tất cả' : cat;
+                renderCategoryPills();
+                applyFiltersAndSort();
+            });
+
+            // Stepper in Grid delegation
+            elements.itemsGrid.addEventListener('click', (e) => {
+                const btnPlus = e.target.closest('.btn-step-plus');
+                if (btnPlus) {
+                    const id = btnPlus.getAttribute('data-id');
+                    const currentCount = state.cart[id] ? state.cart[id].count : 0;
+                    updateCartQuantity(id, currentCount + 1);
+                    return;
+                }
+
+                const btnMinus = e.target.closest('.btn-step-minus');
+                if (btnMinus) {
+                    const id = btnMinus.getAttribute('data-id');
+                    const currentCount = state.cart[id] ? state.cart[id].count : 0;
+                    updateCartQuantity(id, Math.max(0, currentCount - 1));
+                    return;
+                }
+            });
+
+            // Quantity input change in Grid
+            elements.itemsGrid.addEventListener('change', (e) => {
+                if (e.target.classList.contains('input-qty')) {
+                    const id = e.target.getAttribute('data-id');
+                    const val = parseInt(e.target.value, 10) || 0;
+                    updateCartQuantity(id, val);
+                }
+            });
+
+            // Pagination button delegation
+            elements.paginationButtons.addEventListener('click', (e) => {
+                const btn = e.target.closest('.btn-page');
+                if (!btn) return;
+                const page = parseInt(btn.getAttribute('data-page'), 10);
+                if (page && page !== state.currentPage) {
+                    state.currentPage = page;
+                    renderItemsGrid();
+                    renderPagination();
+                    document.getElementById('itemsContainerWrapper').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            // Drawer Stepper delegation
+            elements.cartItemsList.addEventListener('click', (e) => {
+                const btnPlus = e.target.closest('.btn-drawer-plus');
+                if (btnPlus) {
+                    const id = btnPlus.getAttribute('data-id');
+                    const count = state.cart[id] ? state.cart[id].count : 0;
+                    updateCartQuantity(id, count + 1);
+                    return;
+                }
+
+                const btnMinus = e.target.closest('.btn-drawer-minus');
+                if (btnMinus) {
+                    const id = btnMinus.getAttribute('data-id');
+                    const count = state.cart[id] ? state.cart[id].count : 0;
+                    updateCartQuantity(id, Math.max(0, count - 1));
+                    return;
+                }
+
+                const btnRemove = e.target.closest('.btn-drawer-remove');
+                if (btnRemove) {
+                    const id = btnRemove.getAttribute('data-id');
+                    updateCartQuantity(id, 0);
+                    return;
+                }
+            });
+
+            // Cart Drawer open/close
+            elements.btnOpenDrawer.addEventListener('click', openDrawer);
+            elements.btnFloatingOpen.addEventListener('click', openDrawer);
+            elements.btnCloseDrawer.addEventListener('click', closeDrawer);
+            elements.cartDrawerBackdrop.addEventListener('click', (e) => {
+                if (e.target === elements.cartDrawerBackdrop) {
+                    closeDrawer();
+                }
+            });
+
+            // Clear Cart
+            elements.btnClearCart.addEventListener('click', () => {
+                if (Object.keys(state.cart).length === 0) return;
+                if (confirm('Bạn có chắc chắn muốn xóa toàn bộ vật phẩm trong giỏ?')) {
+                    state.cart = {};
+                    renderCartDrawer();
+                    renderItemsGrid();
+                    updateCartHeaderStats();
+                    showToast('Đã xóa toàn bộ giỏ tính điểm.');
+                }
+            });
+
+            // Copy Summary
+            elements.btnCopySummary.addEventListener('click', copySummaryToClipboard);
+        });
+    </script>
+
+    <!-- Sidebottom Navigation Component & Script -->
+    <script src="/components/sidebottom.js"></script>
+    <script>
+        renderSidebottom({
+            items: [
+                { href: 'https://zalo.me/g/kbqnel556', icon: 'zalo', label: 'Cộng Đồng', track: 'side-zalo', target: '_blank', rel: 'noopener noreferrer' },
+                { href: 'https://m.me/lamongame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Lamon', icon: 'giftcode', label: 'Giftcode', track: 'side-giftcode', target: '_blank', rel: 'noopener noreferrer', ariaLabel: 'Mở Messenger để nhận giftcode' },
+                { href: '/', icon: 'home', label: 'Trang chủ', track: 'side-home' },
+                { href: 'https://www.facebook.com/lamongame/', icon: 'support', label: 'Hỗ trợ', track: 'side-support', target: '_blank', rel: 'noopener noreferrer' },
+                { href: '/games/than-ma-giang-the/', icon: 'moreGames', label: 'Tải Game', track: 'side-dl-game' }
+            ]
+        });
+    </script>
+</body>
+
+</html>
