@@ -404,7 +404,8 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
             class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-slate-900 border-l border-white/10 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out z-[100001]"
             style="z-index: 100001 !important;">
             <!-- Drawer Header -->
-            <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-slate-950/80 flex-shrink-0">
+            <div
+                class="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-slate-950/80 flex-shrink-0">
                 <div class="flex items-center gap-2.5">
                     <span class="text-2xl">🛍️</span>
                     <div>
@@ -432,7 +433,8 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
             </div>
 
             <!-- Drawer Footer: Summary & Actions -->
-            <div class="p-4 border-t border-white/10 bg-slate-950/90 space-y-3 flex-shrink-0" style="padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 1.25rem));">
+            <div class="p-4 border-t border-white/10 bg-slate-950/90 space-y-3 flex-shrink-0"
+                style="padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 1.25rem));">
                 <!-- Calculation Breakdown -->
                 <div class="space-y-1.5 text-xs text-slate-300">
                     <div class="flex items-center justify-between">
@@ -459,12 +461,19 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
                     </button>
                 </div>
 
-                <!-- Direct Send to Messenger CTV -->
-                <a id="btnSendMessenger" href="https://m.me/lamongame" target="_blank" rel="noopener noreferrer"
-                    class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-950/50 transition-all">
-                    <span>💬</span>
-                    <span>Gửi Yêu Cầu Cho CTV / CSKH Lamon Game</span>
-                </a>
+                <!-- Send Request Options: Messenger & Zalo CTV -->
+                <div class="flex flex-col gap-2 pt-1">
+                    <button type="button" id="btnSendMessenger"
+                        class="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-950/50 transition-all active:scale-[0.98]">
+                        <span class="text-sm">💬</span>
+                        <span>Gửi Yêu Cầu Qua Messenger</span>
+                    </button>
+                    <button type="button" id="btnSendZalo"
+                        class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 transition-all active:scale-[0.98]">
+                        <span class="text-sm">📱</span>
+                        <span>Gửi Cho Zalo CTV: 0925 187 240</span>
+                    </button>
+                </div>
             </div>
         </aside>
     </div>
@@ -566,6 +575,7 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
             btnClearCart: document.getElementById('btnClearCart'),
             btnCopySummary: document.getElementById('btnCopySummary'),
             btnSendMessenger: document.getElementById('btnSendMessenger'),
+            btnSendZalo: document.getElementById('btnSendZalo'),
             headerCartCount: document.getElementById('headerCartCount'),
             floatingBadgeCount: document.getElementById('floatingBadgeCount'),
             floatingPointsTotal: document.getElementById('floatingPointsTotal'),
@@ -1053,10 +1063,14 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
             elements.drawerTotalQuantity.textContent = `${totalQuantity} món`;
             elements.drawerTotalPoints.textContent = `${formatPoints(totalPoints)} Điểm`;
 
-            // Update Messenger deep link with pre-filled message
-            const summaryText = buildSummaryText(entries, totalQuantity, totalPoints);
-            const encodedText = encodeURIComponent(summaryText);
-            elements.btnSendMessenger.href = `https://m.me/lamongame?text=${encodedText}`;
+            // Update button visual state
+            if (entries.length === 0) {
+                elements.btnSendMessenger.classList.add('opacity-60');
+                if (elements.btnSendZalo) elements.btnSendZalo.classList.add('opacity-60');
+            } else {
+                elements.btnSendMessenger.classList.remove('opacity-60');
+                if (elements.btnSendZalo) elements.btnSendZalo.classList.remove('opacity-60');
+            }
         }
 
         // Build clean formatted text for clipboard copying
@@ -1288,6 +1302,77 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
 
             // Copy Summary
             elements.btnCopySummary.addEventListener('click', copySummaryToClipboard);
+
+            // Direct Send to Messenger with pre-filled message (soạn sẵn tin nhắn)
+            elements.btnSendMessenger.addEventListener('click', () => {
+                const entries = Object.values(state.cart);
+                if (entries.length === 0) {
+                    showToast('⚠️ Giỏ hàng trống! Vui lòng chọn vật phẩm trước.');
+                    return;
+                }
+
+                let totalQuantity = 0;
+                let totalPoints = 0;
+                entries.forEach(e => {
+                    totalQuantity += e.count;
+                    totalPoints += (e.count * e.item.points);
+                });
+
+                const summaryText = buildSummaryText(entries, totalQuantity, totalPoints);
+
+                // Tự động sao chép ngầm vào clipboard đề phòng
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(summaryText).catch(() => { });
+                }
+
+                showToast('🚀 Đang chuyển tới Messenger với tin nhắn soạn sẵn...');
+
+                const messengerUrl = `https://m.me/lamongame?text=${encodeURIComponent(summaryText)}`;
+
+                // Trên di động: chuyển trực tiếp trong cùng tab để hệ thống kích hoạt Universal Link vào App Messenger
+                // Tuyệt đối không dùng target="_blank" vì sẽ mở tab mới khiến trình duyệt bị Meta chuyển hướng sang Fanpage
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMobile) {
+                    window.location.href = messengerUrl;
+                } else {
+                    window.open(messengerUrl, '_blank', 'noopener,noreferrer');
+                }
+            });
+
+            // Direct Send to Zalo CTV (0925 187 240) - Zalo cá nhân CTV
+            if (elements.btnSendZalo) {
+                elements.btnSendZalo.addEventListener('click', () => {
+                    const entries = Object.values(state.cart);
+                    if (entries.length === 0) {
+                        showToast('⚠️ Giỏ hàng trống! Vui lòng chọn vật phẩm trước.');
+                        return;
+                    }
+
+                    let totalQuantity = 0;
+                    let totalPoints = 0;
+                    entries.forEach(e => {
+                        totalQuantity += e.count;
+                        totalPoints += (e.count * e.item.points);
+                    });
+
+                    const fullText = buildSummaryText(entries, totalQuantity, totalPoints);
+
+                    // Tự động sao chép danh sách vào clipboard
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(fullText).catch(() => { });
+                    }
+
+                    showToast('📋 Đã copy danh sách! Đang mở Zalo CTV (0925 187 240)... Bạn chỉ cần Dán và Gửi nhé.');
+
+                    const zaloUrl = 'https://zalo.me/0925187240';
+                    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                    if (isMobile) {
+                        window.location.href = zaloUrl;
+                    } else {
+                        window.open(zaloUrl, '_blank', 'noopener,noreferrer');
+                    }
+                });
+            }
         });
     </script>
 
