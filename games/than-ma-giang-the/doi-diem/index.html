@@ -16,11 +16,13 @@
         content="Tra cứu bảng giá & tính điểm quy đổi vật phẩm game Thần Ma Giáng Thế trực tiếp từ Google Sheets.">
     <meta property="og:image" content="/images/tmgt/tmgt-banner1.png">
 
-    <!-- Google Fonts -->
+    <!-- Performance: DNS Prefetch & Preconnect for External Resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://docs.google.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@700;800;900&family=Alegreya+SC:wght@700;800;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
         rel="stylesheet">
 
     <!-- Shared & Game Stylesheets for Portal Header & Sidebottom -->
@@ -50,16 +52,15 @@
                         }
                     },
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        fantasy: ['Cinzel', '"Alegreya SC"', 'serif']
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
                     }
                 }
             }
         }
     </script>
 
-    <!-- PapaParse CDN for parsing published Google Sheet CSV -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- PapaParse CDN for parsing published Google Sheet CSV (Deferred for non-blocking render) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" defer></script>
 
     <style>
         /* Custom scrollbars */
@@ -124,12 +125,15 @@
 
 <!--
 ===================================================================================
-HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 BƯỚC):
+HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
 1. Mở file Google Sheet chứa bảng quy đổi vật phẩm Thần Ma Giáng Thế.
-2. Trên thanh menu, chọn: Tệp (File) > Chia sẻ (Share) > Xuất bản lên web (Publish to web).
-3. Trong hộp thoại hiện ra, ở mục định dạng chọn "Giá trị được phân tách bằng dấu phẩy (.csv)" thay vì "Trang web".
-4. Bấm "Xuất bản" (Publish) và Sao chép đường liên kết nhận được.
-5. Dán đường link vào hằng số `GOOGLE_SHEET_CSV_URL` bên dưới hoặc nhập trực tiếp vào ô cấu hình trên giao diện.
+2. Cấu trúc cột mỗi khối (Hỗ trợ 3 khối song song):
+   - Cột A: LOẠI | Cột B: TÊN VẬT PHẨM | Cột C: ĐIỂM QUY ĐỔI | Cột D: LINK ẢNH (tùy chọn)
+   - Khối 2: Cột F, G, H, I | Khối 3: Cột K, L, M, N
+   * Link ảnh hỗ trợ: Link ảnh trực tiếp (.png, .jpg, .webp) hoặc link Google Drive công khai.
+3. Trên thanh menu Google Sheet: Tệp (File) > Chia sẻ (Share) > Xuất bản lên web (Publish to web).
+4. Ở mục định dạng chọn "Giá trị được phân tách bằng dấu phẩy (.csv)" thay vì "Trang web".
+5. Bấm "Xuất bản" (Publish) và dán link vào biến GOOGLE_SHEET_CSV_URL.
 ===================================================================================
 -->
 
@@ -161,7 +165,7 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
             <!-- Main Title & Cart Action -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-3.5">
-                    <img src="/images/tmgt/tmgt-logo.png" alt="Thần Ma Giáng Thế"
+                    <img src="/images/tmgt/tmgt-logo.png" alt="Thần Ma Giáng Thế" width="56" height="56" fetchpriority="high"
                         class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl border-2 border-amber-500/40 object-cover shadow-md shadow-amber-950/40 shrink-0">
                     <div>
                         <div class="flex items-center gap-2 flex-wrap">
@@ -180,7 +184,13 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
                     </div>
                 </div>
 
-                <div class="shrink-0">
+                <div class="shrink-0 flex items-center gap-2">
+                    <!-- Quick Sync / Refresh Cache Button -->
+                    <button id="btnSyncSheet" type="button" title="Làm mới & đồng bộ dữ liệu mới nhất từ Google Sheets"
+                        class="text-xs font-bold bg-slate-800/90 hover:bg-slate-700 text-slate-300 hover:text-amber-300 rounded-xl px-3 py-2.5 flex items-center justify-center gap-1.5 border border-white/10 transition-all active:scale-95 shadow-sm">
+                        <span id="syncIcon" class="text-sm transition-transform">🔄</span>
+                        <span class="hidden sm:inline">Làm Mới</span>
+                    </button>
                     <button id="btnOpenDrawer" type="button"
                         class="w-full sm:w-auto text-xs sm:text-sm font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 border border-emerald-400/30 transition-all transform active:scale-95">
                         <span class="text-base">🛒</span>
@@ -478,6 +488,112 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
         </aside>
     </div>
 
+    <!-- Modal Xem Ảnh Vật Phẩm (On-demand Lightbox Popup) -->
+    <div id="imageModalBackdrop"
+        class="fixed inset-0 bg-black/80 backdrop-blur-md transition-all opacity-0 pointer-events-none duration-300 flex items-center justify-center p-4 z-[100002]"
+        style="z-index: 100002 !important;">
+        <div id="imageModalBox"
+            class="glass-panel border border-white/15 rounded-3xl w-full max-w-lg bg-slate-900/95 shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 flex flex-col max-h-[92vh]">
+            
+            <!-- Modal Header -->
+            <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-slate-950/70 shrink-0">
+                <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                    <span id="modalCategoryBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold border shrink-0">
+                        Vật phẩm
+                    </span>
+                    <h3 id="modalItemTitle" class="text-sm sm:text-base font-bold text-white truncate" title="">
+                        Tên vật phẩm
+                    </h3>
+                </div>
+                <button type="button" id="btnCloseImageModal"
+                    class="w-8 h-8 rounded-xl bg-slate-800/80 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border border-white/10 flex items-center justify-center transition-all shrink-0 active:scale-95"
+                    title="Đóng (Phím ESC)">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Modal Body (Image preview & fallback) -->
+            <div class="p-4 sm:p-5 overflow-y-auto flex flex-col items-center justify-center space-y-3.5 flex-1 min-h-[260px] relative">
+                <!-- Spinner Loading State -->
+                <div id="modalImageLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/70 z-10 backdrop-blur-sm">
+                    <div class="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mb-3"></div>
+                    <span class="text-xs font-semibold text-slate-300">Đang tải ảnh vật phẩm...</span>
+                </div>
+
+                <!-- Image Display Box with Zoom & Pan Support -->
+                <div id="modalImageWrapper" class="w-full flex items-center justify-center rounded-2xl bg-slate-950/70 border border-white/5 p-2 overflow-hidden min-h-[240px] relative group select-none">
+                    <!-- Zoom Toolbar floating controls -->
+                    <div id="modalZoomControls" class="absolute top-3 right-3 flex items-center gap-1 bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-white/10 shadow-lg z-20 transition-opacity">
+                        <button type="button" id="btnZoomOut" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-slate-800" title="Thu nhỏ (-)">
+                            －
+                        </button>
+                        <span id="zoomLevelIndicator" class="text-[11px] font-mono font-bold text-amber-400 px-1 select-none min-w-[36px] text-center">100%</span>
+                        <button type="button" id="btnZoomIn" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center transition-all" title="Phóng to (+)">
+                            ＋
+                        </button>
+                        <button type="button" id="btnZoomReset" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-300 text-xs flex items-center justify-center transition-all" title="Đặt lại kích thước">
+                            ↺
+                        </button>
+                        <a id="btnOpenOriginalImage" href="#" target="_blank" rel="noopener noreferrer" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-emerald-300 text-xs flex items-center justify-center transition-all" title="Mở ảnh gốc chất lượng cao trong tab mới">
+                            ↗
+                        </a>
+                    </div>
+
+                    <!-- Draggable & Zoomable Image Viewport -->
+                    <div id="modalImagePanContainer" class="w-full flex items-center justify-center overflow-hidden cursor-zoom-in transition-all" style="max-height: 52vh; min-height: 220px;">
+                        <img id="modalItemImage" src="" alt="Ảnh vật phẩm" class="max-h-[50vh] max-w-full object-contain rounded-xl shadow-lg transition-transform duration-150 select-none pointer-events-auto" draggable="false">
+                    </div>
+
+                    <!-- Floating hint: "Nhấp hoặc lăn chuột để phóng to" -->
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none bg-slate-950/80 backdrop-blur-sm px-3 py-0.5 rounded-full border border-white/10 text-[10px] text-slate-400 opacity-80 hidden sm:block">
+                        🔍 Nhấp vào ảnh hoặc lăn chuột để phóng to • Kéo để di chuyển
+                    </div>
+                </div>
+
+                <!-- No Image Fallback Alert -->
+                <div id="modalNoImageAlert" class="hidden w-full text-center p-6 rounded-2xl bg-slate-950/60 border border-dashed border-amber-500/30 space-y-3">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-2xl text-amber-400">
+                        🖼️
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-200">Chưa có ảnh xem trước</h4>
+                        <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto leading-relaxed">
+                            Vật phẩm này chưa được thêm đường dẫn ảnh trong Google Sheet (Cột Link Ảnh). Bạn vẫn có thể chọn số lượng và tính điểm như bình thường!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item Info Badges Row -->
+                <div class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-950/60 border border-white/5 text-xs">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-slate-400">Hệ số quy đổi:</span>
+                        <span id="modalItemPoints" class="font-extrabold text-amber-400">0 Điểm</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-slate-400">Trạng thái:</span>
+                        <span class="font-bold text-emerald-400 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+                            Khả dụng
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer with Quick Add Button -->
+            <div class="px-5 py-3.5 border-t border-white/10 bg-slate-950/80 flex items-center justify-between gap-3 shrink-0">
+                <button type="button" id="btnModalCloseSecondary"
+                    class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-white/10 transition-all">
+                    Đóng
+                </button>
+                <button type="button" id="btnModalQuickAddToCart"
+                    class="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/50 transition-all active:scale-95">
+                    <span>🛒</span>
+                    <span>Thêm Vào Giỏ Tính Điểm</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification Container -->
     <div id="toastContainer"
         class="fixed bottom-24 left-1/2 -translate-x-1/2 pointer-events-none flex flex-col items-center space-y-2 z-[100005]"
@@ -580,6 +696,31 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
             floatingBadgeCount: document.getElementById('floatingBadgeCount'),
             floatingPointsTotal: document.getElementById('floatingPointsTotal'),
 
+            // Sync Header Button
+            btnSyncSheet: document.getElementById('btnSyncSheet'),
+            syncIcon: document.getElementById('syncIcon'),
+
+            // Image Preview Modal Elements
+            imageModalBackdrop: document.getElementById('imageModalBackdrop'),
+            imageModalBox: document.getElementById('imageModalBox'),
+            btnCloseImageModal: document.getElementById('btnCloseImageModal'),
+            btnModalCloseSecondary: document.getElementById('btnModalCloseSecondary'),
+            btnModalQuickAddToCart: document.getElementById('btnModalQuickAddToCart'),
+            modalCategoryBadge: document.getElementById('modalCategoryBadge'),
+            modalItemTitle: document.getElementById('modalItemTitle'),
+            modalImageLoader: document.getElementById('modalImageLoader'),
+            modalImageWrapper: document.getElementById('modalImageWrapper'),
+            modalImagePanContainer: document.getElementById('modalImagePanContainer'),
+            modalItemImage: document.getElementById('modalItemImage'),
+            modalNoImageAlert: document.getElementById('modalNoImageAlert'),
+            modalItemPoints: document.getElementById('modalItemPoints'),
+            modalZoomControls: document.getElementById('modalZoomControls'),
+            btnZoomIn: document.getElementById('btnZoomIn'),
+            btnZoomOut: document.getElementById('btnZoomOut'),
+            btnZoomReset: document.getElementById('btnZoomReset'),
+            zoomLevelIndicator: document.getElementById('zoomLevelIndicator'),
+            btnOpenOriginalImage: document.getElementById('btnOpenOriginalImage'),
+
             toastContainer: document.getElementById('toastContainer')
         };
 
@@ -610,9 +751,9 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
          * ===========================================================================
          * DATA TRANSFORMATION FUNCTION
          * Xử lý cấu trúc Google Sheet 3 khối song song:
-         * Block 1: Col A (index 0), Col B (index 1), Col C (index 2)
-         * Block 2: Col F (index 5), Col G (index 6), Col H (index 7)
-         * Block 3: Col K (index 10), Col L (index 11), Col M (index 12)
+         * Block 1: Col A (0), Col B (1), Col C (2), Col D (3 - Link ảnh tùy chọn)
+         * Block 2: Col F (5), Col G (6), Col H (7), Col I (8 - Link ảnh tùy chọn)
+         * Block 3: Col K (10), Col L (11), Col M (12), Col N (13 - Link ảnh tùy chọn)
          * ===========================================================================
          */
         function transformGoogleSheetData(rawRows) {
@@ -620,12 +761,32 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
 
             const extractedItems = [];
 
-            function parseBlock(row, typeColIdx, nameColIdx, pointsColIdx, blockNumber, rowIndex) {
+            // Chuyển đổi link Google Drive hoặc URL ảnh trực tiếp
+            function normalizeImageUrl(url) {
+                if (!url) return '';
+                url = url.toString().trim();
+                if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/') && !url.startsWith('./')) {
+                    return '';
+                }
+                // Hỗ trợ link chia sẻ Google Drive: chuyển sang link ảnh direct
+                const driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+                if (driveMatch && driveMatch[1]) {
+                    return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+                }
+                const driveIdMatch = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/);
+                if (driveIdMatch && driveIdMatch[1]) {
+                    return `https://lh3.googleusercontent.com/d/${driveIdMatch[1]}`;
+                }
+                return url;
+            }
+
+            function parseBlock(row, typeColIdx, nameColIdx, pointsColIdx, imgColIdx, blockNumber, rowIndex) {
                 if (!row || row.length <= nameColIdx) return null;
 
                 const type = (row[typeColIdx] || '').toString().trim();
                 const name = (row[nameColIdx] || '').toString().trim();
                 const rawPoints = (row[pointsColIdx] || '').toString().trim();
+                const rawImg = (imgColIdx !== undefined && row.length > imgColIdx) ? (row[imgColIdx] || '').toString().trim() : '';
 
                 // Skip empty names
                 if (!name) return null;
@@ -653,21 +814,22 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
                     id: itemId,
                     type: type || 'Khác',
                     name: name,
-                    points: points
+                    points: points,
+                    image: normalizeImageUrl(rawImg)
                 };
             }
 
             rawRows.forEach((row, rowIndex) => {
-                // Block 1: Col A, B, C
-                const item1 = parseBlock(row, 0, 1, 2, 1, rowIndex);
+                // Block 1: Col A, B, C, D
+                const item1 = parseBlock(row, 0, 1, 2, 3, 1, rowIndex);
                 if (item1) extractedItems.push(item1);
 
-                // Block 2: Col F, G, H
-                const item2 = parseBlock(row, 5, 6, 7, 2, rowIndex);
+                // Block 2: Col F, G, H, I
+                const item2 = parseBlock(row, 5, 6, 7, 8, 2, rowIndex);
                 if (item2) extractedItems.push(item2);
 
-                // Block 3: Col K, L, M
-                const item3 = parseBlock(row, 10, 11, 12, 3, rowIndex);
+                // Block 3: Col K, L, M, N
+                const item3 = parseBlock(row, 10, 11, 12, 13, 3, rowIndex);
                 if (item3) extractedItems.push(item3);
             });
 
@@ -694,41 +856,133 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
             elements.errorState.classList.add('hidden');
         }
 
-        // Fetch and Parse CSV Data using PapaParse directly from configured Google Sheet URL
-        function fetchSheetData() {
-            renderSkeletons();
-            state.isLoading = true;
+        // LocalStorage Cache Key & TTL Configuration (10 minutes)
+        const CACHE_KEY = 'TMGT_EXCHANGE_SHEET_CACHE_V2';
+        const CACHE_TTL_MS = 10 * 60 * 1000;
 
+        // Fast native CSV parser: Tốc độ parse siêu tốc (<1ms) không phụ thuộc CDN
+        function fastParseCSV(csvText) {
+            if (!csvText) return [];
+            const lines = csvText.split(/\r\n|\n/);
+            const rows = [];
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                if (!line || !line.trim()) continue;
+                const row = [];
+                let inQuotes = false;
+                let current = '';
+                for (let c = 0; c < line.length; c++) {
+                    const char = line[c];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        row.push(current);
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                row.push(current);
+                rows.push(row);
+            }
+            return rows;
+        }
+
+        // Tải dữ liệu tối ưu kết hợp Stale-While-Revalidate: Hiển thị ngay lập tức từ Cache!
+        function fetchSheetData(isSilent = false, forceRefresh = false) {
             const normalizedUrl = normalizeGoogleSheetUrl(GOOGLE_SHEET_CSV_URL);
             const isPlaceholder = !normalizedUrl || normalizedUrl.trim() === '' || normalizedUrl.includes('PASTE_YOUR_PUBLISHED_GOOGLE_SHEET_CSV_LINK_HERE');
 
             if (isPlaceholder) {
-                showFetchError('Hệ thống đang đồng bộ dữ liệu bảng đổi điểm từ Google Sheet. Vui lòng quay lại sau ít phút!');
+                if (!isSilent) showFetchError('Hệ thống đang đồng bộ dữ liệu bảng đổi điểm từ Google Sheet. Vui lòng quay lại sau ít phút!');
                 return;
             }
 
-            Papa.parse(normalizedUrl.trim(), {
-                download: true,
-                skipEmptyLines: true,
-                error: function (error) {
-                    console.error('PapaParse error:', error);
-                    showFetchError('Lỗi kết nối tải dữ liệu từ Google Sheet. Vui lòng đảm bảo quyền chia sẻ trang tính đã được mở hoặc liên hệ Fanpage.');
-                },
-                complete: function (results) {
-                    try {
-                        const parsedItems = transformGoogleSheetData(results.data);
-                        if (!parsedItems || parsedItems.length === 0) {
-                            showFetchError('Đã kết nối được file Google Sheet nhưng không bóc tách được vật phẩm nào ở 3 khối cột (Col A-C, Col F-H, Col K-M). Vui lòng kiểm tra lại cấu trúc hàng và cột.');
-                            return;
+            // 1. Kiểm tra cache trong localStorage để render tức thì 0.05s
+            if (!forceRefresh) {
+                try {
+                    const cachedStr = localStorage.getItem(CACHE_KEY);
+                    if (cachedStr) {
+                        const cached = JSON.parse(cachedStr);
+                        if (cached && Array.isArray(cached.items) && cached.items.length > 0) {
+                            loadItems(cached.items);
+                            state.isLoading = false;
+
+                            // Nếu cache vẫn còn hạn (dưới 10 phút), không cần fetch lại ngay
+                            const age = Date.now() - (cached.timestamp || 0);
+                            if (age < CACHE_TTL_MS) {
+                                return;
+                            }
+                            // Nếu cache đã quá 10 phút, âm thầm revalidate ngầm
+                            isSilent = true;
                         }
-                        loadItems(parsedItems);
-                        showToast(`Đã tải thành công ${parsedItems.length} vật phẩm từ Google Sheet!`);
-                    } catch (err) {
-                        console.error('Parse processing error:', err);
-                        showFetchError('Có lỗi xảy ra khi bóc tách dữ liệu từ Google Sheet.');
                     }
+                } catch (e) {
+                    console.warn('Cache read error:', e);
                 }
-            });
+            }
+
+            // 2. Chỉ hiện skeletons nếu chưa có bất kỳ dữ liệu nào trên màn hình
+            if (!isSilent && (!state.rawItems || state.rawItems.length === 0)) {
+                renderSkeletons();
+                state.isLoading = true;
+            }
+
+            if (elements.syncIcon && forceRefresh) {
+                elements.syncIcon.classList.add('animate-spin');
+            }
+
+            const fetchUrl = forceRefresh ? `${normalizedUrl}&_t=${Date.now()}` : normalizedUrl;
+
+            fetch(fetchUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+                    return response.text();
+                })
+                .then(csvText => {
+                    let rawRows = [];
+                    if (typeof Papa !== 'undefined' && Papa.parse) {
+                        const parsed = Papa.parse(csvText, { skipEmptyLines: true });
+                        rawRows = parsed.data;
+                    } else {
+                        rawRows = fastParseCSV(csvText);
+                    }
+
+                    const parsedItems = transformGoogleSheetData(rawRows);
+                    if (!parsedItems || parsedItems.length === 0) {
+                        if (!isSilent && (!state.rawItems || state.rawItems.length === 0)) {
+                            showFetchError('Đã kết nối được Google Sheet nhưng không bóc tách được vật phẩm nào.');
+                        }
+                        return;
+                    }
+
+                    // Lưu vào localStorage cache
+                    try {
+                        localStorage.setItem(CACHE_KEY, JSON.stringify({
+                            timestamp: Date.now(),
+                            items: parsedItems
+                        }));
+                    } catch (e) {
+                        console.warn('Cache write error:', e);
+                    }
+
+                    loadItems(parsedItems);
+
+                    if (forceRefresh) {
+                        showToast(`🔄 Đã đồng bộ mới nhất ${parsedItems.length} vật phẩm từ Google Sheet!`);
+                    }
+                })
+                .catch(err => {
+                    console.error('Fetch error:', err);
+                    if (!isSilent && (!state.rawItems || state.rawItems.length === 0)) {
+                        showFetchError('Lỗi kết nối tải dữ liệu từ Google Sheet. Vui lòng bấm thử lại.');
+                    }
+                })
+                .finally(() => {
+                    if (elements.syncIcon) {
+                        elements.syncIcon.classList.remove('animate-spin');
+                    }
+                });
         }
 
         function showFetchError(message) {
@@ -869,7 +1123,7 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
                     <div class="glass-panel-card rounded-2xl p-4 flex flex-col justify-between transition-all group ${isSelected ? 'ring-2 ring-emerald-500/80 border-emerald-500/50 bg-slate-900/90 shadow-lg shadow-emerald-950/40' : ''
                     }" data-item-id="${item.id}">
                         <!-- Card Top: Category Badge & Points -->
-                        <div class="space-y-2">
+                        <div class="space-y-2.5">
                             <div class="flex items-center justify-between gap-2">
                                 <span class="px-2.5 py-0.5 rounded-md text-[11px] font-bold border ${categoryClass}">
                                     ${item.type}
@@ -880,13 +1134,22 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
                             </div>
 
                             <!-- Card Middle: Item Name -->
-                            <h3 class="text-sm font-bold text-slate-100 group-hover:text-amber-300 transition-colors line-clamp-2 leading-snug pt-1" title="${item.name}">
+                            <h3 class="text-sm font-bold text-slate-100 group-hover:text-amber-300 transition-colors line-clamp-2 leading-snug pt-0.5" title="${item.name}">
                                 ${item.name}
                             </h3>
+
+                            <!-- View Image Action (On-demand Lightbox) -->
+                            <div class="pt-1 flex items-center">
+                                <button type="button" class="btn-view-image inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-900/90 hover:bg-amber-500/15 text-slate-300 hover:text-amber-300 border border-white/10 hover:border-amber-500/40 transition-all active:scale-95 group/imgbtn" 
+                                    data-id="${item.id}" title="Xem ảnh chi tiết vật phẩm">
+                                    <span class="text-amber-400 text-xs transition-transform group-hover/imgbtn:scale-110">🖼️</span>
+                                    <span>Xem ảnh</span>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Card Bottom: Quantity Stepper -->
-                        <div class="pt-4 mt-3 border-t border-white/5 flex items-center justify-between gap-2">
+                        <div class="pt-3.5 mt-3 border-t border-white/5 flex items-center justify-between gap-2">
                             <span class="text-[11px] text-slate-400 font-medium">Số lượng:</span>
                             <div class="flex items-center gap-1 bg-slate-950/80 rounded-xl p-1 border border-white/10">
                                 <button type="button" class="btn-step-minus w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-slate-800 active:scale-95" 
@@ -1153,17 +1416,148 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
 
         /**
          * ===========================================================================
+         * ON-DEMAND IMAGE MODAL & ZOOM/PAN SYSTEM
+         * ===========================================================================
+         */
+        let currentModalItemId = null;
+        let zoomLevel = 1;
+        let isPanning = false;
+        let startPanX = 0;
+        let startPanY = 0;
+        let currentTranslateX = 0;
+        let currentTranslateY = 0;
+
+        function updateImageTransform() {
+            if (!elements.modalItemImage) return;
+            elements.modalItemImage.style.transform = `translate(${currentTranslateX}px, ${currentTranslateY}px) scale(${zoomLevel})`;
+            if (elements.zoomLevelIndicator) {
+                elements.zoomLevelIndicator.textContent = `${Math.round(zoomLevel * 100)}%`;
+            }
+            if (elements.modalImagePanContainer) {
+                if (zoomLevel > 1) {
+                    elements.modalImagePanContainer.classList.remove('cursor-zoom-in');
+                    elements.modalImagePanContainer.classList.add(isPanning ? 'cursor-grabbing' : 'cursor-grab');
+                } else {
+                    elements.modalImagePanContainer.classList.add('cursor-zoom-in');
+                    elements.modalImagePanContainer.classList.remove('cursor-grab', 'cursor-grabbing');
+                }
+            }
+            if (elements.btnZoomOut) {
+                elements.btnZoomOut.disabled = zoomLevel <= 1;
+            }
+        }
+
+        function resetZoom() {
+            zoomLevel = 1;
+            currentTranslateX = 0;
+            currentTranslateY = 0;
+            isPanning = false;
+            updateImageTransform();
+        }
+
+        function setZoom(newZoom) {
+            zoomLevel = Math.min(3, Math.max(1, Math.round(newZoom * 100) / 100));
+            if (zoomLevel === 1) {
+                currentTranslateX = 0;
+                currentTranslateY = 0;
+            }
+            updateImageTransform();
+        }
+
+        function openImageModal(itemId) {
+            const item = state.rawItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            currentModalItemId = itemId;
+            elements.modalItemTitle.textContent = item.name;
+            elements.modalItemTitle.setAttribute('title', item.name);
+            elements.modalItemPoints.textContent = `${formatPoints(item.points)} Điểm`;
+
+            // Category badge styling
+            elements.modalCategoryBadge.textContent = item.type;
+            elements.modalCategoryBadge.className = `px-2.5 py-0.5 rounded-md text-[11px] font-bold border shrink-0 ${getCategoryColor(item.type)}`;
+
+            // Reset image state and zoom
+            resetZoom();
+            elements.modalItemImage.src = '';
+            elements.modalItemImage.classList.add('opacity-0');
+            elements.modalNoImageAlert.classList.add('hidden');
+            elements.modalImageWrapper.classList.remove('hidden');
+
+            if (elements.btnOpenOriginalImage) {
+                elements.btnOpenOriginalImage.href = item.image || '#';
+            }
+
+            if (item.image && item.image.trim() !== '') {
+                // Show loading spinner while image loads
+                elements.modalImageLoader.classList.remove('hidden');
+                if (elements.modalZoomControls) elements.modalZoomControls.classList.remove('hidden');
+
+                const tempImg = new Image();
+                tempImg.onload = function () {
+                    if (currentModalItemId === itemId) {
+                        elements.modalItemImage.src = item.image;
+                        elements.modalItemImage.classList.remove('opacity-0');
+                        elements.modalImageLoader.classList.add('hidden');
+                    }
+                };
+                tempImg.onerror = function () {
+                    if (currentModalItemId === itemId) {
+                        elements.modalImageLoader.classList.add('hidden');
+                        elements.modalImageWrapper.classList.add('hidden');
+                        elements.modalNoImageAlert.classList.remove('hidden');
+                        if (elements.modalZoomControls) elements.modalZoomControls.classList.add('hidden');
+                    }
+                };
+                tempImg.src = item.image;
+            } else {
+                // No image URL provided in Google Sheet
+                elements.modalImageLoader.classList.add('hidden');
+                elements.modalImageWrapper.classList.add('hidden');
+                elements.modalNoImageAlert.classList.remove('hidden');
+                if (elements.modalZoomControls) elements.modalZoomControls.classList.add('hidden');
+            }
+
+            // Animate Modal Open
+            elements.imageModalBackdrop.classList.remove('pointer-events-none', 'opacity-0');
+            elements.imageModalBox.classList.remove('scale-95');
+            elements.imageModalBox.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            elements.imageModalBackdrop.classList.add('opacity-0');
+            elements.imageModalBox.classList.remove('scale-100');
+            elements.imageModalBox.classList.add('scale-95');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                elements.imageModalBackdrop.classList.add('pointer-events-none');
+                elements.modalItemImage.src = '';
+                currentModalItemId = null;
+                resetZoom();
+            }, 300);
+        }
+
+        /**
+         * ===========================================================================
          * EVENT LISTENERS & INITIALIZATION
          * ===========================================================================
          */
         document.addEventListener('DOMContentLoaded', () => {
-            // Tải dữ liệu trực tiếp từ Google Sheet cấu hình trong code
+            // Tải dữ liệu tối ưu từ Cache & Google Sheet
             fetchSheetData();
 
-            // Retry fetch khi có lỗi kết nối
+            // Retry fetch khi có lỗi kết nối (force refresh)
             elements.btnRetryFetch.addEventListener('click', () => {
-                fetchSheetData();
+                fetchSheetData(false, true);
             });
+
+            // Nút làm mới & đồng bộ dữ liệu tức thì
+            if (elements.btnSyncSheet) {
+                elements.btnSyncSheet.addEventListener('click', () => {
+                    fetchSheetData(false, true);
+                });
+            }
 
             // Search input real-time
             elements.searchInput.addEventListener('input', (e) => {
@@ -1211,8 +1605,15 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
                 applyFiltersAndSort();
             });
 
-            // Stepper in Grid delegation
+            // Grid delegation: Stepper & View Image
             elements.itemsGrid.addEventListener('click', (e) => {
+                const btnViewImg = e.target.closest('.btn-view-image');
+                if (btnViewImg) {
+                    const id = btnViewImg.getAttribute('data-id');
+                    openImageModal(id);
+                    return;
+                }
+
                 const btnPlus = e.target.closest('.btn-step-plus');
                 if (btnPlus) {
                     const id = btnPlus.getAttribute('data-id');
@@ -1373,6 +1774,106 @@ HƯỚNG DẪN XUẤT BẢN GOOGLE SHEET SANG ĐỊNH DẠNG CSV (CHỈ VỚI 2 
                     }
                 });
             }
+
+            // Image Preview Modal Listeners
+            elements.btnCloseImageModal.addEventListener('click', closeImageModal);
+            if (elements.btnModalCloseSecondary) {
+                elements.btnModalCloseSecondary.addEventListener('click', closeImageModal);
+            }
+            elements.imageModalBackdrop.addEventListener('click', (e) => {
+                if (e.target === elements.imageModalBackdrop) {
+                    closeImageModal();
+                }
+            });
+
+            // Zoom button controls
+            if (elements.btnZoomIn) {
+                elements.btnZoomIn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    setZoom(zoomLevel + 0.3);
+                });
+            }
+            if (elements.btnZoomOut) {
+                elements.btnZoomOut.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    setZoom(zoomLevel - 0.3);
+                });
+            }
+            if (elements.btnZoomReset) {
+                elements.btnZoomReset.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    resetZoom();
+                });
+            }
+
+            // Interactive Pan & Zoom on Image Canvas
+            if (elements.modalImagePanContainer) {
+                let hasMoved = false;
+
+                elements.modalImagePanContainer.addEventListener('mousedown', (e) => {
+                    if (zoomLevel > 1) {
+                        isPanning = true;
+                        hasMoved = false;
+                        startPanX = e.clientX - currentTranslateX;
+                        startPanY = e.clientY - currentTranslateY;
+                        updateImageTransform();
+                    }
+                });
+
+                window.addEventListener('mousemove', (e) => {
+                    if (isPanning) {
+                        hasMoved = true;
+                        currentTranslateX = e.clientX - startPanX;
+                        currentTranslateY = e.clientY - startPanY;
+                        updateImageTransform();
+                    }
+                });
+
+                window.addEventListener('mouseup', () => {
+                    if (isPanning) {
+                        isPanning = false;
+                        updateImageTransform();
+                    }
+                });
+
+                // Click toggle 1x <-> 2x
+                elements.modalImagePanContainer.addEventListener('click', (e) => {
+                    if (hasMoved) return; // Không đổi zoom nếu người dùng vừa kéo di chuyển
+                    if (zoomLevel === 1) {
+                        setZoom(2);
+                    } else {
+                        resetZoom();
+                    }
+                });
+
+                // Mouse Wheel Zoom
+                elements.modalImagePanContainer.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    if (e.deltaY < 0) {
+                        setZoom(zoomLevel + 0.2);
+                    } else {
+                        setZoom(zoomLevel - 0.2);
+                    }
+                }, { passive: false });
+            }
+
+            // Quick Add to Cart inside Image Modal
+            if (elements.btnModalQuickAddToCart) {
+                elements.btnModalQuickAddToCart.addEventListener('click', () => {
+                    if (!currentModalItemId) return;
+                    const currentCount = state.cart[currentModalItemId] ? state.cart[currentModalItemId].count : 0;
+                    updateCartQuantity(currentModalItemId, currentCount + 1);
+                    showToast(`🛒 Đã thêm 1 "${elements.modalItemTitle.textContent}" vào giỏ!`);
+                });
+            }
+
+            // Global Keyboard listener (Escape closes modals)
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeImageModal();
+                    closeDrawer();
+                }
+            });
         });
     </script>
 
