@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /next/
-Disallow: /games/huyet-vuc-chi-canh/test.html
 
 Sitemap: https://lamongame.com/sitemap.xml
