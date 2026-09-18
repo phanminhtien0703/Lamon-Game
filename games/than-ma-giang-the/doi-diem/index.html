@@ -130,6 +130,7 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
 2. Cấu trúc cột mỗi khối (Hỗ trợ 3 khối song song):
    - Cột A: LOẠI | Cột B: TÊN VẬT PHẨM | Cột C: ĐIỂM QUY ĐỔI | Cột D: LINK ẢNH (tùy chọn)
    - Khối 2: Cột F, G, H, I | Khối 3: Cột K, L, M, N
+   * Hỗ trợ nhiều ảnh: Có thể nhập nhiều link ảnh trong cùng 1 ô, cách nhau bằng dấu phẩy (,), dấu chấm phẩy (;) hoặc xuống dòng (Alt + Enter).
    * Link ảnh hỗ trợ: Link ảnh trực tiếp (.png, .jpg, .webp) hoặc link Google Drive công khai.
 3. Trên thanh menu Google Sheet: Tệp (File) > Chia sẻ (Share) > Xuất bản lên web (Publish to web).
 4. Ở mục định dạng chọn "Giá trị được phân tách bằng dấu phẩy (.csv)" thay vì "Trang web".
@@ -522,6 +523,12 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
 
                 <!-- Image Display Box with Zoom & Pan Support -->
                 <div id="modalImageWrapper" class="w-full flex items-center justify-center rounded-2xl bg-slate-950/70 border border-white/5 p-2 overflow-hidden min-h-[240px] relative group select-none">
+                    <!-- Image counter badge (Hiển thị khi có nhiều ảnh) -->
+                    <div id="modalImageCounter" class="hidden absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900/90 backdrop-blur-md border border-white/10 text-[11px] font-extrabold text-amber-400 z-20 shadow-lg select-none">
+                        <span>🖼️</span>
+                        <span id="modalImageCounterText">1 / 1</span>
+                    </div>
+
                     <!-- Zoom Toolbar floating controls -->
                     <div id="modalZoomControls" class="absolute top-3 right-3 flex items-center gap-1 bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-white/10 shadow-lg z-20 transition-opacity">
                         <button type="button" id="btnZoomOut" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-slate-800" title="Thu nhỏ (-)">
@@ -539,14 +546,33 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
                         </a>
                     </div>
 
+                    <!-- Slider Prev / Next Buttons (Hiển thị khi có nhiều ảnh) -->
+                    <button type="button" id="btnPrevImage" class="hidden absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-900/80 hover:bg-amber-500 text-white hover:text-slate-950 border border-white/15 flex items-center justify-center transition-all shadow-xl backdrop-blur-md z-20 active:scale-90" title="Ảnh trước (Phím ❮ hoặc A)">
+                        ❮
+                    </button>
+                    <button type="button" id="btnNextImage" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-900/80 hover:bg-amber-500 text-white hover:text-slate-950 border border-white/15 flex items-center justify-center transition-all shadow-xl backdrop-blur-md z-20 active:scale-90" title="Ảnh tiếp theo (Phím ❯ hoặc D)">
+                        ❯
+                    </button>
+
                     <!-- Draggable & Zoomable Image Viewport -->
                     <div id="modalImagePanContainer" class="w-full flex items-center justify-center overflow-hidden cursor-zoom-in transition-all" style="max-height: 52vh; min-height: 220px;">
                         <img id="modalItemImage" src="" alt="Ảnh vật phẩm" class="max-h-[50vh] max-w-full object-contain rounded-xl shadow-lg transition-transform duration-150 select-none pointer-events-auto" draggable="false">
                     </div>
 
                     <!-- Floating hint: "Nhấp hoặc lăn chuột để phóng to" -->
-                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none bg-slate-950/80 backdrop-blur-sm px-3 py-0.5 rounded-full border border-white/10 text-[10px] text-slate-400 opacity-80 hidden sm:block">
-                        🔍 Nhấp vào ảnh hoặc lăn chuột để phóng to • Kéo để di chuyển
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none bg-slate-950/80 backdrop-blur-sm px-3 py-0.5 rounded-full border border-white/10 text-[10px] text-slate-400 opacity-80 hidden sm:block whitespace-nowrap">
+                        🔍 Lăn chuột để zoom • Kéo di chuyển • Phím ❮ ❯ chuyển ảnh
+                    </div>
+                </div>
+
+                <!-- Thumbnails Strip for Multiple Images -->
+                <div id="modalThumbnailsWrapper" class="hidden w-full space-y-1.5">
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 px-1 font-semibold">
+                        <span>Danh sách ảnh:</span>
+                        <span class="text-[10px] text-amber-400/90 font-medium">Bấm chọn ảnh xem nhanh</span>
+                    </div>
+                    <div id="modalThumbnailsContainer" class="w-full flex items-center gap-2 overflow-x-auto p-1.5 rounded-xl bg-slate-950/60 border border-white/5">
+                        <!-- Injected dynamically -->
                     </div>
                 </div>
 
@@ -720,6 +746,12 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
             btnZoomReset: document.getElementById('btnZoomReset'),
             zoomLevelIndicator: document.getElementById('zoomLevelIndicator'),
             btnOpenOriginalImage: document.getElementById('btnOpenOriginalImage'),
+            modalImageCounter: document.getElementById('modalImageCounter'),
+            modalImageCounterText: document.getElementById('modalImageCounterText'),
+            btnPrevImage: document.getElementById('btnPrevImage'),
+            btnNextImage: document.getElementById('btnNextImage'),
+            modalThumbnailsWrapper: document.getElementById('modalThumbnailsWrapper'),
+            modalThumbnailsContainer: document.getElementById('modalThumbnailsContainer'),
 
             toastContainer: document.getElementById('toastContainer')
         };
@@ -765,6 +797,7 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
             function normalizeImageUrl(url) {
                 if (!url) return '';
                 url = url.toString().trim();
+                url = url.replace(/^["'<\(\[]+|["'>\)\]]+$/g, '').trim();
                 if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/') && !url.startsWith('./')) {
                     return '';
                 }
@@ -777,7 +810,26 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
                 if (driveIdMatch && driveIdMatch[1]) {
                     return `https://lh3.googleusercontent.com/d/${driveIdMatch[1]}`;
                 }
+                const driveUcMatch = url.match(/drive\.google\.com\/uc\?(?:[^&]+&)*id=([a-zA-Z0-9_-]+)/);
+                if (driveUcMatch && driveUcMatch[1]) {
+                    return `https://lh3.googleusercontent.com/d/${driveUcMatch[1]}`;
+                }
                 return url;
+            }
+
+            // Hỗ trợ bóc tách nhiều link ảnh (ngăn cách bởi dấu phẩy, chấm phẩy, hoặc xuống dòng)
+            function normalizeImageUrls(rawInput) {
+                if (!rawInput) return [];
+                const rawStr = rawInput.toString();
+                const tokens = rawStr.split(/[\r\n;,|]+/);
+                const urls = [];
+                tokens.forEach(tok => {
+                    const cleanUrl = normalizeImageUrl(tok);
+                    if (cleanUrl && !urls.includes(cleanUrl)) {
+                        urls.push(cleanUrl);
+                    }
+                });
+                return urls;
             }
 
             function parseBlock(row, typeColIdx, nameColIdx, pointsColIdx, imgColIdx, blockNumber, rowIndex) {
@@ -809,13 +861,15 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
                 if (isNaN(points) || points <= 0) return null;
 
                 const itemId = `tmgt-b${blockNumber}-r${rowIndex}-${name.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                const images = normalizeImageUrls(rawImg);
 
                 return {
                     id: itemId,
                     type: type || 'Khác',
                     name: name,
                     points: points,
-                    image: normalizeImageUrl(rawImg)
+                    image: images.length > 0 ? images[0] : '',
+                    images: images
                 };
             }
 
@@ -857,7 +911,7 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
         }
 
         // LocalStorage Cache Key & TTL Configuration (10 minutes)
-        const CACHE_KEY = 'TMGT_EXCHANGE_SHEET_CACHE_V2';
+        const CACHE_KEY = 'TMGT_EXCHANGE_SHEET_CACHE_V3';
         const CACHE_TTL_MS = 10 * 60 * 1000;
 
         // Fast native CSV parser: Tốc độ parse siêu tốc (<1ms) không phụ thuộc CDN
@@ -1143,7 +1197,7 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
                                 <button type="button" class="btn-view-image inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-900/90 hover:bg-amber-500/15 text-slate-300 hover:text-amber-300 border border-white/10 hover:border-amber-500/40 transition-all active:scale-95 group/imgbtn" 
                                     data-id="${item.id}" title="Xem ảnh chi tiết vật phẩm">
                                     <span class="text-amber-400 text-xs transition-transform group-hover/imgbtn:scale-110">🖼️</span>
-                                    <span>Xem ảnh</span>
+                                    <span>${item.images && item.images.length > 1 ? `Xem ảnh (${item.images.length})` : 'Xem ảnh'}</span>
                                 </button>
                             </div>
                         </div>
@@ -1416,10 +1470,12 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
 
         /**
          * ===========================================================================
-         * ON-DEMAND IMAGE MODAL & ZOOM/PAN SYSTEM
+         * ON-DEMAND IMAGE MODAL, GALLERY SLIDER & ZOOM/PAN SYSTEM
          * ===========================================================================
          */
         let currentModalItemId = null;
+        let currentModalImages = [];
+        let currentImageIndex = 0;
         let zoomLevel = 1;
         let isPanning = false;
         let startPanX = 0;
@@ -1464,6 +1520,63 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
             updateImageTransform();
         }
 
+        // Hiển thị ảnh tại chỉ số index trong danh sách ảnh
+        function showModalImage(index) {
+            if (!currentModalImages || currentModalImages.length === 0) return;
+
+            // Vòng tròn khi bấm lùi ở ảnh đầu hoặc tới ở ảnh cuối
+            if (index < 0) {
+                index = currentModalImages.length - 1;
+            } else if (index >= currentModalImages.length) {
+                index = 0;
+            }
+            currentImageIndex = index;
+            const currentImgUrl = currentModalImages[currentImageIndex];
+
+            // Reset zoom về 100% khi chuyển ảnh mới
+            resetZoom();
+
+            elements.modalItemImage.src = '';
+            elements.modalItemImage.classList.add('opacity-0');
+            elements.modalImageLoader.classList.remove('hidden');
+
+            if (elements.btnOpenOriginalImage) {
+                elements.btnOpenOriginalImage.href = currentImgUrl;
+            }
+
+            if (elements.modalImageCounterText) {
+                elements.modalImageCounterText.textContent = `${currentImageIndex + 1} / ${currentModalImages.length}`;
+            }
+
+            // Cập nhật trạng thái active của thumbnails
+            if (elements.modalThumbnailsContainer) {
+                const thumbs = elements.modalThumbnailsContainer.querySelectorAll('.modal-thumb-btn');
+                thumbs.forEach((thumb, idx) => {
+                    if (idx === currentImageIndex) {
+                        thumb.className = 'modal-thumb-btn shrink-0 w-12 h-12 rounded-lg overflow-hidden border-2 border-amber-400 ring-2 ring-amber-500/50 transition-all scale-105 opacity-100 shadow-md';
+                        thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    } else {
+                        thumb.className = 'modal-thumb-btn shrink-0 w-12 h-12 rounded-lg overflow-hidden border border-white/15 opacity-60 hover:opacity-100 hover:border-amber-400/60 transition-all';
+                    }
+                });
+            }
+
+            const tempImg = new Image();
+            tempImg.onload = function () {
+                if (currentModalImages[currentImageIndex] === currentImgUrl) {
+                    elements.modalItemImage.src = currentImgUrl;
+                    elements.modalItemImage.classList.remove('opacity-0');
+                    elements.modalImageLoader.classList.add('hidden');
+                }
+            };
+            tempImg.onerror = function () {
+                if (currentModalImages[currentImageIndex] === currentImgUrl) {
+                    elements.modalImageLoader.classList.add('hidden');
+                }
+            };
+            tempImg.src = currentImgUrl;
+        }
+
         function openImageModal(itemId) {
             const item = state.rawItems.find(i => i.id === itemId);
             if (!item) return;
@@ -1477,45 +1590,51 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
             elements.modalCategoryBadge.textContent = item.type;
             elements.modalCategoryBadge.className = `px-2.5 py-0.5 rounded-md text-[11px] font-bold border shrink-0 ${getCategoryColor(item.type)}`;
 
-            // Reset image state and zoom
+            // Danh sách ảnh
+            currentModalImages = (item.images && item.images.length > 0)
+                ? item.images
+                : (item.image && item.image.trim() !== '' ? [item.image] : []);
+            currentImageIndex = 0;
+
             resetZoom();
-            elements.modalItemImage.src = '';
-            elements.modalItemImage.classList.add('opacity-0');
-            elements.modalNoImageAlert.classList.add('hidden');
-            elements.modalImageWrapper.classList.remove('hidden');
 
-            if (elements.btnOpenOriginalImage) {
-                elements.btnOpenOriginalImage.href = item.image || '#';
-            }
-
-            if (item.image && item.image.trim() !== '') {
-                // Show loading spinner while image loads
-                elements.modalImageLoader.classList.remove('hidden');
+            if (currentModalImages.length > 0) {
+                elements.modalNoImageAlert.classList.add('hidden');
+                elements.modalImageWrapper.classList.remove('hidden');
                 if (elements.modalZoomControls) elements.modalZoomControls.classList.remove('hidden');
 
-                const tempImg = new Image();
-                tempImg.onload = function () {
-                    if (currentModalItemId === itemId) {
-                        elements.modalItemImage.src = item.image;
-                        elements.modalItemImage.classList.remove('opacity-0');
-                        elements.modalImageLoader.classList.add('hidden');
+                if (currentModalImages.length > 1) {
+                    // Hiển thị thanh điều khiển chuyển nhiều ảnh
+                    if (elements.btnPrevImage) elements.btnPrevImage.classList.remove('hidden');
+                    if (elements.btnNextImage) elements.btnNextImage.classList.remove('hidden');
+                    if (elements.modalImageCounter) elements.modalImageCounter.classList.remove('hidden');
+                    if (elements.modalThumbnailsWrapper) {
+                        elements.modalThumbnailsWrapper.classList.remove('hidden');
+                        elements.modalThumbnailsContainer.innerHTML = currentModalImages.map((imgUrl, idx) => `
+                            <button type="button" class="modal-thumb-btn shrink-0 w-12 h-12 rounded-lg overflow-hidden border border-white/15 opacity-60 hover:opacity-100 hover:border-amber-400/60 transition-all cursor-pointer" data-index="${idx}" title="Xem ảnh ${idx + 1}">
+                                <img src="${imgUrl}" alt="Thumbnail ${idx + 1}" class="w-full h-full object-cover pointer-events-none" loading="lazy">
+                            </button>
+                        `).join('');
                     }
-                };
-                tempImg.onerror = function () {
-                    if (currentModalItemId === itemId) {
-                        elements.modalImageLoader.classList.add('hidden');
-                        elements.modalImageWrapper.classList.add('hidden');
-                        elements.modalNoImageAlert.classList.remove('hidden');
-                        if (elements.modalZoomControls) elements.modalZoomControls.classList.add('hidden');
-                    }
-                };
-                tempImg.src = item.image;
+                } else {
+                    // Ẩn thanh chuyển ảnh nếu chỉ có 1 ảnh
+                    if (elements.btnPrevImage) elements.btnPrevImage.classList.add('hidden');
+                    if (elements.btnNextImage) elements.btnNextImage.classList.add('hidden');
+                    if (elements.modalImageCounter) elements.modalImageCounter.classList.add('hidden');
+                    if (elements.modalThumbnailsWrapper) elements.modalThumbnailsWrapper.classList.add('hidden');
+                }
+
+                showModalImage(0);
             } else {
-                // No image URL provided in Google Sheet
+                // Không có link ảnh nào
                 elements.modalImageLoader.classList.add('hidden');
                 elements.modalImageWrapper.classList.add('hidden');
                 elements.modalNoImageAlert.classList.remove('hidden');
                 if (elements.modalZoomControls) elements.modalZoomControls.classList.add('hidden');
+                if (elements.btnPrevImage) elements.btnPrevImage.classList.add('hidden');
+                if (elements.btnNextImage) elements.btnNextImage.classList.add('hidden');
+                if (elements.modalImageCounter) elements.modalImageCounter.classList.add('hidden');
+                if (elements.modalThumbnailsWrapper) elements.modalThumbnailsWrapper.classList.add('hidden');
             }
 
             // Animate Modal Open
@@ -1534,6 +1653,8 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
                 elements.imageModalBackdrop.classList.add('pointer-events-none');
                 elements.modalItemImage.src = '';
                 currentModalItemId = null;
+                currentModalImages = [];
+                currentImageIndex = 0;
                 resetZoom();
             }, 300);
         }
@@ -1867,8 +1988,76 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
                 });
             }
 
-            // Global Keyboard listener (Escape closes modals)
+            // Image Slider Navigation (Prev / Next)
+            if (elements.btnPrevImage) {
+                elements.btnPrevImage.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showModalImage(currentImageIndex - 1);
+                });
+            }
+            if (elements.btnNextImage) {
+                elements.btnNextImage.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showModalImage(currentImageIndex + 1);
+                });
+            }
+
+            // Image Thumbnails Delegation
+            if (elements.modalThumbnailsContainer) {
+                elements.modalThumbnailsContainer.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.modal-thumb-btn');
+                    if (btn) {
+                        const idx = parseInt(btn.getAttribute('data-index'), 10);
+                        if (!isNaN(idx)) {
+                            showModalImage(idx);
+                        }
+                    }
+                });
+            }
+
+            // Touch Swipe Gestures for Mobile (Khi zoomLevel === 1)
+            if (elements.modalImageWrapper) {
+                let touchStartX = 0;
+                let touchStartY = 0;
+                elements.modalImageWrapper.addEventListener('touchstart', (e) => {
+                    if (e.touches && e.touches.length === 1 && zoomLevel === 1) {
+                        touchStartX = e.touches[0].clientX;
+                        touchStartY = e.touches[0].clientY;
+                    }
+                }, { passive: true });
+
+                elements.modalImageWrapper.addEventListener('touchend', (e) => {
+                    if (e.changedTouches && e.changedTouches.length === 1 && zoomLevel === 1) {
+                        const deltaX = e.changedTouches[0].clientX - touchStartX;
+                        const deltaY = e.changedTouches[0].clientY - touchStartY;
+                        // Ngưỡng vuốt ngang tối thiểu 45px và góc ngang trội hơn dọc
+                        if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+                            if (currentModalImages && currentModalImages.length > 1) {
+                                if (deltaX < 0) {
+                                    showModalImage(currentImageIndex + 1); // Vuốt sang trái -> Ảnh kế tiếp
+                                } else {
+                                    showModalImage(currentImageIndex - 1); // Vuốt sang phải -> Ảnh trước
+                                }
+                            }
+                        }
+                    }
+                }, { passive: true });
+            }
+
+            // Global Keyboard listener (Escape đóng modal, Mũi tên trái/phải hoặc A/D đổi ảnh)
             document.addEventListener('keydown', (e) => {
+                const isModalOpen = !elements.imageModalBackdrop.classList.contains('pointer-events-none');
+                if (isModalOpen) {
+                    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                        if (currentModalImages && currentModalImages.length > 1) {
+                            showModalImage(currentImageIndex - 1);
+                        }
+                    } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                        if (currentModalImages && currentModalImages.length > 1) {
+                            showModalImage(currentImageIndex + 1);
+                        }
+                    }
+                }
                 if (e.key === 'Escape') {
                     closeImageModal();
                     closeDrawer();
