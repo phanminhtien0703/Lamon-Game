@@ -9,7 +9,7 @@
                 if (url.searchParams.has('fbclid')) {
                     var fbclid = url.searchParams.get('fbclid');
                     if (fbclid) {
-                        try { localStorage.setItem('fbclid', fbclid); } catch (e) {}
+                        try { localStorage.setItem('fbclid', fbclid); } catch (e) { }
                     }
                     url.searchParams.delete('fbclid');
                     var cleanUrl =
@@ -18,7 +18,7 @@
                         url.hash;
                     window.history.replaceState({}, document.title, cleanUrl);
                 }
-            } catch (e) {}
+            } catch (e) { }
         })();
     </script>
     <meta charset="utf-8">
@@ -80,7 +80,9 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Cinzel:wght@700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Cinzel:wght@700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Modern Refined Styling -->
     <link rel="stylesheet" href="/assets/css/pages/dua-top-tinh-nang.css">
