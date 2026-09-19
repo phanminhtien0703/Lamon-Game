@@ -8,9 +8,18 @@ const SECRET = new TextEncoder().encode(
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Nếu người dùng thông thường vào root '/' -> Giấu trang nội bộ bằng mã lỗi 404
+  // 1. Nếu vào root '/' -> Chuyển hướng vào dashboard (nếu đã đăng nhập) hoặc login
   if (pathname === '/') {
-    return new NextResponse('Page Not Found', { status: 404 });
+    const sessionToken = request.cookies.get('admin_session')?.value;
+    if (sessionToken) {
+      try {
+        await jwtVerify(sessionToken, SECRET);
+        return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+      } catch {
+        // Token không hợp lệ thì chuyển tới login
+      }
+    }
+    return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
   // 2. Bỏ qua static assets, favicon, _next
