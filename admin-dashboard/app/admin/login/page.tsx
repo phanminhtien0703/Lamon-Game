@@ -118,11 +118,6 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-slate-800/80 text-center">
-          <span className="text-xs text-slate-500">
-            Tài khoản mặc định: <code className="text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-800/40">admin</code> | Mật khẩu: <code className="text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-800/40">Admin@2026!</code>
-          </span>
-        </div>
       </div>
     </div>
   );
