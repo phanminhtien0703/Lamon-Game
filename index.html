@@ -67,9 +67,18 @@
         })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
     </script>
 
+    <!-- Theme Manager Init (Anti-FOUC) -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('lamon_game_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
     <!-- Shared & Game Stylesheets -->
     <link rel="stylesheet" href="/games/public/game.css">
     <link rel="stylesheet" href="/assets/css/pages/home.css">
+    <link rel="stylesheet" href="/assets/css/components/theme-light.css">
 
     <!-- Tracking Scripts -->
     <script src="/next/static/chunks/track.js"></script>
@@ -91,6 +100,11 @@
                 </div>
             </div>
             <div class="portal-header-actions">
+                <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Chuyển chế độ Sáng / Tối"
+                    title="Chuyển chế độ Sáng / Tối">
+                    <span class="theme-icon">🌙</span>
+                    <span class="theme-label">Tối</span>
+                </button>
                 <a href="/games/than-ma-giang-the/" class="portal-header-btn event-btn" data-track="home-topbar-mmorpg">
                     <span>⚔️</span>
                     <span>MMORPG 3D</span>
@@ -200,127 +214,49 @@
             </a>
         </div>
 
-        <!-- 3. GAME ĐỀ XUẤT (Danh sách nhiều game chuẩn MMORPG Download) -->
-        <section class="portal-section">
+        <!-- 3. GAME ĐỀ XUẤT (Danh sách nhiều game chuẩn App Store style) -->
+        <section class="portal-section apps-section">
             <div class="portal-section-header">
                 <div class="portal-section-title-wrap">
                     <h3 class="portal-section-title">GAME ĐỀ XUẤT</h3>
                 </div>
             </div>
 
-            <div class="portal-games-grid">
+            <div class="portal-apps-grid">
                 <!-- Game 1: Thần Ma Giáng Thế -->
-                <div class="portal-game-card highlight" data-download-url="/games/than-ma-giang-the/"
-                    data-track="card-tmgt">
-                    <a href="/games/than-ma-giang-the/" class="portal-game-card-link"
-                        aria-label="Giao diện tải game Thần Ma Giáng Thế">Thần Ma Giáng Thế</a>
-                    <div class="portal-game-main">
-                        <div class="portal-game-avatar-wrap">
-                            <img src="/images/tmgt/tmgt-logo.png" alt="Thần Ma Giáng Thế" class="portal-game-avatar">
-                        </div>
-                        <div class="portal-game-info">
-                            <div class="portal-game-title-row">
-                                <h4 class="portal-game-title">Thần Ma Giáng Thế</h4>
-                                <span class="portal-game-badge-hot">⭐ HOT</span>
-                            </div>
-                            <div class="portal-game-tags">
-                                <span class="portal-game-tag genre">MMORPG 3D</span>
-                                <span class="portal-game-tag">Free 3.000 Ruby</span>
-                            </div>
-                            <p class="portal-game-desc">
-                                Siêu phẩm MMORPG 3D không chiến tiên ma. Tự do chuyển 8 môn phái, cưỡi rồng PK và cày
-                                chay làm giàu.
-                            </p>
-                        </div>
+                <a href="/games/than-ma-giang-the/" class="portal-app-item" data-track="card-tmgt">
+                    <div class="portal-app-thumb-wrap">
+                        <img src="/images/tmgt/tmgt-logo.png" alt="Thần Ma Giáng Thế" class="portal-app-thumb">
                     </div>
-                    <div class="portal-game-actions">
-                        <a href="https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4/THANMAGIANGTHEYL784Z4_EdIf1XkalZCqknYO0sCRwA.apk"
-                            class="portal-btn-play" data-track="home-dl-tmgt-apk">
-                            <span>🤖 Tải APK</span>
-                        </a>
-                        <a href="itms-services://?action=download-manifest&url=https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4IOS/THANMAGIANGTHEYL784Z4IOS_EdIf1XkalZCqknYO0sCRwA.plist"
-                            class="portal-btn-sub" data-track="home-dl-tmgt-ios">
-                            <span>🍎 Tải iOS</span>
-                        </a>
-                        <a href="/games/than-ma-giang-the/" class="portal-btn-sub view-detail"
-                            data-track="home-view-tmgt">
-                            <span>Chi tiết ➔</span>
-                        </a>
+                    <div class="portal-app-meta">
+                        <span class="portal-app-name">Thần Ma Giáng Thế</span>
+                        <span class="portal-app-tag">GAME HOT</span>
                     </div>
-                </div>
+                </a>
 
+                <!-- Game 2: Nghịch Thiên Cải Mệnh -->
+                <a href="https://t.skeideng.com/S2Pxl3.html" target="_blank" rel="noopener noreferrer"
+                    class="portal-app-item" data-track="card-psm">
+                    <div class="portal-app-thumb-wrap">
+                        <img src="/images/psm/psm-logo.jpg" alt="Phù Sinh Mộng" class="portal-app-thumb">
+                    </div>
+                    <div class="portal-app-meta">
+                        <span class="portal-app-name">Phù Sinh Mộng</span>
+                        <span class="portal-app-tag">GAME HOT</span>
+                    </div>
+                </a>
 
-                <!-- Game 3: Phù Sinh Mộng -->
-                <div class="portal-game-card" data-download-url="https://t.skeideng.com/S2Pxl3.html"
-                    data-target="_blank" data-track="card-psm">
-                    <a href="https://t.skeideng.com/S2Pxl3.html" target="_blank" rel="noopener noreferrer"
-                        class="portal-game-card-link" aria-label="Giao diện tải game Phù Sinh Mộng">Phù Sinh Mộng</a>
-                    <div class="portal-game-main">
-                        <div class="portal-game-avatar-wrap">
-                            <img src="/images/psm/psm-logo.jpg" alt="Phù Sinh Mộng" class="portal-game-avatar">
-                        </div>
-                        <div class="portal-game-info">
-                            <div class="portal-game-title-row">
-                                <h4 class="portal-game-title">Phù Sinh Mộng</h4>
-                            </div>
-                            <div class="portal-game-tags">
-                                <span class="portal-game-tag genre">Tiên Hiệp 3D</span>
-                                <span class="portal-game-tag">Kết Duyên Tầm Đạo</span>
-                            </div>
-                            <p class="portal-game-desc">
-                                Đồ họa tiên hiệp thơ mộng, hệ thống kết hôn duyên khởi lãng mạn cùng chiến trường đoạt
-                                linh thú.
-                            </p>
-                        </div>
+                <!-- Game 3: Tân Binh Thức Tỉnh -->
+                <a href="https://t.skeideng.com/MHoxs.html" target="_blank" rel="noopener noreferrer"
+                    class="portal-app-item" data-track="card-tbtt">
+                    <div class="portal-app-thumb-wrap">
+                        <img src="/images/tbtt/tbtt-logo.jpg" alt="Tân Binh Thức Tỉnh" class="portal-app-thumb">
                     </div>
-                    <div class="portal-game-actions">
-                        <a href="https://t.skeideng.com/S2Pxl3.html" target="_blank" rel="noopener noreferrer"
-                            class="portal-btn-play psm" data-track="home-dl-psm">
-                            <span>🌸 Tải Game</span>
-                        </a>
-                        <a href="https://m.me/lamongame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Ph%C3%B9%20Sinh%20M%E1%BB%99ng"
-                            target="_blank" rel="noopener noreferrer" class="portal-btn-sub" data-track="home-code-psm">
-                            <span>🎁 Nhận Code</span>
-                        </a>
+                    <div class="portal-app-meta">
+                        <span class="portal-app-name">Tân Binh Thức Tỉnh</span>
+                        <span class="portal-app-tag">GAME HOT</span>
                     </div>
-                </div>
-
-                <!-- Game 4: Tân Binh Thức Tỉnh -->
-                <div class="portal-game-card" data-download-url="https://t.skeideng.com/MHoxs.html" data-target="_blank"
-                    data-track="card-tbtt">
-                    <a href="https://t.skeideng.com/MHoxs.html" target="_blank" rel="noopener noreferrer"
-                        class="portal-game-card-link" aria-label="Giao diện tải game Tân Binh Thức Tỉnh">Tân Binh Thức
-                        Tỉnh</a>
-                    <div class="portal-game-main">
-                        <div class="portal-game-avatar-wrap">
-                            <img src="/images/tbtt/tbtt-logo.jpg" alt="Tân Binh Thức Tỉnh" class="portal-game-avatar">
-                        </div>
-                        <div class="portal-game-info">
-                            <div class="portal-game-title-row">
-                                <h4 class="portal-game-title">Tân Binh Thức Tỉnh</h4>
-                            </div>
-                            <div class="portal-game-tags">
-                                <span class="portal-game-tag genre">MMORPG Huyền Huyễn</span>
-                                <span class="portal-game-tag">Săn Boss Đồ Đỏ</span>
-                            </div>
-                            <p class="portal-game-desc">
-                                Siêu phẩm MMORPG huyền huyễn đỉnh cao, chiến trường liên server vạn người, săn boss đồ
-                                đỏ và thức tỉnh sức mạnh tối thượng.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="portal-game-actions">
-                        <a href="https://t.skeideng.com/MHoxs.html" target="_blank" rel="noopener noreferrer"
-                            class="portal-btn-play tbtt" data-track="home-dl-tbtt">
-                            <span>🛡️ Tải Game</span>
-                        </a>
-                        <a href="https://m.me/lamongame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20T%C3%A2n%20Binh%20Th%E1%BB%A9c%20T%E1%BB%89nh"
-                            target="_blank" rel="noopener noreferrer" class="portal-btn-sub"
-                            data-track="home-code-tbtt">
-                            <span>🎁 Nhận Code</span>
-                        </a>
-                    </div>
-                </div>
+                </a>
             </div>
         </section>
 
@@ -358,7 +294,7 @@
             </div>
 
             <div class="portal-giftcode-grid">
-                <!-- Giftcode Thần Ma Giáng Thế -->
+                <!-- Giftcode 1: Thần Ma Giáng Thế -->
                 <div class="portal-giftcode-card">
                     <img src="/images/tmgt/tmgt-logo.png" alt="Thần Ma Giáng Thế" class="portal-giftcode-avatar">
                     <div class="portal-giftcode-info">
@@ -372,6 +308,33 @@
                     </a>
                 </div>
 
+                <!-- Giftcode 2: Phù Sinh Mộng -->
+                <div class="portal-giftcode-card">
+                    <img src="/images/psm/psm-logo.jpg" alt="Phù Sinh Mộng" class="portal-giftcode-avatar">
+                    <div class="portal-giftcode-info">
+                        <h4>Phù Sinh Mộng</h4>
+                        <p class="portal-giftcode-stat">🎁 Quà: Code Tân Thủ + Quà Đăng Ký VIP</p>
+                    </div>
+                    <a href="https://m.me/lamongame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Ph%C3%B9%20Sinh%20M%E1%BB%99ng"
+                        target="_blank" rel="noopener noreferrer" class="portal-btn-giftcode"
+                        data-track="giftcode-btn-psm">
+                        Nhận code
+                    </a>
+                </div>
+
+                <!-- Giftcode 3: Tân Binh Thức Tỉnh -->
+                <div class="portal-giftcode-card">
+                    <img src="/images/tbtt/tbtt-logo.jpg" alt="Tân Binh Thức Tỉnh" class="portal-giftcode-avatar">
+                    <div class="portal-giftcode-info">
+                        <h4>Tân Binh Thức Tỉnh</h4>
+                        <p class="portal-giftcode-stat">🎁 Quà: Code Tân Thủ + Rương Đồ Đỏ & KNB</p>
+                    </div>
+                    <a href="https://m.me/lamongame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20T%C3%A2n%20Binh%20Th%E1%BB%A9c%20T%E1%BB%89nh"
+                        target="_blank" rel="noopener noreferrer" class="portal-btn-giftcode"
+                        data-track="giftcode-btn-tbtt">
+                        Nhận code
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -497,6 +460,9 @@
 
     <!-- Hero Banner Slider Interaction Script -->
     <script src="/assets/js/pages/home.js"></script>
+
+    <!-- Theme Manager Core Script -->
+    <script src="/assets/js/core/theme-manager.js"></script>
 </body>
 
 </html>

@@ -59,6 +59,16 @@
         }
     </script>
 
+    <!-- Theme Manager Init (Anti-FOUC) -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('lamon_game_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="/assets/css/components/theme-light.css">
+
     <!-- PapaParse CDN for parsing published Google Sheet CSV (Deferred for non-blocking render) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" defer></script>
 
@@ -156,11 +166,17 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
                     <span class="text-amber-400">❮</span>
                     <span>Về Trang Game TMGT</span>
                 </a>
-                <a href="../dua-top-tinh-nang/"
-                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition-all">
-                    <span>🏆</span>
-                    <span>Sự Kiện Đua Top</span>
-                </a>
+                <div class="flex items-center gap-2">
+                    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Chuyển chế độ Sáng / Tối" title="Chuyển chế độ Sáng / Tối">
+                        <span class="theme-icon">🌙</span>
+                        <span class="theme-label">Tối</span>
+                    </button>
+                    <a href="../dua-top-tinh-nang/"
+                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition-all">
+                        <span>🏆</span>
+                        <span>Sự Kiện Đua Top</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Main Title & Cart Action -->
@@ -2079,6 +2095,8 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
             ]
         });
     </script>
+    <!-- Theme Manager Core Script -->
+    <script src="/assets/js/core/theme-manager.js"></script>
 </body>
 
 </html>

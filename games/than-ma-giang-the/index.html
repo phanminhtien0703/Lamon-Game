@@ -68,8 +68,17 @@
     <script src="../../next/static/chunks/app/download-flow.js" async=""></script>
     <script src="../../next/static/chunks/track.js"></script>
 
+    <!-- Theme Manager Init (Anti-FOUC) -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('lamon_game_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
     <!-- MMORPG Master Redesign Stylesheet -->
     <link rel="stylesheet" href="/assets/css/pages/than-ma-giang-the.css">
+    <link rel="stylesheet" href="/assets/css/components/theme-light.css">
 </head>
 
 <body class="__className_73ee6c">
@@ -84,6 +93,10 @@
                 </a>
             </div>
             <div class="tmgt-topbar-right">
+                <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Chuyển chế độ Sáng / Tối" title="Chuyển chế độ Sáng / Tối">
+                    <span class="theme-icon">🌙</span>
+                    <span class="theme-label">Tối</span>
+                </button>
                 <a href="./doi-diem/" class="tmgt-top-event-btn" data-track="doi-diem-topbar"
                     style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); border-color: rgba(16, 185, 129, 0.4); color: #34d399;">
                     <span>💎</span>
@@ -587,6 +600,9 @@
 
     <!-- Carousel & Interactive Class Switcher Logic -->
     <script src="/assets/js/pages/than-ma-giang-the.js"></script>
+
+    <!-- Theme Manager Core Script -->
+    <script src="/assets/js/core/theme-manager.js"></script>
 </body>
 
 </html>

@@ -473,54 +473,161 @@ body {
     transform: translateX(2px);
 }
 
-/* =========================================================
-   FEATURED MMORPG GAMES GRID (BỐ CỤC NHIỀU GAME)
-   ========================================================= */
-.portal-games-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+.portal-section.apps-section .portal-section-header {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 16px;
 }
 
-@media (max-width: 860px) {
-    .portal-games-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
+/* =========================================================
+   FEATURED MMORPG GAMES GRID (APP STORE STYLE - THEO MẪU ẢNH)
+   ========================================================= */
+.portal-apps-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 28px 20px;
+    margin-top: 8px;
+}
+
+@media (max-width: 1100px) {
+    .portal-apps-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px 18px;
     }
 }
 
-.portal-game-card {
-    background: var(--tmgt-surface);
-    border: 1px solid var(--tmgt-card-border);
-    border-radius: 18px;
-    padding: 16px;
+@media (max-width: 820px) {
+    .portal-apps-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px 14px;
+    }
+}
+
+@media (max-width: 520px) {
+    .portal-apps-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px 10px;
+    }
+}
+
+.portal-app-item {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    backdrop-filter: blur(12px);
-    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-    position: relative;
-    overflow: hidden;
+    align-items: flex-start;
+    text-decoration: none;
+    color: inherit;
     cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+    transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+    width: 100%;
 }
 
-.portal-game-card:hover {
-    background: var(--tmgt-surface-hover);
-    border-color: rgba(234, 88, 12, 0.4);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(234, 88, 12, 0.15);
+.portal-app-item:hover {
+    transform: translateY(-4px);
 }
 
-.portal-game-card:hover .portal-game-title {
-    color: var(--tmgt-gold-light);
-}
-
-.portal-game-card-link {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    text-indent: -9999px;
+.portal-app-thumb-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    border-radius: 22px;
     overflow: hidden;
+    background: #0f172a;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.25s ease;
+}
+
+@media (max-width: 520px) {
+    .portal-app-thumb-wrap {
+        border-radius: 16px;
+    }
+}
+
+.portal-app-item:hover .portal-app-thumb-wrap {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(245, 158, 11, 0.2);
+    border-color: rgba(245, 158, 11, 0.5);
+    transform: scale(1.02);
+}
+
+.portal-app-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.portal-app-item:hover .portal-app-thumb {
+    transform: scale(1.04);
+}
+
+.portal-app-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
+    width: 100%;
+    text-align: left;
+}
+
+@media (max-width: 520px) {
+    .portal-app-meta {
+        margin-top: 6px;
+        gap: 2px;
+    }
+}
+
+.portal-app-name {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    transition: color 0.2s ease;
+}
+
+@media (max-width: 520px) {
+    .portal-app-name {
+        font-size: 12.5px;
+    }
+}
+
+.portal-app-item:hover .portal-app-name {
+    color: #fbbf24;
+}
+
+.portal-app-tag {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    display: block;
+}
+
+@media (max-width: 520px) {
+    .portal-app-tag {
+        font-size: 10px;
+    }
+}
+
+.portal-games-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+inset: 0;
+z-index: 1;
+text-indent: -9999px;
+overflow: hidden;
 }
 
 .portal-game-card.highlight {
@@ -541,9 +648,9 @@ body {
 }
 
 .portal-game-avatar {
-    width: 72px;
-    height: 72px;
-    border-radius: 16px;
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
     object-fit: cover;
     border: 2px solid rgba(255, 255, 255, 0.15);
     background: #000;
@@ -750,13 +857,21 @@ body {
    ========================================================= */
 .portal-giftcode-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 960px) {
+    .portal-giftcode-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+}
+
+@media (max-width: 640px) {
     .portal-giftcode-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
 }
 

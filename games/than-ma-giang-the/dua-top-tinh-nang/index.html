@@ -84,8 +84,17 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Cinzel:wght@700;800;900&display=swap"
         rel="stylesheet">
 
+    <!-- Theme Manager Init (Anti-FOUC) -->
+    <script>
+        (function () {
+            var t = localStorage.getItem('lamon_game_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+
     <!-- Modern Refined Styling -->
     <link rel="stylesheet" href="/assets/css/pages/dua-top-tinh-nang.css">
+    <link rel="stylesheet" href="/assets/css/components/theme-light.css">
 
     <!-- Next.js Script Chunks -->
     <script src="../../../next/static/chunks/app/download-flow.js" async></script>
@@ -108,9 +117,15 @@
                 </a>
             </div>
 
-            <div class="event-live-badge">
-                <span class="pulse-circle"></span>
-                <span>Đang Diễn Ra</span>
+            <div class="event-nav-right" style="display: flex; align-items: center; gap: 10px;">
+                <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Chuyển chế độ Sáng / Tối" title="Chuyển chế độ Sáng / Tối">
+                    <span class="theme-icon">🌙</span>
+                    <span class="theme-label">Tối</span>
+                </button>
+                <div class="event-live-badge">
+                    <span class="pulse-circle"></span>
+                    <span>Đang Diễn Ra</span>
+                </div>
             </div>
         </div>
 
@@ -491,6 +506,9 @@
 
     <!-- Interaction Script -->
     <script src="/assets/js/pages/dua-top-tinh-nang.js"></script>
+
+    <!-- Theme Manager Core Script -->
+    <script src="/assets/js/core/theme-manager.js"></script>
 </body>
 
 </html>
