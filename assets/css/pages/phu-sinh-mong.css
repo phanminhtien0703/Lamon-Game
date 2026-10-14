@@ -1,0 +1,87 @@
+/* =========================================================
+   PHÙ SINH MỘNG — THEME & CUSTOM STYLES
+   File: assets/css/pages/phu-sinh-mong.css
+   Mục đích: Thiết lập tông màu Tiên Hiệp Mỹ Lệ (Hồng pastel, Tím huyền ảo, Lam ngọc)
+   Kế thừa toàn bộ hệ thống layout đỉnh cao của Thần Ma Giáng Thế
+   ========================================================= */
+
+:root {
+    --tmgt-flame: #e11d48;
+    --tmgt-flame-light: #f43f5e;
+    --tmgt-gold: #c084fc;
+    --tmgt-gold-light: #e879f9;
+    --tmgt-cyan: #38bdf8;
+    --tmgt-dark: #0b0717;
+    --tmgt-surface: rgba(18, 12, 33, 0.88);
+    --tmgt-surface-hover: rgba(28, 19, 51, 0.96);
+    --tmgt-card-border: rgba(236, 72, 153, 0.2);
+    --tmgt-card-border-glow: rgba(225, 29, 72, 0.35);
+}
+
+/* Background tiên hiệp huyền ảo */
+html,
+body {
+    background-color: var(--tmgt-dark) !important;
+    background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(225, 29, 72, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse at 85% 15%, rgba(168, 85, 247, 0.16) 0%, transparent 50%),
+        radial-gradient(ellipse at 15% 40%, rgba(56, 189, 248, 0.12) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(11, 7, 23, 0.85) 0%, rgba(11, 7, 23, 0.98) 100%),
+        url('/images/pattern-bg.png') !important;
+}
+
+/* Theme Light Override for PSM */
+[data-theme="light"] {
+    --tmgt-flame: #e11d48;
+    --tmgt-flame-light: #f43f5e;
+    --tmgt-surface: #ffffff;
+    --tmgt-surface-hover: #fff1f2;
+    --tmgt-card-border: #fecdd3;
+    --tmgt-card-border-glow: rgba(225, 29, 72, 0.2);
+    --tmgt-text-main: #111827;
+    --tmgt-text-muted: #4b5563;
+}
+
+[data-theme="light"] body {
+    background-color: #fff5f7 !important;
+    background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(254, 205, 211, 0.6) 0%, transparent 65%),
+        radial-gradient(ellipse at 85% 15%, rgba(243, 232, 255, 0.6) 0%, transparent 50%),
+        linear-gradient(180deg, #ffffff 0%, #fff1f2 100%) !important;
+}
+
+/* Hero Badge Tiên Hiệp */
+.tmgt-tag-primary {
+    background: linear-gradient(135deg, #a855f7, #ec4899) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35) !important;
+}
+
+/* Nút Tải Android PSM */
+.tmgt-btn-android {
+    background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+    border-color: rgba(244, 63, 94, 0.4) !important;
+    box-shadow: 0 6px 20px rgba(225, 29, 72, 0.3) !important;
+}
+
+.tmgt-btn-android:hover {
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
+    box-shadow: 0 10px 28px rgba(225, 29, 72, 0.45) !important;
+}
+
+/* Nút Tải iOS PSM */
+.tmgt-btn-ios {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+    border-color: rgba(167, 139, 250, 0.4) !important;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3) !important;
+}
+
+.tmgt-btn-ios:hover {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+    box-shadow: 0 10px 28px rgba(124, 58, 237, 0.45) !important;
+}
+
+/* Carousel Image Object Fit */
+.tmgt-slide img {
+    object-position: center top !important;
+}

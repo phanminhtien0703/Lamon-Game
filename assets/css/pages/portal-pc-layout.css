@@ -110,9 +110,9 @@
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
-        max-width: 1640px !important;
+        max-width: 1520px !important;
         margin: 0 auto !important;
-        padding: 14px 32px !important;
+        padding: 14px 28px !important;
         box-sizing: border-box !important;
         width: 100% !important;
     }
@@ -120,7 +120,7 @@
     .portal-brand-name {
         font-family: var(--font-ui) !important;
         font-weight: 800 !important;
-        font-size: 19px !important;
+        font-size: 16.5px !important;
         color: #111827 !important;
         letter-spacing: 0.5px !important;
     }
@@ -144,7 +144,7 @@
     }
 
     .pc-nav-link {
-        font-size: 14.5px;
+        font-size: 13.5px;
         font-weight: 600;
         color: #4b5563;
         text-decoration: none;
@@ -210,11 +210,11 @@
         display: inline-flex !important;
         align-items: center;
         justify-content: center;
-        padding: 8px 22px;
+        padding: 8px 20px;
         border-radius: 8px;
         background: #dc2626;
         color: #ffffff !important;
-        font-size: 13.5px;
+        font-size: 12.5px;
         font-weight: 700;
         text-decoration: none;
         transition: all 0.2s ease;
@@ -231,12 +231,12 @@
        ========================================================= */
     .portal-layout-pc {
         display: grid !important;
-        grid-template-columns: minmax(0, 1fr) 380px !important;
-        gap: 28px !important;
+        grid-template-columns: minmax(0, 1fr) 370px !important;
+        gap: 26px !important;
         align-items: start !important;
-        max-width: 1640px !important;
+        max-width: 1520px !important;
         margin: 0 auto !important;
-        padding: 0 32px 48px !important;
+        padding: 0 28px 48px !important;
         box-sizing: border-box !important;
         width: 100% !important;
     }
@@ -261,7 +261,7 @@
     .portal-hero-slider {
         position: relative !important;
         width: 100% !important;
-        height: 420px !important;
+        height: 405px !important;
         aspect-ratio: auto !important;
         border-radius: 16px !important;
         overflow: hidden !important;
@@ -296,21 +296,21 @@
     }
 
     .hero-tag {
-        font-size: 13px;
+        font-size: 11.5px;
         font-weight: 800;
         letter-spacing: 1px;
         color: #dc2626;
         text-transform: uppercase;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
     .hero-main-title {
         font-family: var(--font-ui);
-        font-size: 38px;
+        font-size: 28px;
         font-weight: 900;
-        line-height: 1.18;
+        line-height: 1.2;
         color: #111827;
-        margin: 0 0 14px 0;
+        margin: 0 0 12px 0;
         text-transform: uppercase;
         letter-spacing: -0.5px;
     }
@@ -320,10 +320,10 @@
     }
 
     .hero-main-desc {
-        font-size: 14px;
+        font-size: 13px;
         line-height: 1.55;
         color: #4b5563;
-        margin: 0 0 24px 0;
+        margin: 0 0 20px 0;
     }
 
     .hero-action-btns {
@@ -333,11 +333,11 @@
     }
 
     .hero-btn-play {
-        padding: 10px 24px;
+        padding: 9px 22px;
         border-radius: 8px;
         background: #dc2626;
         color: #ffffff !important;
-        font-size: 13.5px;
+        font-size: 12.5px;
         font-weight: 700;
         text-decoration: none;
         transition: all 0.2s ease;
@@ -354,12 +354,12 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 9px 20px;
+        padding: 8px 18px;
         border-radius: 8px;
         background: #ffffff;
         border: 1px solid #d1d5db;
         color: #111827 !important;
-        font-size: 13.5px;
+        font-size: 12.5px;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.2s ease;
@@ -413,7 +413,7 @@
         bottom: 20px;
         right: 28px;
         z-index: 5;
-        font-size: 13.5px;
+        font-size: 12px;
         font-weight: 700;
         color: #ffffff;
         align-items: center;
@@ -445,7 +445,7 @@
 
     .portal-section-title {
         font-family: var(--font-ui) !important;
-        font-size: 18px !important;
+        font-size: 16px !important;
         font-weight: 800 !important;
         color: #111827 !important;
         background: none !important;
@@ -455,7 +455,7 @@
     }
 
     .portal-section-link {
-        font-size: 13px !important;
+        font-size: 12px !important;
         font-weight: 700 !important;
         color: #dc2626 !important;
         text-decoration: none !important;
@@ -488,7 +488,7 @@
 
     .apps-section .portal-section-title {
         font-family: var(--font-ui) !important;
-        font-size: 20px !important;
+        font-size: 17px !important;
         font-weight: 800 !important;
         color: #111827 !important;
         margin: 0 !important;
@@ -496,7 +496,7 @@
     }
 
     .apps-section .portal-section-link {
-        font-size: 13.5px !important;
+        font-size: 12.5px !important;
         font-weight: 700 !important;
         color: #dc2626 !important;
         text-decoration: none !important;
@@ -577,7 +577,7 @@
 
     .portal-app-name {
         font-family: var(--font-ui) !important;
-        font-size: 15px !important;
+        font-size: 13.5px !important;
         font-weight: 800 !important;
         color: #ffffff !important;
         white-space: nowrap !important;
@@ -595,8 +595,51 @@
     }
 
     /* =========================================================
-       KHUYẾN MÃI & SỰ KIỆN PC (CỘT TRÁI)
+       KHUYẾN MÃI & SỰ KIỆN PC (KHUNG CARD TRẮNG SÁNG NHƯ DANH SÁCH GAME)
        ========================================================= */
+    .portal-section-welfare {
+        background: #ffffff !important;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 16px !important;
+        padding: 24px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+        margin-bottom: 0 !important;
+    }
+
+    .portal-section-welfare .portal-section-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        margin-bottom: 18px !important;
+        padding-bottom: 0 !important;
+        border-bottom: none !important;
+    }
+
+    .portal-section-welfare .portal-section-title {
+        font-family: var(--font-ui) !important;
+        font-size: 17px !important;
+        font-weight: 800 !important;
+        color: #111827 !important;
+        margin: 0 !important;
+        letter-spacing: -0.3px !important;
+    }
+
+    .portal-section-welfare .portal-section-link {
+        font-size: 12.5px !important;
+        font-weight: 700 !important;
+        color: #dc2626 !important;
+        text-decoration: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .portal-section-welfare .portal-section-link:hover {
+        opacity: 0.8 !important;
+        transform: translateX(3px) !important;
+    }
+
     .portal-promo-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
@@ -604,20 +647,22 @@
     }
 
     .portal-promo-card {
-        border-radius: 16px !important;
+        border-radius: 12px !important;
         overflow: hidden !important;
         border: 1px solid #e5e7eb !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
-        transition: transform 0.25s ease !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+        transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+        display: block !important;
     }
 
     .portal-promo-card:hover {
-        transform: translateY(-4px) !important;
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08) !important;
     }
 
     .portal-promo-card img {
         width: 100% !important;
-        height: 100% !important;
+        height: auto !important;
         object-fit: cover !important;
         display: block !important;
     }
@@ -657,21 +702,21 @@
     }
 
     .portal-giftcode-info h4 {
-        font-size: 13.5px !important;
+        font-size: 12.5px !important;
         color: #111827 !important;
         font-weight: 700 !important;
     }
 
     .portal-giftcode-stat {
-        font-size: 11px !important;
+        font-size: 10.5px !important;
         color: #6b7280 !important;
     }
 
     .portal-btn-giftcode {
         background: #dc2626 !important;
         color: #ffffff !important;
-        font-size: 12px !important;
-        padding: 6px 14px !important;
+        font-size: 11.5px !important;
+        padding: 6px 13px !important;
         border-radius: 6px !important;
         font-weight: 700 !important;
     }
@@ -714,12 +759,12 @@
     }
 
     .portal-news-img-wrap {
-        width: 54px !important;
-        height: 54px !important;
-        border-radius: 8px !important;
+        width: 104px !important;
+        aspect-ratio: 16 / 9 !important;
+        height: auto !important;
+        border-radius: 6px !important;
         overflow: hidden !important;
         flex-shrink: 0 !important;
-        aspect-ratio: auto !important;
     }
 
     .portal-news-img-wrap img {
@@ -738,17 +783,19 @@
     }
 
     .portal-news-title {
-        font-size: 13px !important;
+        font-size: 12px !important;
         font-weight: 700 !important;
         color: #111827 !important;
-        white-space: nowrap !important;
+        line-height: 1.35 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        line-height: 1.35 !important;
     }
 
     .portal-news-meta {
-        font-size: 11px !important;
+        font-size: 10.5px !important;
         font-weight: 700 !important;
         color: #dc2626 !important;
     }
@@ -767,7 +814,7 @@
     }
 
     .pc-community-tag {
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 800;
         color: #dc2626;
         text-transform: uppercase;
@@ -776,14 +823,14 @@
     }
 
     .pc-community-title {
-        font-size: 15px;
+        font-size: 13.5px;
         font-weight: 900;
         color: #111827;
         margin: 0 0 6px 0;
     }
 
     .pc-community-desc {
-        font-size: 12px;
+        font-size: 11.5px;
         color: #4b5563;
         margin: 0 0 14px 0;
         line-height: 1.45;
@@ -793,11 +840,11 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 7px 18px;
+        padding: 6px 16px;
         border-radius: 6px;
         background: #dc2626;
         color: #ffffff !important;
-        font-size: 12.5px;
+        font-size: 11.5px;
         font-weight: 700;
         text-decoration: none;
         transition: all 0.2s ease;
@@ -846,11 +893,11 @@
 
     .tmgt-support-icon {
         color: #dc2626 !important;
-        font-size: 16px !important;
+        font-size: 15px !important;
     }
 
     .tmgt-support-label {
-        font-size: 11.5px !important;
+        font-size: 11px !important;
         color: #111827 !important;
         font-weight: 700 !important;
     }
@@ -903,30 +950,30 @@
     }
 
     .pc-footer-brand-name {
-        font-size: 18px;
+        font-size: 15.5px;
         font-weight: 800;
         color: #111827;
         letter-spacing: 0.5px;
     }
 
     .pc-footer-slogan {
-        font-size: 13.5px;
+        font-size: 12px;
         font-weight: 600;
         color: #4b5563;
         margin: 0 0 4px 0;
     }
 
     .pc-footer-desc {
-        font-size: 12.5px;
+        font-size: 11.5px;
         color: #9ca3af;
         margin: 0;
     }
 
     .pc-footer-col-title {
-        font-size: 14.5px;
+        font-size: 13px;
         font-weight: 800;
         color: #111827;
-        margin: 0 0 16px 0;
+        margin: 0 0 14px 0;
     }
 
     .pc-footer-links {
@@ -935,11 +982,11 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     }
 
     .pc-footer-links a {
-        font-size: 13px;
+        font-size: 12px;
         color: #6b7280;
         text-decoration: none;
         transition: color 0.2s ease;
@@ -956,9 +1003,9 @@
     }
 
     .pc-social-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        border-radius: 7px;
         background: #dc2626;
         color: #ffffff !important;
         display: flex;
@@ -974,12 +1021,12 @@
     }
 
     .pc-footer-bottom {
-        padding-top: 20px;
+        padding-top: 18px;
         border-top: 1px solid #f3f4f6;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        font-size: 12px;
+        font-size: 11.5px;
         color: #9ca3af;
     }
 }
