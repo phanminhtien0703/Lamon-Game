@@ -38,6 +38,22 @@
             });
         }
 
+        const arrowPrev = document.getElementById('heroArrowPrev');
+        const arrowNext = document.getElementById('heroArrowNext');
+        const counterCurrent = document.getElementById('heroCounterCurrent');
+        const counterTotal = document.getElementById('heroCounterTotal');
+
+        if (counterTotal) {
+            counterTotal.textContent = (slides.length < 10 ? '0' : '') + slides.length;
+        }
+
+        function updateCounter() {
+            if (counterCurrent) {
+                counterCurrent.textContent = (currentIdx + 1 < 10 ? '0' : '') + (currentIdx + 1);
+            }
+        }
+        updateCounter();
+
         function goToSlide(idx) {
             slides[currentIdx].classList.remove('active');
             if (dotsContainer && dotsContainer.children[currentIdx]) {
@@ -50,6 +66,7 @@
             if (dotsContainer && dotsContainer.children[currentIdx]) {
                 dotsContainer.children[currentIdx].classList.add('active');
             }
+            updateCounter();
             resetAutoPlay();
         }
 
@@ -58,6 +75,8 @@
 
         if (btnNext) btnNext.addEventListener('click', nextSlide);
         if (btnPrev) btnPrev.addEventListener('click', prevSlide);
+        if (arrowNext) arrowNext.addEventListener('click', nextSlide);
+        if (arrowPrev) arrowPrev.addEventListener('click', prevSlide);
 
         function resetAutoPlay() {
             if (timer) clearInterval(timer);
