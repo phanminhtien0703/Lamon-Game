@@ -7,10 +7,10 @@
    ========================================================= */
 
 /* -------------------------------------------------------------
-   1. QUI TẮC DÀNH CHO MOBILE (< 1024px) — KHÔNG THAY ĐỔI GIAO DIỆN
+   1. QUI TẮC DÀNH CHO MOBILE (< 1024px) — ĐỒNG BỘ TÔNG XANH NƯỚC TIÊN HIỆP TƯƠNG THÍCH PC
    ------------------------------------------------------------- */
 @media (max-width: 1023px) {
-    /* Ẩn các thành phần độc quyền PC */
+    /* Ẩn các thành phần độc quyền PC & theme toggle để giữ header thanh thoát */
     .pc-nav-menu,
     .pc-header-search,
     .pc-header-cta,
@@ -21,7 +21,8 @@
     .portal-pc-footer,
     .portal-app-badge-top,
     .portal-app-arrow,
-    .pc-see-all {
+    .pc-see-all,
+    .theme-toggle-btn {
         display: none !important;
     }
 
@@ -32,34 +33,381 @@
     .pc-header-container {
         display: contents !important;
     }
+
+    /* Tông nền mây nước tiên cảnh sáng sủa, thanh khiết trên Mobile */
+    html,
+    body {
+        background-color: #f0f7fb !important;
+        background-image: radial-gradient(circle at 10% 12%, rgba(14, 165, 233, 0.08) 0%, transparent 45%),
+                          radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.07) 0%, transparent 40%),
+                          linear-gradient(180deg, #f0f7fb 0%, #eaf4fb 50%, #f0f7fb 100%) !important;
+        background-attachment: fixed !important;
+        color: #0f172a !important;
+        min-height: 100vh !important;
+    }
+
+    /* Header Mobile: Kính mờ trắng ngọc, viền sương lam */
+    .portal-header {
+        background: rgba(255, 255, 255, 0.95) !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 4px 18px rgba(2, 132, 199, 0.08) !important;
+    }
+
+    .portal-logo-link {
+        color: #0f172a !important;
+    }
+
+    .portal-brand-name {
+        color: #0f172a !important;
+        font-weight: 800 !important;
+    }
+
+    .portal-header-btn.event-btn {
+        background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%) !important;
+        border: none !important;
+        color: #ffffff !important;
+        box-shadow: 0 3px 12px rgba(2, 132, 199, 0.28) !important;
+        font-weight: 700 !important;
+    }
+
+    /* Banner Hero Slider Mobile */
+    .portal-hero-slider {
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 8px 24px rgba(2, 132, 199, 0.08) !important;
+    }
+
+    .portal-slide-overlay {
+        background: linear-gradient(0deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.35) 60%, transparent 100%) !important;
+    }
+
+    .portal-slide-badge {
+        background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%) !important;
+        color: #ffffff !important;
+    }
+
+    .portal-dot.active {
+        background: linear-gradient(90deg, #0284c7, #06b6d4) !important;
+    }
+
+    /* Quick Action Menu Mobile (4 nút) */
+    .portal-quick-item {
+        background: #ffffff !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.05) !important;
+        color: #0f172a !important;
+    }
+
+    .portal-quick-item:hover,
+    .portal-quick-item:active {
+        background: #f0f9ff !important;
+        border-color: #7dd3fc !important;
+    }
+
+    .portal-quick-text h4 {
+        color: #0f172a !important;
+        font-weight: 700 !important;
+    }
+
+    .portal-quick-icon.flame {
+        background: rgba(2, 132, 199, 0.1) !important;
+        border: 1px solid rgba(2, 132, 199, 0.25) !important;
+        color: #0284c7 !important;
+    }
+
+    .portal-quick-icon.gold {
+        background: rgba(245, 158, 11, 0.12) !important;
+        border: 1px solid rgba(245, 158, 11, 0.3) !important;
+        color: #d97706 !important;
+    }
+
+    .portal-quick-icon.blue {
+        background: rgba(59, 130, 246, 0.1) !important;
+        border: 1px solid rgba(59, 130, 246, 0.25) !important;
+        color: #2563eb !important;
+    }
+
+    .portal-quick-icon.green {
+        background: rgba(16, 185, 129, 0.1) !important;
+        border: 1px solid rgba(16, 185, 129, 0.25) !important;
+        color: #059669 !important;
+    }
+
+    /* Tiêu đề các mục trên Mobile */
+    .portal-section-header {
+        border-bottom: 1px solid #e0f2fe !important;
+    }
+
+    .portal-section-title {
+        color: #0f172a !important;
+        background: none !important;
+        -webkit-background-clip: unset !important;
+        -webkit-text-fill-color: #0f172a !important;
+        font-family: var(--font-fantasy) !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .portal-section-link {
+        color: #0284c7 !important;
+        font-weight: 700 !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        text-decoration: none !important;
+    }
+
+    /* Danh sách game (App Store Style) */
+    .portal-app-thumb-wrap {
+        background: #ffffff !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.06) !important;
+    }
+
+    .portal-app-item:hover .portal-app-thumb-wrap {
+        border-color: #38bdf8 !important;
+        box-shadow: 0 8px 20px rgba(2, 132, 199, 0.16) !important;
+    }
+
+    .portal-app-name {
+        color: #0f172a !important;
+        font-weight: 700 !important;
+    }
+
+    .portal-app-item:hover .portal-app-name {
+        color: #0284c7 !important;
+    }
+
+    .portal-app-tag {
+        color: #64748b !important;
+    }
+
+    /* Khuyến mãi & Sự kiện (Welfare) */
+    .portal-promo-card {
+        background: #ffffff !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.05) !important;
+    }
+
+    /* Giftcode Tân Thủ */
+    .portal-giftcode-card {
+        background: #ffffff !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.04) !important;
+    }
+
+    .portal-giftcode-avatar {
+        border: 1px solid #e0f2fe !important;
+    }
+
+    .portal-giftcode-info h4 {
+        color: #0f172a !important;
+        font-weight: 700 !important;
+    }
+
+    .portal-giftcode-stat {
+        color: #64748b !important;
+    }
+
+    .portal-btn-giftcode {
+        background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%) !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28) !important;
+        border: none !important;
+        font-weight: 700 !important;
+    }
+
+    /* Tin tức máy chủ */
+    .portal-news-card {
+        background: #ffffff !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.04) !important;
+    }
+
+    .portal-news-title {
+        color: #0f172a !important;
+        font-weight: 700 !important;
+    }
+
+    .portal-news-card:hover .portal-news-title {
+        color: #0284c7 !important;
+    }
+
+    .portal-news-meta {
+        color: #64748b !important;
+    }
+
+    .portal-news-meta::before {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230284c7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E") !important;
+        opacity: 0.85 !important;
+    }
+
+    /* Thẻ tải game trực tiếp (nếu có hiển thị) */
+    .portal-game-card {
+        background: #ffffff !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.05) !important;
+    }
+
+    .portal-game-title {
+        color: #0f172a !important;
+    }
+
+    .portal-game-desc {
+        color: #64748b !important;
+    }
+
+    .portal-game-tag {
+        background: #f0f7fb !important;
+        color: #0284c7 !important;
+        border: 1px solid #e0f2fe !important;
+    }
+
+    .portal-btn-play {
+        background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%) !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28) !important;
+    }
+
+    .portal-btn-sub {
+        background: #f0f7fb !important;
+        border: 1px solid #bae6fd !important;
+        color: #0284c7 !important;
+    }
+
+    /* Trung tâm hỗ trợ CSKH */
+    .tmgt-support-card {
+        background: #ffffff !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 4px 20px rgba(2, 132, 199, 0.06) !important;
+    }
+
+    .tmgt-support-alert {
+        background: rgba(2, 132, 199, 0.06) !important;
+        border: 1px solid #bae6fd !important;
+        color: #0369a1 !important;
+    }
+
+    .tmgt-support-tile {
+        background: #f8fafc !important;
+        border: 1px solid #e0f2fe !important;
+        color: #0f172a !important;
+    }
+
+    .tmgt-support-tile:hover {
+        background: #f0f9ff !important;
+        border-color: #bae6fd !important;
+        color: #0284c7 !important;
+    }
+
+    .tmgt-support-icon {
+        background: rgba(2, 132, 199, 0.1) !important;
+        color: #0284c7 !important;
+    }
+
+    .tmgt-support-label {
+        color: #0f172a !important;
+    }
+
+    /* Thanh điều hướng cố định dưới đáy Mobile (Sidebottom) */
+    #sidebottom-root .sidebottom,
+    .sidebottom.fixed-bottom {
+        display: block !important;
+    }
+
+    #sidebottom-root .sidebottom .bg-color {
+        background: rgba(255, 255, 255, 0.96) !important;
+        border-top: 1px solid #dbeafe !important;
+        border-left: 1px solid #e0f2fe !important;
+        border-right: 1px solid #e0f2fe !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        box-shadow: 0 -4px 20px rgba(2, 132, 199, 0.08) !important;
+        padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    }
+
+    #sidebottom-root .sidebottom ul {
+        height: 58px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a {
+        color: #64748b !important;
+        padding: 4px 0 !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a span {
+        font-size: 10px !important;
+        font-weight: 600 !important;
+        white-space: nowrap !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a:hover {
+        color: #0284c7 !important;
+        background: rgba(2, 132, 199, 0.06) !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a.active {
+        background: radial-gradient(49.41% 49.15% at 50% 50.85%, rgba(2, 132, 199, 0.16) 0, rgba(2, 132, 199, 0) 100%) !important;
+        color: #0284c7 !important;
+        font-weight: 700 !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a svg path,
+    #sidebottom-root .sidebottom ul li a svg {
+        fill: #64748b !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a.active svg path,
+    #sidebottom-root .sidebottom ul li a.active svg {
+        fill: #0284c7 !important;
+    }
 }
 
 /* -------------------------------------------------------------
-   2. BỐ CỤC & TÔNG MÀU SÁNG CHUẨN PC THEO ẢNH (>= 1024px)
+   2. BỐ CỤC & TÔNG MÀU XANH NƯỚC TIÊN HIỆP TU TIÊN SÁNG SỦA (>= 1024px)
    ------------------------------------------------------------- */
 @media (min-width: 1024px) {
 
     :root {
-        --pc-red: #dc2626;
-        --pc-red-hover: #b91c1c;
-        --pc-red-light: rgba(220, 38, 38, 0.08);
-        --pc-bg: #f5f6f8;
+        /* Bích Thủy Tiên Vận — Xianxia Luminous Water Blue Palette */
+        --pc-water: #0284c7;             /* Thanh Thủy Lam chủ đạo (Sky 600) */
+        --pc-water-hover: #0369a1;       /* Thâm Lam huyền ảo (Sky 700) */
+        --pc-water-light: #0ea5e9;       /* Linh Tuyền Lam rực sáng (Sky 500) */
+        --pc-water-cyan: #06b6d4;        /* Bích Thủy Ngọc (Cyan 500) */
+        --pc-water-soft: rgba(2, 132, 199, 0.08); /* Ánh ngọc mờ */
+        --pc-water-border: #bae6fd;      /* Viền Băng Tinh (Sky 200) */
+        --pc-water-glow: 0 4px 18px rgba(2, 132, 199, 0.32); /* Hào quang linh khí nước */
+        --pc-water-grad: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); /* Dòng chảy Bích Thủy */
+        --pc-water-grad-hover: linear-gradient(135deg, #0369a1 0%, #0891b2 100%);
+
+        /* Tương thích biến hệ thống */
+        --pc-red: var(--pc-water);
+        --pc-red-hover: var(--pc-water-hover);
+        --pc-red-light: var(--pc-water-soft);
+
+        /* Nền mây nước tiên cảnh sáng sủa, thanh khiết */
+        --pc-bg: #f0f7fb;
         --pc-card-bg: #ffffff;
-        --pc-card-border: #e5e7eb;
-        --pc-card-border-subtle: #f1f5f9;
-        --pc-text-dark: #111827;
-        --pc-text-muted: #4b5563;
-        --pc-text-sub: #9ca3af;
+        --pc-card-border: #dbeafe;       /* Viền lam sương sáng */
+        --pc-card-border-subtle: #e0f2fe;
+        --pc-text-dark: #0f172a;         /* Đen tuyền sắc nét */
+        --pc-text-muted: #334155;
+        --pc-text-sub: #64748b;
         --pc-radius: 16px;
-        --pc-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-        --pc-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
+        --pc-shadow: 0 4px 20px rgba(2, 132, 199, 0.05);
+        --pc-shadow-hover: 0 10px 25px rgba(2, 132, 199, 0.12);
     }
 
-    /* Tông nền sáng dịu mắt theo chuẩn ảnh 1 & 2 */
+    /* Tông nền mây nước tiên cảnh sáng sủa, thanh khiết */
+    html,
     body {
-        background-color: #f5f6f8 !important;
-        background-image: none !important;
-        color: #111827 !important;
+        background-color: #f0f7fb !important;
+        background-image: radial-gradient(circle at 10% 12%, rgba(14, 165, 233, 0.08) 0%, transparent 45%),
+                          radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.07) 0%, transparent 40%),
+                          linear-gradient(180deg, #f0f7fb 0%, #eaf4fb 50%, #f0f7fb 100%) !important;
+        background-attachment: fixed !important;
+        color: #0f172a !important;
+        min-height: 100vh !important;
     }
 
     /* Container chính trên PC mở rộng 100% để Header và Footer chạm viền màn hình */
@@ -94,12 +442,14 @@
         border-radius: 0 !important;
         margin: 0 0 24px 0 !important;
         padding: 0 !important;
-        background: #ffffff !important;
-        border-bottom: 1px solid #e5e7eb !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border-bottom: 1px solid #e0f2fe !important;
         border-top: none !important;
         border-left: none !important;
         border-right: none !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+        box-shadow: 0 2px 14px rgba(2, 132, 199, 0.04) !important;
         display: block !important;
         z-index: 1000 !important;
         box-sizing: border-box !important;
@@ -117,11 +467,19 @@
         width: 100% !important;
     }
 
+    .portal-logo-img {
+        width: 34px !important;
+        height: 34px !important;
+        border: none !important;
+        border-radius: 0 !important;
+        object-fit: contain !important;
+    }
+
     .portal-brand-name {
         font-family: var(--font-ui) !important;
         font-weight: 800 !important;
         font-size: 16.5px !important;
-        color: #111827 !important;
+        color: #0f172a !important;
         letter-spacing: 0.5px !important;
     }
 
@@ -146,7 +504,7 @@
     .pc-nav-link {
         font-size: 13.5px;
         font-weight: 600;
-        color: #4b5563;
+        color: #475569;
         text-decoration: none;
         padding: 10px 0;
         display: inline-block;
@@ -154,11 +512,11 @@
     }
 
     .pc-nav-link:hover {
-        color: #dc2626;
+        color: #0284c7;
     }
 
     .pc-nav-link.active {
-        color: #dc2626;
+        color: #0284c7;
         font-weight: 700;
     }
 
@@ -169,7 +527,8 @@
         left: 0;
         right: 0;
         height: 3px;
-        background: #dc2626;
+        background: linear-gradient(90deg, #0284c7, #06b6d4);
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
         border-radius: 999px;
     }
 
@@ -193,17 +552,18 @@
         width: 38px;
         height: 38px;
         border-radius: 8px;
-        background: #f3f4f6;
-        border: 1px solid #e5e7eb;
-        color: #6b7280;
+        background: #f0f9ff;
+        border: 1px solid #e0f2fe;
+        color: #0284c7;
         cursor: pointer;
         transition: all 0.2s ease;
     }
 
     .pc-header-search:hover {
-        color: #dc2626;
-        border-color: #dc2626;
+        color: #0369a1;
+        border-color: #0284c7;
         background: #ffffff;
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
     }
 
     .pc-header-cta {
@@ -212,17 +572,18 @@
         justify-content: center;
         padding: 8px 20px;
         border-radius: 8px;
-        background: #dc2626;
+        background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%) !important;
         color: #ffffff !important;
         font-size: 12.5px;
         font-weight: 700;
         text-decoration: none;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
     }
 
     .pc-header-cta:hover {
-        background: #b91c1c;
+        background: linear-gradient(135deg, #0369a1 0%, #0891b2 100%) !important;
+        box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
         transform: translateY(-1px);
     }
 
@@ -266,21 +627,21 @@
         border-radius: 16px !important;
         overflow: hidden !important;
         margin-bottom: 0 !important;
-        border: 1px solid #e5e7eb !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
-        background: #f8fafc !important;
+        border: 1px solid #dbeafe !important;
+        box-shadow: 0 4px 20px rgba(2, 132, 199, 0.06) !important;
+        background: #f0f9ff !important;
     }
 
     .portal-slide-overlay {
         display: none !important; /* Dùng overlay PC */
     }
 
-    /* Haze trắng mịn bên trái để chữ đen và đỏ tương phản rực rỡ */
+    /* Haze mây sương trắng mờ bên trái tôn vinh khí chất tiên hiệp */
     .hero-pc-overlay {
         display: flex !important;
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.90) 38%, rgba(255, 255, 255, 0.25) 70%, transparent 100%) !important;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.92) 38%, rgba(255, 255, 255, 0.25) 70%, transparent 100%) !important;
         align-items: center;
         justify-content: space-between;
         padding: 40px 48px;
@@ -299,7 +660,7 @@
         font-size: 11.5px;
         font-weight: 800;
         letter-spacing: 1px;
-        color: #dc2626;
+        color: #0284c7;
         text-transform: uppercase;
         margin-bottom: 10px;
     }
@@ -309,20 +670,23 @@
         font-size: 28px;
         font-weight: 900;
         line-height: 1.2;
-        color: #111827;
+        color: #0f172a;
         margin: 0 0 12px 0;
         text-transform: uppercase;
         letter-spacing: -0.5px;
     }
 
     .hero-main-title span {
-        color: #dc2626;
+        color: #0284c7;
+        background: linear-gradient(135deg, #0284c7, #06b6d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .hero-main-desc {
         font-size: 13px;
         line-height: 1.55;
-        color: #4b5563;
+        color: #475569;
         margin: 0 0 20px 0;
     }
 
@@ -335,19 +699,20 @@
     .hero-btn-play {
         padding: 9px 22px;
         border-radius: 8px;
-        background: #dc2626;
+        background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%) !important;
         color: #ffffff !important;
         font-size: 12.5px;
         font-weight: 700;
         text-decoration: none;
         transition: all 0.2s ease;
-        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
         cursor: pointer;
     }
 
     .hero-btn-play:hover {
-        background: #b91c1c;
+        background: linear-gradient(135deg, #0369a1 0%, #0891b2 100%) !important;
         transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.45);
     }
 
     .hero-btn-trailer {
@@ -357,19 +722,20 @@
         padding: 8px 18px;
         border-radius: 8px;
         background: #ffffff;
-        border: 1px solid #d1d5db;
-        color: #111827 !important;
+        border: 1px solid #bae6fd;
+        color: #0f172a !important;
         font-size: 12.5px;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.2s ease;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px 3px rgba(2, 132, 199, 0.06);
         cursor: pointer;
     }
 
     .hero-btn-trailer:hover {
-        border-color: #9ca3af;
-        background: #f9fafb;
+        border-color: #0284c7;
+        color: #0284c7 !important;
+        background: #f0f9ff;
     }
 
     .hero-nav-arrow {
@@ -381,22 +747,23 @@
         height: 38px;
         border-radius: 50%;
         background: #ffffff;
-        border: 1px solid #e5e7eb;
-        color: #111827;
+        border: 1px solid #bae6fd;
+        color: #0284c7;
         align-items: center;
         justify-content: center;
         font-size: 18px;
         cursor: pointer;
         z-index: 10;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.12);
         transition: all 0.2s ease;
     }
 
     .hero-nav-arrow:hover {
-        background: #dc2626;
+        background: linear-gradient(135deg, #0284c7, #06b6d4);
         color: #ffffff;
-        border-color: #dc2626;
+        border-color: transparent;
         transform: translateY(-50%) scale(1.08);
+        box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
     }
 
     .hero-nav-arrow.prev {
@@ -447,7 +814,7 @@
         font-family: var(--font-ui) !important;
         font-size: 16px !important;
         font-weight: 800 !important;
-        color: #111827 !important;
+        color: #0f172a !important;
         background: none !important;
         -webkit-text-fill-color: initial !important;
         margin: 0 !important;
@@ -457,12 +824,14 @@
     .portal-section-link {
         font-size: 12px !important;
         font-weight: 700 !important;
-        color: #dc2626 !important;
+        color: #0284c7 !important;
         text-decoration: none !important;
+        transition: color 0.2s ease;
     }
 
     .portal-section-link:hover {
-        opacity: 0.8 !important;
+        color: #0369a1 !important;
+        opacity: 0.9 !important;
     }
 
     /* =========================================================
@@ -470,10 +839,10 @@
        ========================================================= */
     .apps-section {
         background: #ffffff !important;
-        border: 1px solid #e5e7eb !important;
+        border: 1px solid #dbeafe !important;
         border-radius: 16px !important;
         padding: 24px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+        box-shadow: 0 4px 20px rgba(2, 132, 199, 0.05) !important;
         margin-bottom: 0 !important;
     }
 
@@ -490,7 +859,7 @@
         font-family: var(--font-ui) !important;
         font-size: 17px !important;
         font-weight: 800 !important;
-        color: #111827 !important;
+        color: #0f172a !important;
         margin: 0 !important;
         letter-spacing: -0.3px !important;
     }
@@ -498,7 +867,7 @@
     .apps-section .portal-section-link {
         font-size: 12.5px !important;
         font-weight: 700 !important;
-        color: #dc2626 !important;
+        color: #0284c7 !important;
         text-decoration: none !important;
         display: inline-flex !important;
         align-items: center !important;
@@ -507,7 +876,7 @@
     }
 
     .apps-section .portal-section-link:hover {
-        opacity: 0.8 !important;
+        color: #0369a1 !important;
         transform: translateX(3px) !important;
     }
 
@@ -534,8 +903,8 @@
 
     .portal-app-item:hover {
         transform: translateY(-5px) !important;
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16) !important;
-        border-color: rgba(220, 38, 38, 0.4) !important;
+        box-shadow: 0 12px 28px rgba(2, 132, 199, 0.22) !important;
+        border-color: #38bdf8 !important;
     }
 
     .portal-app-thumb-wrap {
@@ -557,6 +926,23 @@
 
     .portal-app-item:hover .portal-app-thumb {
         transform: scale(1.06) !important;
+    }
+
+    .portal-badge-upcoming {
+        position: absolute !important;
+        top: 8px !important;
+        right: 8px !important;
+        background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%) !important;
+        color: #ffffff !important;
+        font-size: 10px !important;
+        font-weight: 800 !important;
+        padding: 3px 8px !important;
+        border-radius: 6px !important;
+        box-shadow: 0 3px 10px rgba(234, 88, 12, 0.35) !important;
+        z-index: 4 !important;
+        letter-spacing: 0.4px !important;
+        text-transform: uppercase !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
     }
 
     /* Đặt tên game ở giữa, căn lề giữa bên dưới chuẩn xác 100% */
@@ -599,10 +985,10 @@
        ========================================================= */
     .portal-section-welfare {
         background: #ffffff !important;
-        border: 1px solid #e5e7eb !important;
+        border: 1px solid #dbeafe !important;
         border-radius: 16px !important;
         padding: 24px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+        box-shadow: 0 4px 20px rgba(2, 132, 199, 0.05) !important;
         margin-bottom: 0 !important;
     }
 
@@ -619,7 +1005,7 @@
         font-family: var(--font-ui) !important;
         font-size: 17px !important;
         font-weight: 800 !important;
-        color: #111827 !important;
+        color: #0f172a !important;
         margin: 0 !important;
         letter-spacing: -0.3px !important;
     }
@@ -627,7 +1013,7 @@
     .portal-section-welfare .portal-section-link {
         font-size: 12.5px !important;
         font-weight: 700 !important;
-        color: #dc2626 !important;
+        color: #0284c7 !important;
         text-decoration: none !important;
         display: inline-flex !important;
         align-items: center !important;
@@ -636,7 +1022,7 @@
     }
 
     .portal-section-welfare .portal-section-link:hover {
-        opacity: 0.8 !important;
+        color: #0369a1 !important;
         transform: translateX(3px) !important;
     }
 
@@ -649,15 +1035,16 @@
     .portal-promo-card {
         border-radius: 12px !important;
         overflow: hidden !important;
-        border: 1px solid #e5e7eb !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
-        transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+        border: 1px solid #e0f2fe !important;
+        box-shadow: 0 2px 10px rgba(2, 132, 199, 0.04) !important;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
         display: block !important;
     }
 
     .portal-promo-card:hover {
         transform: translateY(-3px) !important;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08) !important;
+        box-shadow: 0 8px 22px rgba(2, 132, 199, 0.16) !important;
+        border-color: #7dd3fc !important;
     }
 
     .portal-promo-card img {
@@ -674,10 +1061,10 @@
     /* 1. Giftcode Section thành Widget PC trắng sáng */
     .portal-section-giftcode {
         background: #ffffff !important;
-        border: 1px solid #e5e7eb !important;
+        border: 1px solid #dbeafe !important;
         border-radius: 16px !important;
         padding: 20px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+        box-shadow: 0 4px 20px rgba(2, 132, 199, 0.05) !important;
         margin-bottom: 0 !important;
     }
 
@@ -690,9 +1077,15 @@
     .portal-giftcode-card {
         padding: 10px 12px !important;
         border-radius: 10px !important;
-        background: #f9fafb !important;
-        border: 1px solid #f3f4f6 !important;
+        background: #f8fafc !important;
+        border: 1px solid #e0f2fe !important;
         box-shadow: none !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .portal-giftcode-card:hover {
+        background: #f0f9ff !important;
+        border-color: #bae6fd !important;
     }
 
     .portal-giftcode-avatar {
@@ -703,35 +1096,38 @@
 
     .portal-giftcode-info h4 {
         font-size: 12.5px !important;
-        color: #111827 !important;
+        color: #0f172a !important;
         font-weight: 700 !important;
     }
 
     .portal-giftcode-stat {
         font-size: 10.5px !important;
-        color: #6b7280 !important;
+        color: #64748b !important;
     }
 
     .portal-btn-giftcode {
-        background: #dc2626 !important;
+        background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%) !important;
         color: #ffffff !important;
         font-size: 11.5px !important;
         padding: 6px 13px !important;
         border-radius: 6px !important;
         font-weight: 700 !important;
+        box-shadow: 0 2px 10px rgba(2, 132, 199, 0.3) !important;
+        transition: all 0.2s ease !important;
     }
 
     .portal-btn-giftcode:hover {
-        background: #b91c1c !important;
+        background: linear-gradient(135deg, #0369a1 0%, #0891b2 100%) !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4) !important;
     }
 
     /* 2. Tin tức Máy chủ thành Widget PC trắng sáng */
     .portal-section-news {
         background: #ffffff !important;
-        border: 1px solid #e5e7eb !important;
+        border: 1px solid #dbeafe !important;
         border-radius: 16px !important;
         padding: 20px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+        box-shadow: 0 4px 20px rgba(2, 132, 199, 0.05) !important;
         margin-bottom: 0 !important;
     }
 
@@ -749,7 +1145,7 @@
         padding: 8px 0 !important;
         background: transparent !important;
         border: none !important;
-        border-bottom: 1px solid #f3f4f6 !important;
+        border-bottom: 1px solid #f1f5f9 !important;
         box-shadow: none !important;
         border-radius: 0 !important;
     }
@@ -767,7 +1163,14 @@
         flex-shrink: 0 !important;
     }
 
-    .portal-news-img-wrap img {
+    .portal-news-img-wrap picture {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    .portal-news-img-wrap img,
+    .portal-news-img-wrap picture img {
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
@@ -785,30 +1188,35 @@
     .portal-news-title {
         font-size: 12px !important;
         font-weight: 700 !important;
-        color: #111827 !important;
+        color: #0f172a !important;
         line-height: 1.35 !important;
         display: -webkit-box !important;
         -webkit-line-clamp: 2 !important;
         -webkit-box-orient: vertical !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
+        transition: color 0.2s ease !important;
+    }
+
+    .portal-news-card:hover .portal-news-title {
+        color: #0284c7 !important;
     }
 
     .portal-news-meta {
         font-size: 10.5px !important;
         font-weight: 700 !important;
-        color: #dc2626 !important;
+        color: #0284c7 !important;
     }
 
-    /* 3. Widget Tham Gia Cộng Đồng PC (Hồng pastel nhẹ nhàng như ảnh 2) */
+    /* 3. Widget Tham Gia Cộng Đồng PC (Bích Thủy Tiên Vận tao nhã) */
     .portal-pc-community-widget {
         display: block !important;
-        background: #fff1f2 !important;
-        border: 1px solid #fecdd3 !important;
+        background: #ecfeff !important;
+        border: 1px solid #bae6fd !important;
         border-radius: 16px !important;
         padding: 20px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
-        background-image: linear-gradient(135deg, rgba(255, 241, 242, 0.95), rgba(254, 226, 226, 0.95)), url('/images/psm/psm-banner.jpg') !important;
+        box-shadow: 0 4px 20px rgba(2, 132, 199, 0.08) !important;
+        background-image: linear-gradient(135deg, rgba(240, 249, 255, 0.94), rgba(224, 242, 254, 0.94)), url('/images/psm/psm-banner.jpg') !important;
         background-size: cover !important;
         background-position: center !important;
     }
@@ -816,22 +1224,23 @@
     .pc-community-tag {
         font-size: 10px;
         font-weight: 800;
-        color: #dc2626;
+        color: #0284c7;
         text-transform: uppercase;
         display: block;
         margin-bottom: 4px;
+        letter-spacing: 0.5px;
     }
 
     .pc-community-title {
         font-size: 13.5px;
         font-weight: 900;
-        color: #111827;
+        color: #0f172a;
         margin: 0 0 6px 0;
     }
 
     .pc-community-desc {
         font-size: 11.5px;
-        color: #4b5563;
+        color: #475569;
         margin: 0 0 14px 0;
         line-height: 1.45;
     }
@@ -842,17 +1251,19 @@
         justify-content: center;
         padding: 6px 16px;
         border-radius: 6px;
-        background: #dc2626;
+        background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
         color: #ffffff !important;
         font-size: 11.5px;
         font-weight: 700;
         text-decoration: none;
         transition: all 0.2s ease;
+        box-shadow: 0 2px 10px rgba(2, 132, 199, 0.3);
     }
 
     .pc-community-btn:hover {
-        background: #b91c1c;
+        background: linear-gradient(135deg, #0369a1 0%, #0891b2 100%);
         transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
     }
 
     /* 4. Trung Tâm Hỗ Trợ thành Widget PC trắng sáng */
@@ -862,10 +1273,10 @@
 
     .tmgt-support-card {
         background: #ffffff !important;
-        border: 1px solid #e5e7eb !important;
+        border: 1px solid #dbeafe !important;
         border-radius: 16px !important;
         padding: 20px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+        box-shadow: 0 4px 20px rgba(2, 132, 199, 0.05) !important;
     }
 
     .tmgt-support-alert {
@@ -878,37 +1289,38 @@
     }
 
     .tmgt-support-tile {
-        background: #f9fafb !important;
-        border: 1px solid #f3f4f6 !important;
+        background: #f8fafc !important;
+        border: 1px solid #e0f2fe !important;
         padding: 10px 8px !important;
         border-radius: 10px !important;
         transition: all 0.2s ease !important;
     }
 
     .tmgt-support-tile:hover {
-        border-color: #fecdd3 !important;
-        background: #ffffff !important;
+        border-color: #7dd3fc !important;
+        background: #f0f9ff !important;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1) !important;
         transform: translateY(-2px) !important;
     }
 
     .tmgt-support-icon {
-        color: #dc2626 !important;
+        color: #0284c7 !important;
         font-size: 15px !important;
     }
 
     .tmgt-support-label {
         font-size: 11px !important;
-        color: #111827 !important;
+        color: #0f172a !important;
         font-weight: 700 !important;
     }
 
     /* =========================================================
-       FOOTER ĐA CỘT PC (TRẮNG SÁNG THEO ẢNH 2)
+       FOOTER ĐA CỘT PC (TRẮNG SÁNG TIÊN HIỆP BÍCH THỦY)
        ========================================================= */
     .portal-pc-footer {
         display: block !important;
         background: #ffffff !important;
-        border-top: 1px solid #e5e7eb !important;
+        border-top: 1px solid #dbeafe !important;
         margin-top: 48px !important;
         padding: 48px 0 24px 0 !important;
         width: 100% !important;
@@ -918,9 +1330,10 @@
         right: auto !important;
         margin-left: 0 !important;
         margin-right: 0 !important;
+        box-shadow: 0 -4px 20px rgba(2, 132, 199, 0.03) !important;
     }
 
-    /* Khung Footer căn giữa trang thanh lịch theo đúng ảnh mẫu */
+    /* Khung Footer căn giữa trang thanh lịch */
     .pc-footer-container {
         max-width: 1080px !important;
         margin: 0 auto !important;
@@ -943,16 +1356,17 @@
     }
 
     .pc-footer-logo {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        object-fit: cover;
+        width: 34px;
+        height: 34px;
+        border: none !important;
+        border-radius: 0 !important;
+        object-fit: contain;
     }
 
     .pc-footer-brand-name {
         font-size: 15.5px;
         font-weight: 800;
-        color: #111827;
+        color: #0f172a;
         letter-spacing: 0.5px;
     }
 
@@ -965,14 +1379,14 @@
 
     .pc-footer-desc {
         font-size: 11.5px;
-        color: #9ca3af;
+        color: #64748b;
         margin: 0;
     }
 
     .pc-footer-col-title {
         font-size: 13px;
         font-weight: 800;
-        color: #111827;
+        color: #0f172a;
         margin: 0 0 14px 0;
     }
 
@@ -987,13 +1401,13 @@
 
     .pc-footer-links a {
         font-size: 12px;
-        color: #6b7280;
+        color: #64748b;
         text-decoration: none;
         transition: color 0.2s ease;
     }
 
     .pc-footer-links a:hover {
-        color: #dc2626;
+        color: #0284c7;
     }
 
     .pc-footer-socials {
@@ -1006,27 +1420,29 @@
         width: 32px;
         height: 32px;
         border-radius: 7px;
-        background: #dc2626;
+        background: linear-gradient(135deg, #0284c7, #06b6d4);
         color: #ffffff !important;
         display: flex;
         align-items: center;
         justify-content: center;
         text-decoration: none;
         transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
     }
 
     .pc-social-btn:hover {
-        background: #b91c1c;
+        background: linear-gradient(135deg, #0369a1, #0891b2);
         transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
     }
 
     .pc-footer-bottom {
         padding-top: 18px;
-        border-top: 1px solid #f3f4f6;
+        border-top: 1px solid #e0f2fe;
         display: flex;
         align-items: center;
         justify-content: space-between;
         font-size: 11.5px;
-        color: #9ca3af;
+        color: #64748b;
     }
 }

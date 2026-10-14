@@ -14,15 +14,14 @@
     <meta property="og:title" content="Đổi Điểm | Thần Ma Giáng Thế - Lamon Game">
     <meta property="og:description"
         content="Tra cứu bảng giá & tính điểm quy đổi vật phẩm game Thần Ma Giáng Thế trực tiếp từ Google Sheets.">
-    <meta property="og:image" content="/images/tmgt/tmgt-banner1.png">
+    <meta property="og:image" content="/images/tmgt/tmgt-banner.jpg">
 
     <!-- Performance: DNS Prefetch & Preconnect for External Resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://docs.google.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
         rel="stylesheet">
 
     <!-- Shared & Game Stylesheets for Portal Header & Sidebottom -->
@@ -61,10 +60,10 @@
 
     <!-- Theme Manager Init (Anti-FOUC) -->
     <script>
-        (function () {
-            var t = localStorage.getItem('lamon_game_theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', t);
-        })();
+            (function () {
+                var t = localStorage.getItem('lamon_game_theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', t);
+            })();
     </script>
 
     <link rel="stylesheet" href="/assets/css/components/theme-light.css">
@@ -167,7 +166,8 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
                     <span>Về Trang Game TMGT</span>
                 </a>
                 <div class="flex items-center gap-2">
-                    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Chuyển chế độ Sáng / Tối" title="Chuyển chế độ Sáng / Tối">
+                    <button type="button" class="theme-toggle-btn" id="themeToggleBtn"
+                        aria-label="Chuyển chế độ Sáng / Tối" title="Chuyển chế độ Sáng / Tối">
                         <span class="theme-icon">🌙</span>
                         <span class="theme-label">Tối</span>
                     </button>
@@ -182,7 +182,8 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
             <!-- Main Title & Cart Action -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-3.5">
-                    <img src="/images/tmgt/tmgt-logo.png" alt="Thần Ma Giáng Thế" width="56" height="56" fetchpriority="high"
+                    <img src="/images/tmgt/tmgt-logo.png" alt="Thần Ma Giáng Thế" width="56" height="56"
+                        fetchpriority="high"
                         class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl border-2 border-amber-500/40 object-cover shadow-md shadow-amber-950/40 shrink-0">
                     <div>
                         <div class="flex items-center gap-2 flex-wrap">
@@ -511,11 +512,12 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
         style="z-index: 100002 !important;">
         <div id="imageModalBox"
             class="glass-panel border border-white/15 rounded-3xl w-full max-w-lg bg-slate-900/95 shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 flex flex-col max-h-[92vh]">
-            
+
             <!-- Modal Header -->
             <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-slate-950/70 shrink-0">
                 <div class="flex items-center gap-2.5 min-w-0 pr-2">
-                    <span id="modalCategoryBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold border shrink-0">
+                    <span id="modalCategoryBadge"
+                        class="px-2.5 py-0.5 rounded-md text-[11px] font-bold border shrink-0">
                         Vật phẩm
                     </span>
                     <h3 id="modalItemTitle" class="text-sm sm:text-base font-bold text-white truncate" title="">
@@ -530,53 +532,78 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
             </div>
 
             <!-- Modal Body (Image preview & fallback) -->
-            <div class="p-4 sm:p-5 overflow-y-auto flex flex-col items-center justify-center space-y-3.5 flex-1 min-h-[260px] relative">
+            <div
+                class="p-4 sm:p-5 overflow-y-auto flex flex-col items-center justify-center space-y-3.5 flex-1 min-h-[260px] relative">
                 <!-- Spinner Loading State -->
-                <div id="modalImageLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/70 z-10 backdrop-blur-sm">
-                    <div class="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mb-3"></div>
+                <div id="modalImageLoader"
+                    class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/70 z-10 backdrop-blur-sm">
+                    <div
+                        class="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mb-3">
+                    </div>
                     <span class="text-xs font-semibold text-slate-300">Đang tải ảnh vật phẩm...</span>
                 </div>
 
                 <!-- Image Display Box with Zoom & Pan Support -->
-                <div id="modalImageWrapper" class="w-full flex items-center justify-center rounded-2xl bg-slate-950/70 border border-white/5 p-2 overflow-hidden min-h-[240px] relative group select-none">
+                <div id="modalImageWrapper"
+                    class="w-full flex items-center justify-center rounded-2xl bg-slate-950/70 border border-white/5 p-2 overflow-hidden min-h-[240px] relative group select-none">
                     <!-- Image counter badge (Hiển thị khi có nhiều ảnh) -->
-                    <div id="modalImageCounter" class="hidden absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900/90 backdrop-blur-md border border-white/10 text-[11px] font-extrabold text-amber-400 z-20 shadow-lg select-none">
+                    <div id="modalImageCounter"
+                        class="hidden absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900/90 backdrop-blur-md border border-white/10 text-[11px] font-extrabold text-amber-400 z-20 shadow-lg select-none">
                         <span>🖼️</span>
                         <span id="modalImageCounterText">1 / 1</span>
                     </div>
 
                     <!-- Zoom Toolbar floating controls -->
-                    <div id="modalZoomControls" class="absolute top-3 right-3 flex items-center gap-1 bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-white/10 shadow-lg z-20 transition-opacity">
-                        <button type="button" id="btnZoomOut" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-slate-800" title="Thu nhỏ (-)">
+                    <div id="modalZoomControls"
+                        class="absolute top-3 right-3 flex items-center gap-1 bg-slate-900/90 backdrop-blur-md p-1 rounded-xl border border-white/10 shadow-lg z-20 transition-opacity">
+                        <button type="button" id="btnZoomOut"
+                            class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-slate-800"
+                            title="Thu nhỏ (-)">
                             －
                         </button>
-                        <span id="zoomLevelIndicator" class="text-[11px] font-mono font-bold text-amber-400 px-1 select-none min-w-[36px] text-center">100%</span>
-                        <button type="button" id="btnZoomIn" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center transition-all" title="Phóng to (+)">
+                        <span id="zoomLevelIndicator"
+                            class="text-[11px] font-mono font-bold text-amber-400 px-1 select-none min-w-[36px] text-center">100%</span>
+                        <button type="button" id="btnZoomIn"
+                            class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold flex items-center justify-center transition-all"
+                            title="Phóng to (+)">
                             ＋
                         </button>
-                        <button type="button" id="btnZoomReset" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-300 text-xs flex items-center justify-center transition-all" title="Đặt lại kích thước">
+                        <button type="button" id="btnZoomReset"
+                            class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-300 text-xs flex items-center justify-center transition-all"
+                            title="Đặt lại kích thước">
                             ↺
                         </button>
-                        <a id="btnOpenOriginalImage" href="#" target="_blank" rel="noopener noreferrer" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-emerald-300 text-xs flex items-center justify-center transition-all" title="Mở ảnh gốc chất lượng cao trong tab mới">
+                        <a id="btnOpenOriginalImage" href="#" target="_blank" rel="noopener noreferrer"
+                            class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-emerald-300 text-xs flex items-center justify-center transition-all"
+                            title="Mở ảnh gốc chất lượng cao trong tab mới">
                             ↗
                         </a>
                     </div>
 
                     <!-- Slider Prev / Next Buttons (Hiển thị khi có nhiều ảnh) -->
-                    <button type="button" id="btnPrevImage" class="hidden absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-900/80 hover:bg-amber-500 text-white hover:text-slate-950 border border-white/15 flex items-center justify-center transition-all shadow-xl backdrop-blur-md z-20 active:scale-90" title="Ảnh trước (Phím ❮ hoặc A)">
+                    <button type="button" id="btnPrevImage"
+                        class="hidden absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-900/80 hover:bg-amber-500 text-white hover:text-slate-950 border border-white/15 flex items-center justify-center transition-all shadow-xl backdrop-blur-md z-20 active:scale-90"
+                        title="Ảnh trước (Phím ❮ hoặc A)">
                         ❮
                     </button>
-                    <button type="button" id="btnNextImage" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-900/80 hover:bg-amber-500 text-white hover:text-slate-950 border border-white/15 flex items-center justify-center transition-all shadow-xl backdrop-blur-md z-20 active:scale-90" title="Ảnh tiếp theo (Phím ❯ hoặc D)">
+                    <button type="button" id="btnNextImage"
+                        class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-900/80 hover:bg-amber-500 text-white hover:text-slate-950 border border-white/15 flex items-center justify-center transition-all shadow-xl backdrop-blur-md z-20 active:scale-90"
+                        title="Ảnh tiếp theo (Phím ❯ hoặc D)">
                         ❯
                     </button>
 
                     <!-- Draggable & Zoomable Image Viewport -->
-                    <div id="modalImagePanContainer" class="w-full flex items-center justify-center overflow-hidden cursor-zoom-in transition-all" style="max-height: 52vh; min-height: 220px;">
-                        <img id="modalItemImage" src="" alt="Ảnh vật phẩm" class="max-h-[50vh] max-w-full object-contain rounded-xl shadow-lg transition-transform duration-150 select-none pointer-events-auto" draggable="false">
+                    <div id="modalImagePanContainer"
+                        class="w-full flex items-center justify-center overflow-hidden cursor-zoom-in transition-all"
+                        style="max-height: 52vh; min-height: 220px;">
+                        <img id="modalItemImage" src="" alt="Ảnh vật phẩm"
+                            class="max-h-[50vh] max-w-full object-contain rounded-xl shadow-lg transition-transform duration-150 select-none pointer-events-auto"
+                            draggable="false">
                     </div>
 
                     <!-- Floating hint: "Nhấp hoặc lăn chuột để phóng to" -->
-                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none bg-slate-950/80 backdrop-blur-sm px-3 py-0.5 rounded-full border border-white/10 text-[10px] text-slate-400 opacity-80 hidden sm:block whitespace-nowrap">
+                    <div
+                        class="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none bg-slate-950/80 backdrop-blur-sm px-3 py-0.5 rounded-full border border-white/10 text-[10px] text-slate-400 opacity-80 hidden sm:block whitespace-nowrap">
                         🔍 Lăn chuột để zoom • Kéo di chuyển • Phím ❮ ❯ chuyển ảnh
                     </div>
                 </div>
@@ -587,26 +614,31 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
                         <span>Danh sách ảnh:</span>
                         <span class="text-[10px] text-amber-400/90 font-medium">Bấm chọn ảnh xem nhanh</span>
                     </div>
-                    <div id="modalThumbnailsContainer" class="w-full flex items-center gap-2 overflow-x-auto p-1.5 rounded-xl bg-slate-950/60 border border-white/5">
+                    <div id="modalThumbnailsContainer"
+                        class="w-full flex items-center gap-2 overflow-x-auto p-1.5 rounded-xl bg-slate-950/60 border border-white/5">
                         <!-- Injected dynamically -->
                     </div>
                 </div>
 
                 <!-- No Image Fallback Alert -->
-                <div id="modalNoImageAlert" class="hidden w-full text-center p-6 rounded-2xl bg-slate-950/60 border border-dashed border-amber-500/30 space-y-3">
-                    <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-2xl text-amber-400">
+                <div id="modalNoImageAlert"
+                    class="hidden w-full text-center p-6 rounded-2xl bg-slate-950/60 border border-dashed border-amber-500/30 space-y-3">
+                    <div
+                        class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-2xl text-amber-400">
                         🖼️
                     </div>
                     <div>
                         <h4 class="text-sm font-bold text-slate-200">Chưa có ảnh xem trước</h4>
                         <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto leading-relaxed">
-                            Vật phẩm này chưa được thêm đường dẫn ảnh trong Google Sheet (Cột Link Ảnh). Bạn vẫn có thể chọn số lượng và tính điểm như bình thường!
+                            Vật phẩm này chưa được thêm đường dẫn ảnh trong Google Sheet (Cột Link Ảnh). Bạn vẫn có thể
+                            chọn số lượng và tính điểm như bình thường!
                         </p>
                     </div>
                 </div>
 
                 <!-- Item Info Badges Row -->
-                <div class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-950/60 border border-white/5 text-xs">
+                <div
+                    class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-950/60 border border-white/5 text-xs">
                     <div class="flex items-center gap-1.5">
                         <span class="text-slate-400">Hệ số quy đổi:</span>
                         <span id="modalItemPoints" class="font-extrabold text-amber-400">0 Điểm</span>
@@ -622,7 +654,8 @@ HƯỚNG DẪN XUẤT BẢN & CẤU HÌNH GOOGLE SHEET:
             </div>
 
             <!-- Modal Footer with Quick Add Button -->
-            <div class="px-5 py-3.5 border-t border-white/10 bg-slate-950/80 flex items-center justify-between gap-3 shrink-0">
+            <div
+                class="px-5 py-3.5 border-t border-white/10 bg-slate-950/80 flex items-center justify-between gap-3 shrink-0">
                 <button type="button" id="btnModalCloseSecondary"
                     class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-white/10 transition-all">
                     Đóng
