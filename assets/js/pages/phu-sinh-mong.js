@@ -1,160 +1,270 @@
 /**
- * Phù Sinh Mộng - Interactive Script
+ * Phù Sinh Mộng - Tiên Hiệp Vực Interactive Script
  * File: assets/js/pages/phu-sinh-mong.js
  */
-(function () {
-    // === 1. Hero Carousel Logic ===
-    const viewport = document.getElementById('tmgtCarousel');
-    if (viewport) {
-        const slides = Array.from(viewport.querySelectorAll('.tmgt-slide'));
-        const dotsContainer = document.getElementById('carouselDots');
-        const btnPrev = document.getElementById('prevSlide');
-        const btnNext = document.getElementById('nextSlide');
-        let currentIdx = 0;
-        let timer = null;
-
-        // Render Dots
-        if (dotsContainer) {
-            dotsContainer.innerHTML = '';
-            slides.forEach((_, i) => {
-                const dot = document.createElement('button');
-                dot.className = 'tmgt-dot' + (i === 0 ? ' active' : '');
-                dot.setAttribute('aria-label', 'Slide ' + (i + 1));
-                dot.addEventListener('click', () => goToSlide(i));
-                dotsContainer.appendChild(dot);
-            });
-        }
-
-        function goToSlide(idx) {
-            slides[currentIdx].classList.remove('active');
-            if (dotsContainer && dotsContainer.children[currentIdx]) {
-                dotsContainer.children[currentIdx].classList.remove('active');
+document.addEventListener('DOMContentLoaded', function () {
+    // === 1. Header scroll effect ===
+    const header = document.querySelector('.psm-header');
+    if (header) {
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
             }
-            currentIdx = (idx + slides.length) % slides.length;
-            slides[currentIdx].classList.add('active');
-            if (dotsContainer && dotsContainer.children[currentIdx]) {
-                dotsContainer.children[currentIdx].classList.add('active');
-            }
-            resetAutoPlay();
-        }
-
-        function nextSlide() { goToSlide(currentIdx + 1); }
-        function prevSlide() { goToSlide(currentIdx - 1); }
-
-        if (btnNext) btnNext.addEventListener('click', nextSlide);
-        if (btnPrev) btnPrev.addEventListener('click', prevSlide);
-
-        function resetAutoPlay() {
-            if (timer) clearInterval(timer);
-            timer = setInterval(nextSlide, 5000);
-        }
-        resetAutoPlay();
-
-        // Touch swipe support
-        let startX = 0;
-        viewport.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
-        viewport.addEventListener('touchend', (e) => {
-            const diff = e.changedTouches[0].clientX - startX;
-            if (diff > 45) prevSlide();
-            else if (diff < -45) nextSlide();
         }, { passive: true });
     }
 
-    // === 2. Interactive Character Class Switcher ===
-    const classData = [
-        {
-            name: 'Kiếm Tôn',
-            role: 'Cận Chiến / Bạo Kích Sát Thương',
-            desc: 'Ngự kiếm xuất trần, kiếm khí tung hoành Tam Giới. Sở hữu tốc độ xuất chiêu chớp nhoáng, chuỗi combo biến hóa khôn lường và sát thương bạo kích đơn mục tiêu đứng đầu.',
-            atk: '95%', def: '70%', cc: '75%', diff: '70%',
-            img: '/images/psm/psm-banner.jpg'
-        },
-        {
-            name: 'Cầm Sư',
-            role: 'Ma Pháp / Trị Liệu Trận Pháp',
-            desc: 'Dùng tiếng đàn dẫn dắt linh khí đất trời. Vừa có khả năng trị liệu hồi phục diện rộng cho đồng đội trong phụ bản, vừa có thể gảy khúc đoạn trường sát thương kẻ địch từ xa.',
-            atk: '85%', def: '65%', cc: '95%', diff: '60%',
-            img: '/images/psm/psm-banner-mobile.jpg'
-        },
-        {
-            name: 'Linh Vũ',
-            role: 'Xạ Thủ / Tầm Xa Nhanh Nhẹn',
-            desc: 'Tên phát như sao băng rơi rụng. Giữ cự ly tác chiến hoàn hảo, thả diều đối thủ và gây sát thương liên tục từ khoảng cách an toàn bậc nhất chiến trường.',
-            atk: '90%', def: '50%', cc: '80%', diff: '75%',
-            img: '/images/psm/psm-logo.jpg'
-        },
-        {
-            name: 'Địa Tạng',
-            role: 'Phòng Ngự / Kim Cang Bất Hoại',
-            desc: 'Thân thể kim cang ngưng tụ linh lực thiên địa. Là tấm lá chắn bất hoại gánh chịu mọi đòn sát thương khốc liệt nhất, bảo vệ vững chắc cho toàn bộ tiên lữ trong bang hội.',
-            atk: '70%', def: '100%', cc: '85%', diff: '55%',
-            img: '/images/psm/psm-banner.jpg'
-        }
+    // === 2. Hero Background & Thumbnail Switcher ===
+    const heroBg = document.getElementById('heroBg');
+    const thumbItems = document.querySelectorAll('.psm-thumb-item');
+    const scenes = [
+        '/images/psm/psm-hero-xianxia.jpg?v=2',
+        '/images/psm/psm-scene-portal.jpg',
+        '/images/psm/psm-scene-dragon.jpg',
+        '/images/psm/psm-scene-halo.jpg'
     ];
+    let currentSceneIdx = 0;
 
-    const tabs = document.querySelectorAll('.tmgt-class-tab');
-    const className = document.getElementById('className');
-    const classRole = document.getElementById('classRole');
-    const classDesc = document.getElementById('classDesc');
-    const statAtk = document.getElementById('statAtk');
-    const statDef = document.getElementById('statDef');
-    const statCc = document.getElementById('statCc');
-    const statDiff = document.getElementById('statDiff');
-    const classImg = document.getElementById('classImg');
-
-    if (tabs.length > 0) {
-        tabs.forEach((tab, index) => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-
-                const data = classData[index];
-                if (data) {
-                    if (className) className.textContent = data.name;
-                    if (classRole) classRole.textContent = data.role;
-                    if (classDesc) classDesc.textContent = data.desc;
-                    if (statAtk) statAtk.style.width = data.atk;
-                    if (statDef) statDef.style.width = data.def;
-                    if (statCc) statCc.style.width = data.cc;
-                    if (statDiff) statDiff.style.width = data.diff;
-                    if (classImg) {
-                        classImg.style.opacity = '0';
-                        setTimeout(() => {
-                            classImg.src = data.img;
-                            classImg.alt = data.name + ' — Phù Sinh Mộng';
-                            classImg.style.opacity = '1';
-                        }, 200);
-                    }
-                }
-            });
+    function switchScene(idx) {
+        if (!heroBg || idx < 0 || idx >= scenes.length) return;
+        currentSceneIdx = idx;
+        heroBg.style.backgroundImage = `url('${scenes[idx]}')`;
+        thumbItems.forEach((thumb, i) => {
+            if (i === idx) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
         });
     }
 
-    // === 3. Features Slide Navigation (Mobile) ===
-    const featuresGrid = document.getElementById('featuresGrid');
-    const fDots = document.querySelectorAll('.tmgt-f-dot');
-    const btnFeatPrev = document.getElementById('featPrev');
-    const btnFeatNext = document.getElementById('featNext');
+    thumbItems.forEach(thumb => {
+        thumb.addEventListener('click', function () {
+            const idx = parseInt(this.getAttribute('data-index'), 10);
+            switchScene(idx);
+        });
+    });
 
-    if (featuresGrid && fDots.length > 0) {
-        let fIndex = 0;
-        const cards = featuresGrid.querySelectorAll('.tmgt-feature-card');
+    // === 3. Platform Switcher & Download CTA Dynamic Linking ===
+    const platBtns = document.querySelectorAll('.psm-plat-btn');
+    const downloadCta = document.getElementById('downloadCta');
+    const downloadPlatforms = {
+        'android': {
+            url: 'https://down.skeideng.com/apk/mnghoalc/93e8aaac362ce4345501c09f8ecd5853.apk',
+            label: 'TẢI GAME BẢN ANDROID',
+            target: '_self'
+        },
+        'ios': {
+            url: 'https://t.skeideng.com/S2Pxl3.html',
+            label: 'TẢI GAME BẢN IOS',
+            target: '_blank'
+        },
+        'windows': {
+            url: 'https://down.skeideng.com/apk/mnghoalc/93e8aaac362ce4345501c09f8ecd5853.apk',
+            label: 'TẢI BẢN GIẢ LẬP PC',
+            target: '_self',
+            guideTab: 'pc'
+        }
+    };
 
-        function updateFeatureSlide(idx) {
-            fIndex = (idx + cards.length) % cards.length;
-            cards.forEach((c, i) => {
-                c.classList.toggle('active-slide', i === fIndex);
-            });
-            fDots.forEach((d, i) => {
-                d.classList.toggle('active', i === fIndex);
-            });
+    let activePlatform = 'android';
+
+    platBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const plat = this.getAttribute('data-platform');
+            platBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            activePlatform = plat;
+
+            if (downloadCta && downloadPlatforms[plat]) {
+                const conf = downloadPlatforms[plat];
+                downloadCta.href = conf.url;
+                if (conf.target) {
+                    downloadCta.target = conf.target;
+                } else {
+                    downloadCta.removeAttribute('target');
+                }
+            }
+        });
+    });
+
+    // Auto-detect OS on page load (highlights detected platform without triggering download)
+    (function detectUserDevice() {
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        let detected = 'android';
+        if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+            detected = 'ios';
+        } else if (/Win|Windows/.test(ua)) {
+            detected = 'windows';
+        }
+        const targetBtn = document.querySelector(`.psm-plat-btn[data-platform="${detected}"]`);
+        if (targetBtn) {
+            platBtns.forEach(b => b.classList.remove('active'));
+            targetBtn.classList.add('active');
+            activePlatform = detected;
+            if (downloadCta && downloadPlatforms[detected]) {
+                const conf = downloadPlatforms[detected];
+                downloadCta.href = conf.url;
+                if (conf.target) {
+                    downloadCta.target = conf.target;
+                } else {
+                    downloadCta.removeAttribute('target');
+                }
+            }
+        }
+    })();
+
+    // === 4. Gallery Carousel Navigation & Lightbox ===
+    const galleryTrack = document.getElementById('galleryTrack');
+    const galleryPrev = document.getElementById('galleryPrev');
+    const galleryNext = document.getElementById('galleryNext');
+
+    if (galleryTrack && galleryPrev && galleryNext) {
+        function getScrollStep() {
+            const card = galleryTrack.querySelector('.psm-gallery-card');
+            return card ? (card.offsetWidth + 16) : 360;
         }
 
-        fDots.forEach((d, i) => {
-            d.addEventListener('click', () => updateFeatureSlide(i));
+        galleryPrev.addEventListener('click', () => {
+            galleryTrack.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
+        });
+        galleryNext.addEventListener('click', () => {
+            galleryTrack.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
         });
 
-        if (btnFeatPrev) btnFeatPrev.addEventListener('click', () => updateFeatureSlide(fIndex - 1));
-        if (btnFeatNext) btnFeatNext.addEventListener('click', () => updateFeatureSlide(fIndex + 1));
+        const viewAllGallery = document.getElementById('viewAllGallery');
+        if (viewAllGallery) {
+            viewAllGallery.addEventListener('click', () => {
+                galleryTrack.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
+            });
+        }
     }
-})();
+
+    // Lightbox Logic
+    const lightbox = document.getElementById('psmLightbox');
+    const lightboxImg = document.getElementById('psmLightboxImg');
+    const lightboxClose = document.getElementById('psmLightboxClose');
+    const galleryCards = document.querySelectorAll('.psm-gallery-card');
+
+    galleryCards.forEach(card => {
+        card.addEventListener('click', function () {
+            const fullSrc = this.getAttribute('data-full') || this.querySelector('img').src;
+            if (lightbox && lightboxImg) {
+                lightboxImg.src = fullSrc;
+                lightbox.classList.add('open');
+            }
+        });
+    });
+
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', () => lightbox.classList.remove('open'));
+    }
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) lightbox.classList.remove('open');
+        });
+    }
+
+    // === 5. Install Guide Modal Logic ===
+    const guideModal = document.getElementById('guideModal');
+    const openGuideBtns = document.querySelectorAll('.open-guide-btn');
+    const closeGuideBtn = document.getElementById('closeGuideBtn');
+    const modalTabs = document.querySelectorAll('.psm-modal-tab-btn');
+    const modalTabContents = document.querySelectorAll('.psm-modal-content');
+
+    function openGuide(tabName = 'android') {
+        if (!guideModal) return;
+        guideModal.classList.add('open');
+        switchModalTab(tabName);
+    }
+
+    function closeGuide() {
+        if (guideModal) guideModal.classList.remove('open');
+    }
+
+    function switchModalTab(tabName) {
+        modalTabs.forEach(btn => {
+            if (btn.getAttribute('data-tab') === tabName) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        modalTabContents.forEach(content => {
+            if (content.getAttribute('data-content') === tabName) {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
+            }
+        });
+    }
+
+    openGuideBtns.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const tab = this.getAttribute('data-guide-tab') || 'android';
+            openGuide(tab);
+        });
+    });
+
+    modalTabs.forEach(tabBtn => {
+        tabBtn.addEventListener('click', function () {
+            switchModalTab(this.getAttribute('data-tab'));
+        });
+    });
+
+    if (closeGuideBtn) closeGuideBtn.addEventListener('click', closeGuide);
+    if (guideModal) {
+        guideModal.addEventListener('click', (e) => {
+            if (e.target === guideModal) closeGuide();
+        });
+    }
+
+    // === 6. Download Platform Selection Modal Logic ===
+    const downloadModal = document.getElementById('downloadModal');
+    const closeDownloadModalBtn = document.getElementById('closeDownloadModalBtn');
+    const downloadTriggerBtns = document.querySelectorAll('.open-download-modal, #downloadCta');
+    const dlCards = document.querySelectorAll('.psm-dl-card');
+
+    function openDownloadModal() {
+        if (!downloadModal) return;
+        downloadModal.classList.add('open');
+    }
+
+    function closeDownloadModal() {
+        if (downloadModal) downloadModal.classList.remove('open');
+    }
+
+    downloadTriggerBtns.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            openDownloadModal();
+        });
+    });
+
+    if (closeDownloadModalBtn) {
+        closeDownloadModalBtn.addEventListener('click', closeDownloadModal);
+    }
+
+    if (downloadModal) {
+        downloadModal.addEventListener('click', (e) => {
+            if (e.target === downloadModal) closeDownloadModal();
+        });
+    }
+
+    dlCards.forEach(card => {
+        card.addEventListener('click', function () {
+            setTimeout(closeDownloadModal, 400);
+        });
+    });
+
+    // ESC key closes all modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (lightbox && lightbox.classList.contains('open')) lightbox.classList.remove('open');
+            if (guideModal && guideModal.classList.contains('open')) guideModal.classList.remove('open');
+            if (downloadModal && downloadModal.classList.contains('open')) closeDownloadModal();
+        }
+    });
+});
