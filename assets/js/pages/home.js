@@ -78,11 +78,47 @@
         if (arrowNext) arrowNext.addEventListener('click', nextSlide);
         if (arrowPrev) arrowPrev.addEventListener('click', prevSlide);
 
-        function resetAutoPlay() {
+        function startAutoPlay() {
             if (timer) clearInterval(timer);
-            timer = setInterval(nextSlide, 4500);
+            timer = setInterval(function () {
+                if (!document.hidden) {
+                    nextSlide();
+                }
+            }, 6500);
         }
-        resetAutoPlay();
+
+        function resetAutoPlay() {
+            startAutoPlay();
+        }
+
+        // Delay starting autoplay until page is fully settled so LCP settles cleanly
+        if (document.readyState === 'complete') {
+            setTimeout(startAutoPlay, 3500);
+        } else {
+            window.addEventListener('load', function () {
+                setTimeout(startAutoPlay, 3000);
+            });
+        }
+
+        // Preload next slides in idle time
+        function preloadOtherSlides() {
+            slides.forEach(function (slide, idx) {
+                if (idx === 0) return;
+                var imgs = slide.querySelectorAll('img');
+                imgs.forEach(function (img) {
+                    if (img.loading === 'lazy') {
+                        img.loading = 'eager';
+                    }
+                });
+            });
+        }
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(preloadOtherSlides, { timeout: 3000 });
+        } else {
+            window.addEventListener('load', function () {
+                setTimeout(preloadOtherSlides, 1000);
+            });
+        }
 
         // Touch Swipe Handling on Mobile
         let startX = 0;

@@ -2,7 +2,7 @@
 <html lang="vi">
 
 <head>
-    <script src="/assets/js/core/fbclid-cleaner.js"></script>
+    <script defer src="/assets/js/core/fbclid-cleaner.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lamon Game | Cổng Game MMORPG 3D Đa Nền Tảng Hàng Đầu</title>
@@ -29,8 +29,12 @@
         content="Cổng game online giải trí đa nền tảng với các tựa game hot MMORPG 3D, tiên hiệp, nhập vai hấp dẫn." />
     <meta name="twitter:image" content="https://lamongame.com/images/tmgt/tmgt-banner.jpg" />
 
-    <link rel="icon" href="/images/logo.jpg" type="image/x-icon" sizes="32x32">
-    <link rel="preload" as="image" href="/images/tmgt/tmgt-banner.jpg">
+    <link rel="icon" href="/images/logo.webp" type="image/webp">
+    <link rel="alternate icon" href="/images/logo.png" type="image/png">
+
+    <!-- Responsive Preload for LCP Hero Banner -->
+    <link rel="preload" as="image" href="/images/tmgt/tmgt-banner-mobile.webp" media="(max-width: 767.98px)">
+    <link rel="preload" as="image" href="/images/tmgt/tmgt-banner.webp" media="(min-width: 768px)">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,33 +43,34 @@
         href="https://fonts.googleapis.com/css2?family=Alegreya+SC:ital,wght@0,700;0,800;0,900;1,700&family=Cinzel:wght@700;800;900&family=Philosopher:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <!-- Google Tag Manager & Analytics -->
-    <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MWFF33CD"></script>
+    <!-- Google Tag Manager & Single GA4 Script with Multi-Config -->
+    <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-MWFF33CD"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QWZDCG2D5J"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { window.dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-QWZDCG2D5J');
-    </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR75NX67PE"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { window.dataLayer.push(arguments); }
-        gtag('js', new Date());
         gtag('config', 'G-MR75NX67PE');
     </script>
 
-    <!-- Hotjar -->
+    <!-- Hotjar (Deferred to idle / user interaction for performance) -->
     <script>
-        (function (h, o, t, j, a, r) {
-            h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
-            h._hjSettings = { hjid: 5262487, hjsv: 6 };
-            a = o.getElementsByTagName('head')[0];
-            r = o.createElement('script'); r.async = 1;
-            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        function initHotjar() {
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
+                h._hjSettings = { hjid: 5262487, hjsv: 6 };
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script'); r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        }
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(initHotjar, { timeout: 3500 });
+        } else {
+            window.addEventListener('load', function () { setTimeout(initHotjar, 2500); });
+        }
     </script>
 
     <!-- Theme Manager Init (Anti-FOUC) -->
@@ -76,14 +81,13 @@
         })();
     </script>
 
-    <!-- Shared & Game Stylesheets -->
-    <link rel="stylesheet" href="/games/public/game.css">
+    <!-- Core Stylesheets -->
     <link rel="stylesheet" href="/assets/css/pages/home.css">
     <link rel="stylesheet" href="/assets/css/components/theme-light.css">
     <link rel="stylesheet" href="/assets/css/pages/portal-pc-layout.css">
 
     <!-- Tracking Scripts -->
-    <script src="/next/static/chunks/track.js"></script>
+    <script defer src="/next/static/chunks/track.js"></script>
 </head>
 
 <body class="__className_73ee6c">
@@ -94,7 +98,10 @@
             <div class="pc-header-container">
                 <div class="portal-brand">
                     <a href="/" class="portal-logo-link">
-                        <img src="/images/logo.jpg?v=2" alt="Logo Lamon Game" class="portal-logo-img" width="34" height="34">
+                        <picture>
+                            <source srcset="/images/logo.webp?v=4" type="image/webp">
+                            <img src="/images/logo.png?v=4" alt="Logo Lamon Game" class="portal-logo-img" width="34" height="34" decoding="async">
+                        </picture>
                         <span class="portal-brand-name">LAMON GAME</span>
                     </a>
                     <div class="portal-badge-live">
@@ -160,19 +167,16 @@
                     <div class="portal-hero-slide active">
                         <a href="/games/than-ma-giang-the/" data-track="banner-slide-tmgt">
                             <picture>
-                                <!-- Màn hình lớn (Large Desktop / 2K, 4K: >= 1400px) -->
-                                <source media="(min-width: 1400px)" srcset="/images/tmgt/tmgt-banner.jpg">
-                                <!-- Desktop / Laptop tiêu chuẩn (1200px – 1399px) -->
+                                <!-- Desktop lớn (>= 1200px) -->
+                                <source media="(min-width: 1200px)" srcset="/images/tmgt/tmgt-banner.webp" type="image/webp">
                                 <source media="(min-width: 1200px)" srcset="/images/tmgt/tmgt-banner.jpg">
-                                <!-- Tablet xoay ngang / Laptop nhỏ (992px – 1199px) -->
-                                <source media="(min-width: 992px)" srcset="/images/tmgt/tmgt-banner-size-16,9.jpg">
-                                <!-- Tablet máy tính bảng dọc (768px – 991px) -->
+                                <!-- Tablet / Laptop nhỏ (768px - 1199px) -->
+                                <source media="(min-width: 768px)" srcset="/images/tmgt/tmgt-banner-size-16,9.webp" type="image/webp">
                                 <source media="(min-width: 768px)" srcset="/images/tmgt/tmgt-banner-size-16,9.jpg">
-                                <!-- Mobile lớn / Phablet (576px – 767px) -->
-                                <source media="(min-width: 576px)" srcset="/images/tmgt/tmgt-banner-size-16,9.jpg">
-                                <!-- Mobile nhỏ (Extra Small: < 576px, phổ biến 360px – 414px) -->
-                                <img src="/images/tmgt/tmgt-banner-size-16,9.jpg"
-                                    alt="Thần Ma Giáng Thế — MMORPG 3D Đỉnh Cao" width="1672" height="941" fetchpriority="high">
+                                <!-- Mobile (< 768px) -->
+                                <source srcset="/images/tmgt/tmgt-banner-mobile.webp" type="image/webp">
+                                <img src="/images/tmgt/tmgt-banner-mobile.webp"
+                                    alt="Thần Ma Giáng Thế — MMORPG 3D Đỉnh Cao" width="640" height="360" fetchpriority="high" decoding="async">
                             </picture>
 
                             <!-- Overlay PC Layout -->
@@ -200,7 +204,7 @@
                                 <span class="portal-slide-badge">🔥 SIÊU PHẨM MMORPG 3D</span>
                                 <h2 class="portal-slide-title">THẦN MA GIÁNG THẾ — KHÔNG CHIẾN RỰC LỬA</h2>
                                 <p class="portal-slide-desc">Bát Đại Môn Phái tự do chuyển phái, ấp trứng hóa rồng và
-                                    phúc lợi 3.000 Ruby/tháng. Tải ngay!</p>
+                                        phúc lợi 3.000 Ruby/tháng. Tải ngay!</p>
                             </div>
                         </a>
                     </div>
@@ -209,18 +213,15 @@
                     <div class="portal-hero-slide">
                         <a href="/games/phu-sinh-mong/" data-track="banner-slide-psm">
                             <picture>
-                                <!-- Màn hình lớn (Large Desktop / 2K, 4K: >= 1400px) -->
-                                <source media="(min-width: 1400px)" srcset="/images/psm/psm-banner.jpg">
-                                <!-- Desktop / Laptop tiêu chuẩn (1200px – 1399px) -->
+                                <!-- Desktop lớn (>= 1200px) -->
+                                <source media="(min-width: 1200px)" srcset="/images/psm/psm-banner.webp" type="image/webp">
                                 <source media="(min-width: 1200px)" srcset="/images/psm/psm-banner.jpg">
-                                <!-- Tablet xoay ngang / Laptop nhỏ (992px – 1199px) -->
-                                <source media="(min-width: 992px)" srcset="/images/psm/psm-banner-size-16,9.jpg">
-                                <!-- Tablet máy tính bảng dọc (768px – 991px) -->
+                                <!-- Tablet / Laptop nhỏ (768px - 1199px) -->
+                                <source media="(min-width: 768px)" srcset="/images/psm/psm-banner-size-16,9.webp" type="image/webp">
                                 <source media="(min-width: 768px)" srcset="/images/psm/psm-banner-size-16,9.jpg">
-                                <!-- Mobile lớn / Phablet (576px – 767px) -->
-                                <source media="(min-width: 576px)" srcset="/images/psm/psm-banner-size-16,9.jpg">
-                                <!-- Mobile nhỏ (Extra Small: < 576px, phổ biến 360px – 414px) -->
-                                <img src="/images/psm/psm-banner-mobile.jpg" alt="Phù Sinh Mộng — Tiên Hiệp 3D" width="1448" height="1086" loading="lazy">
+                                <!-- Mobile (< 768px) -->
+                                <source srcset="/images/psm/psm-banner-mobile.webp" type="image/webp">
+                                <img src="/images/psm/psm-banner-mobile.webp" alt="Phù Sinh Mộng — Tiên Hiệp 3D" width="640" height="360" loading="lazy" decoding="async">
                             </picture>
                             <div class="hero-pc-overlay">
                                 <div class="hero-content-left">
@@ -239,7 +240,7 @@
                                     DUYÊN</span>
                                 <h2 class="portal-slide-title">PHÙ SINH MỘNG — THẾ GIỚI TIÊN HIỆP MỸ LỆ</h2>
                                 <p class="portal-slide-desc">Đồ họa sắc nét, thần thú thượng cổ cùng dàn ảo hóa tuyệt
-                                    đỉnh tại cổng game Lamon Game.</p>
+                                        đỉnh tại cổng game Lamon Game.</p>
                             </div>
                         </a>
                     </div>
@@ -248,19 +249,16 @@
                     <div class="portal-hero-slide">
                         <a href="/games/tan-binh-thuc-tinh/" data-track="banner-slide-tbtt">
                             <picture>
-                                <!-- Màn hình lớn (Large Desktop / 2K, 4K: >= 1400px) -->
-                                <source media="(min-width: 1400px)" srcset="/images/tbtt/tbtt-banner.jpg">
-                                <!-- Desktop / Laptop tiêu chuẩn (1200px – 1399px) -->
+                                <!-- Desktop lớn (>= 1200px) -->
+                                <source media="(min-width: 1200px)" srcset="/images/tbtt/tbtt-banner.webp" type="image/webp">
                                 <source media="(min-width: 1200px)" srcset="/images/tbtt/tbtt-banner.jpg">
-                                <!-- Tablet xoay ngang / Laptop nhỏ (992px – 1199px) -->
-                                <source media="(min-width: 992px)" srcset="/images/tbtt/tbtt-banner-size-16,9.jpg">
-                                <!-- Tablet máy tính bảng dọc (768px – 991px) -->
+                                <!-- Tablet / Laptop nhỏ (768px - 1199px) -->
+                                <source media="(min-width: 768px)" srcset="/images/tbtt/tbtt-banner-size-16,9.webp" type="image/webp">
                                 <source media="(min-width: 768px)" srcset="/images/tbtt/tbtt-banner-size-16,9.jpg">
-                                <!-- Mobile lớn / Phablet (576px – 767px) -->
-                                <source media="(min-width: 576px)" srcset="/images/tbtt/tbtt-banner-size-16,9.jpg">
-                                <!-- Mobile nhỏ (Extra Small: < 576px, phổ biến 360px – 414px) -->
-                                <img src="/images/tbtt/tbtt-banner-size-16,9.jpg"
-                                    alt="Tân Binh Thức Tỉnh — Anime Thẻ Tướng" width="1672" height="941" loading="lazy">
+                                <!-- Mobile (< 768px) -->
+                                <source srcset="/images/tbtt/tbtt-banner-mobile.webp" type="image/webp">
+                                <img src="/images/tbtt/tbtt-banner-mobile.webp"
+                                    alt="Tân Binh Thức Tỉnh — Anime Thẻ Tướng" width="640" height="360" loading="lazy" decoding="async">
                             </picture>
                             <div class="hero-pc-overlay">
                                 <div class="hero-content-left">
@@ -368,7 +366,10 @@
                         <!-- Game 1: Thần Ma Giáng Thế -->
                         <a href="/games/than-ma-giang-the/" class="portal-app-item" data-track="card-tmgt">
                             <div class="portal-app-thumb-wrap">
-                                <img src="/images/tmgt/tmgt-logo.jpg" alt="Thần Ma Giáng Thế" class="portal-app-thumb" width="180" height="180" loading="lazy">
+                                <picture>
+                                    <source srcset="/images/tmgt/tmgt-logo.webp" type="image/webp">
+                                    <img src="/images/tmgt/tmgt-logo.jpg" alt="Thần Ma Giáng Thế" class="portal-app-thumb" width="180" height="180" decoding="async">
+                                </picture>
                             </div>
                             <div class="portal-app-meta">
                                 <span class="portal-app-name">Thần Ma Giáng Thế</span>
@@ -378,7 +379,10 @@
                         <!-- Game 2: Phù Sinh Mộng -->
                         <a href="/games/phu-sinh-mong/" class="portal-app-item" data-track="card-psm">
                             <div class="portal-app-thumb-wrap">
-                                <img src="/images/psm/psm-logo.jpg" alt="Phù Sinh Mộng" class="portal-app-thumb" width="180" height="180" loading="lazy">
+                                <picture>
+                                    <source srcset="/images/psm/psm-logo.webp" type="image/webp">
+                                    <img src="/images/psm/psm-logo.jpg" alt="Phù Sinh Mộng" class="portal-app-thumb" width="180" height="180" decoding="async">
+                                </picture>
                             </div>
                             <div class="portal-app-meta">
                                 <span class="portal-app-name">Phù Sinh Mộng</span>
@@ -388,7 +392,10 @@
                         <!-- Game 3: Tân Binh Thức Tỉnh -->
                         <a href="/games/tan-binh-thuc-tinh/" class="portal-app-item" data-track="card-tbtt">
                             <div class="portal-app-thumb-wrap">
-                                <img src="/images/tbtt/tbtt-logo.jpg" alt="Tân Binh Thức Tỉnh" class="portal-app-thumb" width="180" height="180" loading="lazy">
+                                <picture>
+                                    <source srcset="/images/tbtt/tbtt-logo.webp" type="image/webp">
+                                    <img src="/images/tbtt/tbtt-logo.jpg" alt="Tân Binh Thức Tỉnh" class="portal-app-thumb" width="180" height="180" decoding="async">
+                                </picture>
                             </div>
                             <div class="portal-app-meta">
                                 <span class="portal-app-name">Tân Binh Thức Tỉnh</span>
@@ -400,8 +407,11 @@
                             class="portal-app-item is-upcoming" data-track="card-tyhm">
                             <div class="portal-app-thumb-wrap">
                                 <span class="portal-badge-upcoming">Sắp ra mắt</span>
-                                <img src="/images/upcoming/upcoming-logo.jpg" alt="Trấn Yêu Hàng Ma — Sắp ra mắt"
-                                    class="portal-app-thumb" width="180" height="180" loading="lazy">
+                                <picture>
+                                    <source srcset="/images/upcoming/upcoming-logo.webp" type="image/webp">
+                                    <img src="/images/upcoming/upcoming-logo.jpg" alt="Trấn Yêu Hàng Ma — Sắp ra mắt"
+                                        class="portal-app-thumb" width="180" height="180" decoding="async">
+                                </picture>
                             </div>
                             <div class="portal-app-meta">
                                 <span class="portal-app-name">Sắp Ra Mắt</span>
@@ -426,11 +436,17 @@
                     <div class="portal-promo-grid">
                         <a class="portal-promo-card" href="https://www.facebook.com/share/p/16XdXvQTcm/" target="_blank"
                             rel="noopener noreferrer" data-track="home-promo-nap4">
-                            <img src="/images/welfare/ho-tro-nap-x4.png" alt="Sự kiện hỗ trợ nạp x4" width="1672" height="941" loading="lazy">
+                            <picture>
+                                <source srcset="/images/welfare/ho-tro-nap-x4.webp" type="image/webp">
+                                <img src="/images/welfare/ho-tro-nap-x4.png" alt="Sự kiện hỗ trợ nạp x4" width="800" height="450" loading="lazy" decoding="async">
+                            </picture>
                         </a>
                         <a class="portal-promo-card" href="https://www.facebook.com/share/p/18Cjx6PyqD/" target="_blank"
                             rel="noopener noreferrer" data-track="home-promo-nguoicu">
-                            <img src="/images/welfare/nguoi-cu-quay-ve.png" alt="Sự kiện người cũ quay về nhận quà VIP" width="1672" height="941" loading="lazy">
+                            <picture>
+                                <source srcset="/images/welfare/nguoi-cu-quay-ve.webp" type="image/webp">
+                                <img src="/images/welfare/nguoi-cu-quay-ve.png" alt="Sự kiện người cũ quay về nhận quà VIP" width="800" height="450" loading="lazy" decoding="async">
+                            </picture>
                         </a>
                     </div>
                 </section>
@@ -451,8 +467,11 @@
                     <div class="portal-giftcode-grid">
                         <!-- Giftcode 1: Thần Ma Giáng Thế -->
                         <div class="portal-giftcode-card">
-                            <img src="/images/tmgt/tmgt-logo.jpg" alt="Thần Ma Giáng Thế"
-                                class="portal-giftcode-avatar" width="56" height="56" loading="lazy">
+                            <picture>
+                                <source srcset="/images/tmgt/tmgt-logo.webp" type="image/webp">
+                                <img src="/images/tmgt/tmgt-logo.jpg" alt="Thần Ma Giáng Thế"
+                                    class="portal-giftcode-avatar" width="56" height="56" loading="lazy" decoding="async">
+                            </picture>
                             <div class="portal-giftcode-info">
                                 <h4>Thần Ma Giáng Thế</h4>
                                 <p class="portal-giftcode-stat">🎁 Quà: Free 200k nạp đầu + 2399 Ruby</p>
@@ -466,7 +485,10 @@
 
                         <!-- Giftcode 2: Phù Sinh Mộng -->
                         <div class="portal-giftcode-card">
-                            <img src="/images/psm/psm-logo.jpg" alt="Phù Sinh Mộng" class="portal-giftcode-avatar" width="56" height="56" loading="lazy">
+                            <picture>
+                                <source srcset="/images/psm/psm-logo.webp" type="image/webp">
+                                <img src="/images/psm/psm-logo.jpg" alt="Phù Sinh Mộng" class="portal-giftcode-avatar" width="56" height="56" loading="lazy" decoding="async">
+                            </picture>
                             <div class="portal-giftcode-info">
                                 <h4>Phù Sinh Mộng</h4>
                                 <p class="portal-giftcode-stat">🎁 Quà: Code Tân Thủ + Quà Đăng Ký VIP</p>
@@ -480,8 +502,11 @@
 
                         <!-- Giftcode 3: Tân Binh Thức Tỉnh -->
                         <div class="portal-giftcode-card">
-                            <img src="/images/tbtt/tbtt-logo.jpg" alt="Tân Binh Thức Tỉnh"
-                                class="portal-giftcode-avatar" width="56" height="56" loading="lazy">
+                            <picture>
+                                <source srcset="/images/tbtt/tbtt-logo.webp" type="image/webp">
+                                <img src="/images/tbtt/tbtt-logo.jpg" alt="Tân Binh Thức Tỉnh"
+                                    class="portal-giftcode-avatar" width="56" height="56" loading="lazy" decoding="async">
+                            </picture>
                             <div class="portal-giftcode-info">
                                 <h4>Tân Binh Thức Tỉnh</h4>
                                 <p class="portal-giftcode-stat">🎁 Quà: Code Tân Thủ + Rương Đồ Đỏ & KNB</p>
@@ -513,10 +538,11 @@
                         <a href="/games/than-ma-giang-the/" class="portal-news-card" data-track="home-news-tmgt">
                             <div class="portal-news-img-wrap">
                                 <picture>
-                                    <source media="(min-width: 1200px)" srcset="/images/tmgt/tmgt-banner-size-16,9.jpg">
-                                    <source media="(min-width: 576px)" srcset="/images/tmgt/tmgt-banner-size-16,9.jpg">
-                                    <img src="/images/tmgt/tmgt-banner-size-16,9.jpg"
-                                        alt="Thần Ma Giáng Thế - Khai mở server" width="1672" height="941" loading="lazy">
+                                    <source media="(min-width: 768px)" srcset="/images/tmgt/tmgt-banner-size-16,9.webp" type="image/webp">
+                                    <source media="(min-width: 768px)" srcset="/images/tmgt/tmgt-banner-size-16,9.jpg">
+                                    <source srcset="/images/tmgt/tmgt-banner-mobile.webp" type="image/webp">
+                                    <img src="/images/tmgt/tmgt-banner-mobile.webp"
+                                        alt="Thần Ma Giáng Thế - Khai mở server" width="640" height="360" loading="lazy" decoding="async">
                                 </picture>
                             </div>
                             <div class="portal-news-body">
@@ -532,10 +558,11 @@
                         <a href="/games/tan-binh-thuc-tinh/" class="portal-news-card" data-track="home-news-tbtt">
                             <div class="portal-news-img-wrap">
                                 <picture>
-                                    <source media="(min-width: 1200px)" srcset="/images/tbtt/tbtt-banner-size-16,9.jpg">
-                                    <source media="(min-width: 576px)" srcset="/images/tbtt/tbtt-banner-size-16,9.jpg">
-                                    <img src="/images/tbtt/tbtt-banner-size-16,9.jpg"
-                                        alt="Tân Binh Thức Tỉnh - Khai mở server" width="1672" height="941" loading="lazy">
+                                    <source media="(min-width: 768px)" srcset="/images/tbtt/tbtt-banner-size-16,9.webp" type="image/webp">
+                                    <source media="(min-width: 768px)" srcset="/images/tbtt/tbtt-banner-size-16,9.jpg">
+                                    <source srcset="/images/tbtt/tbtt-banner-mobile.webp" type="image/webp">
+                                    <img src="/images/tbtt/tbtt-banner-mobile.webp"
+                                        alt="Tân Binh Thức Tỉnh - Khai mở server" width="640" height="360" loading="lazy" decoding="async">
                                 </picture>
                             </div>
                             <div class="portal-news-body">
@@ -551,10 +578,11 @@
                         <a href="/games/phu-sinh-mong/" class="portal-news-card" data-track="home-news-psm">
                             <div class="portal-news-img-wrap">
                                 <picture>
-                                    <source media="(min-width: 1200px)" srcset="/images/psm/psm-banner-size-16,9.jpg">
-                                    <source media="(min-width: 576px)" srcset="/images/psm/psm-banner-size-16,9.jpg">
-                                    <img src="/images/psm/psm-banner-size-16,9.jpg" alt="Phù Sinh Mộng - Khai mở server" width="1672" height="941"
-                                        loading="lazy">
+                                    <source media="(min-width: 768px)" srcset="/images/psm/psm-banner-size-16,9.webp" type="image/webp">
+                                    <source media="(min-width: 768px)" srcset="/images/psm/psm-banner-size-16,9.jpg">
+                                    <source srcset="/images/psm/psm-banner-mobile.webp" type="image/webp">
+                                    <img src="/images/psm/psm-banner-mobile.webp" alt="Phù Sinh Mộng - Khai mở server" width="640" height="360"
+                                        loading="lazy" decoding="async">
                                 </picture>
                             </div>
                             <div class="portal-news-body">
@@ -633,7 +661,10 @@
                     <!-- Cột 1: Thông tin thương hiệu -->
                     <div class="pc-footer-col brand-col">
                         <div class="pc-footer-logo-row">
-                            <img src="/images/logo.jpg?v=2" alt="Logo Lamon Game" class="pc-footer-logo" width="34" height="34" loading="lazy">
+                            <picture>
+                                <source srcset="/images/logo.webp?v=4" type="image/webp">
+                                <img src="/images/logo.png?v=4" alt="Logo Lamon Game" class="pc-footer-logo" width="34" height="34" loading="lazy">
+                            </picture>
                             <span class="pc-footer-brand-name">LAMON GAME</span>
                         </div>
                         <p class="pc-footer-slogan">Play More, Live Bigger.</p>
