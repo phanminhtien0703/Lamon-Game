@@ -583,6 +583,12 @@ body {
     transform: scale(1.02);
 }
 
+.portal-app-thumb-wrap picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
 .portal-app-thumb {
     width: 100%;
     height: 100%;
