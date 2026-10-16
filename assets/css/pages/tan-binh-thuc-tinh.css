@@ -520,18 +520,24 @@ body.tbtt-body::-webkit-scrollbar-thumb:hover {
 .tbtt-couplet-wrap {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
+    background: transparent;
+    border: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    padding: 0;
 }
 
 .tbtt-couplet-col {
     writing-mode: vertical-rl;
     text-orientation: upright;
     font-family: var(--tbtt-font-heading);
-    font-size: 1.22rem;
+    font-size: 1.25rem;
     font-weight: 900;
     letter-spacing: 8px;
     color: #ffffff;
-    text-shadow: 0 0 16px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.9);
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 12px rgba(56, 189, 248, 0.5));
     user-select: none;
     line-height: 1.35;
     background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 60%, #bae6fd 100%);
@@ -542,8 +548,8 @@ body.tbtt-body::-webkit-scrollbar-thumb:hover {
 .tbtt-seal {
     width: 32px;
     height: 32px;
-    border-radius: 4px;
-    background: var(--tbtt-crimson);
+    border-radius: 6px;
+    background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 50%, #0284c7 100%);
     color: #ffffff;
     font-family: var(--tbtt-font-heading);
     font-size: 0.95rem;
@@ -551,8 +557,8 @@ body.tbtt-body::-webkit-scrollbar-thumb:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 12px rgba(225, 29, 72, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 /* ==========================================================================
