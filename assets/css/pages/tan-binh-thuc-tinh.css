@@ -48,13 +48,16 @@ body.tbtt-body {
 body.tbtt-body::-webkit-scrollbar {
     width: 8px;
 }
+
 body.tbtt-body::-webkit-scrollbar-track {
     background: #080c14;
 }
+
 body.tbtt-body::-webkit-scrollbar-thumb {
     background: #273145;
     border-radius: 4px;
 }
+
 body.tbtt-body::-webkit-scrollbar-thumb:hover {
     background: var(--tbtt-gold);
 }
@@ -1307,7 +1310,8 @@ body.tbtt-body::-webkit-scrollbar-thumb:hover {
     }
 
     .tbtt-nav-menu {
-        display: none; /* Hide top links on mobile, keep brand & action */
+        display: none;
+        /* Hide top links on mobile, keep brand & action */
     }
 
     .tbtt-hero {
