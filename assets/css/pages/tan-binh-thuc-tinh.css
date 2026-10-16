@@ -1,0 +1,1764 @@
+/* ==========================================================================
+   TÂN BINH THỨC TỈNH — MASTER LANDING STYLESHEET
+   File: assets/css/pages/tan-binh-thuc-tinh.css
+   Theme: Anime Chiến Thuật, Hải Trình Kỳ Ảo, Thức Tỉnh Tiềm Năng
+   Thiết kế chuẩn tỉ lệ và bố cục 100% đồng bộ với Phù Sinh Mộng
+   ========================================================================== */
+
+:root {
+    --tbtt-gold: #f59e0b;
+    --tbtt-gold-hover: #fbbf24;
+    --tbtt-gold-glow: rgba(245, 158, 11, 0.45);
+    --tbtt-crimson: #e11d48;
+    --tbtt-crimson-hover: #f43f5e;
+    --tbtt-crimson-glow: rgba(225, 29, 72, 0.45);
+    --tbtt-blue: #38bdf8;
+    --tbtt-dark-bg: #07090f;
+    --tbtt-dark-surface: rgba(14, 18, 27, 0.78);
+    --tbtt-card-border: rgba(255, 255, 255, 0.08);
+    --tbtt-card-border-active: #f59e0b;
+    --tbtt-text-main: #f8fafc;
+    --tbtt-text-muted: #94a3b8;
+    --tbtt-font-heading: 'Cinzel', 'Philosopher', 'Noto Serif', serif;
+    --tbtt-font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Reset cơ bản */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body.tbtt-body {
+    background-color: var(--tbtt-dark-bg);
+    color: var(--tbtt-text-main);
+    font-family: var(--tbtt-font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Scrollbar tùy chỉnh */
+body.tbtt-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body.tbtt-body::-webkit-scrollbar-track {
+    background: #080c14;
+}
+
+body.tbtt-body::-webkit-scrollbar-thumb {
+    background: #273145;
+    border-radius: 4px;
+}
+
+body.tbtt-body::-webkit-scrollbar-thumb:hover {
+    background: var(--tbtt-gold);
+}
+
+/* ==========================================================================
+   1. TOP NAVIGATION BAR (ĐỒNG BỘ PHÙ SINH MỘNG)
+   ========================================================================== */
+.tbtt-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 72px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+    transition: all 0.3s ease;
+}
+
+.tbtt-header.scrolled {
+    background: rgba(7, 9, 15, 0.98) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.3) !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Brand Logo */
+.tbtt-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.tbtt-brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    background: #ffffff;
+    flex-shrink: 0;
+}
+
+.tbtt-brand-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.tbtt-brand:hover .tbtt-brand-icon {
+    transform: scale(1.08);
+    border-color: var(--tbtt-gold);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+}
+
+.tbtt-brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.tbtt-brand-name {
+    font-family: var(--tbtt-font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.tbtt-brand-sub {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+}
+
+/* Main Nav Links */
+.tbtt-nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+}
+
+.tbtt-nav-link {
+    color: #f1f5f9;
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    position: relative;
+    padding: 6px 0;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.8);
+}
+
+.tbtt-nav-link:hover,
+.tbtt-nav-link.active {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.tbtt-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 100%;
+    height: 2px;
+    background: var(--tbtt-gold);
+    transition: transform 0.25s ease;
+    box-shadow: 0 0 8px var(--tbtt-gold);
+}
+
+.tbtt-nav-link:hover::after,
+.tbtt-nav-link.active::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+/* Header Right Actions */
+.tbtt-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.tbtt-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+}
+
+.tbtt-home-btn:hover {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: var(--tbtt-gold);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   2. HERO SECTION (CHUẨN TỈ LỆ clamp(560px, 72vh, 670px) NHƯ PHÙ SINH MỘNG)
+   ========================================================================== */
+.tbtt-hero {
+    position: relative;
+    min-height: clamp(560px, 72vh, 670px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 72px;
+    padding-bottom: 24px;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.35);
+    box-shadow: 0 1px 12px rgba(245, 158, 11, 0.12);
+}
+
+/* Background image & overlays */
+.tbtt-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-size: cover;
+    background-position: center 20%;
+    background-repeat: no-repeat;
+    transition: background-image 0.8s ease-in-out;
+}
+
+.tbtt-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 75% 25%, transparent 45%, rgba(7, 9, 15, 0.5) 95%),
+        linear-gradient(to right, rgba(7, 9, 15, 0.85) 0%, rgba(7, 9, 15, 0.45) 32%, rgba(7, 9, 15, 0.05) 60%, transparent 100%),
+        linear-gradient(to top, #07090f 0%, rgba(7, 9, 15, 0.8) 8%, transparent 24%);
+}
+
+/* Hero Content Flex (Center content on left, Couplet on right) */
+.tbtt-hero-container {
+    position: relative;
+    z-index: 10;
+    max-width: 1720px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    flex: 1;
+}
+
+/* 2.1 Center Hero Details */
+.tbtt-hero-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 680px;
+}
+
+.tbtt-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #fed7aa;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    margin-bottom: 18px;
+}
+
+.tbtt-hero-title {
+    font-family: var(--tbtt-font-heading);
+    font-size: clamp(2.6rem, 4.2vw, 3.6rem);
+    font-weight: 800;
+    font-style: italic;
+    line-height: 1.12;
+    margin-bottom: 10px;
+    background: linear-gradient(180deg, #ffffff 0%, #ffedd5 30%, #f59e0b 75%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 18px rgba(245, 158, 11, 0.35));
+    letter-spacing: 1px;
+}
+
+.tbtt-hero-subtitle {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    color: #f8fafc;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.tbtt-hero-desc {
+    font-size: 0.92rem;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    max-width: 580px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Platform Selectors */
+.tbtt-platforms {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.tbtt-plat-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #e2e8f0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.tbtt-plat-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
+.tbtt-plat-btn.active {
+    background: rgba(245, 158, 11, 0.22);
+    border-color: var(--tbtt-gold);
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+}
+
+/* Big Download Button */
+.tbtt-download-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-width: 220px;
+    padding: 13px 32px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 40%, #ea580c 100%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-family: var(--tbtt-font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.tbtt-download-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: skewX(-25deg);
+    transition: 0.6s ease;
+}
+
+.tbtt-download-cta:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(245, 158, 11, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.tbtt-download-cta:hover::before {
+    left: 140%;
+}
+
+.tbtt-download-cta svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+    transition: transform 0.25s ease;
+}
+
+.tbtt-download-cta:hover svg {
+    transform: translateY(2px);
+}
+
+/* Metadata underneath */
+.tbtt-meta-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+    font-size: 0.78rem;
+    color: #94a3b8;
+    flex-wrap: wrap;
+}
+
+.tbtt-meta-info span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tbtt-meta-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #64748b;
+}
+
+/* 2.2 Hero Thumbnail Carousel */
+.tbtt-hero-thumbs {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 12px;
+    background: rgba(7, 9, 15, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    margin-top: 14px;
+}
+
+.tbtt-thumb-item {
+    position: relative;
+    width: 82px;
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    opacity: 0.65;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+}
+
+.tbtt-thumb-item:hover {
+    opacity: 1;
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.tbtt-thumb-item.active {
+    opacity: 1;
+    border-color: var(--tbtt-gold);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+    transform: scale(1.05);
+}
+
+.tbtt-thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 2.3 Right Vertical Couplet & Seal (ĐỒNG BỘ PHÙ SINH MỘNG) */
+.tbtt-hero-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    height: 100%;
+}
+
+.tbtt-couplet-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tbtt-couplet-col {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-family: var(--tbtt-font-heading);
+    font-size: 1.22rem;
+    font-weight: 900;
+    letter-spacing: 8px;
+    color: #ffffff;
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.9);
+    user-select: none;
+    line-height: 1.35;
+    background: linear-gradient(180deg, #ffffff 0%, #fed7aa 60%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tbtt-seal {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    background: var(--tbtt-crimson);
+    color: #ffffff;
+    font-family: var(--tbtt-font-heading);
+    font-size: 0.95rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px rgba(225, 29, 72, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   3. SECTION: HÌNH ẢNH GAME (GALLERY)
+   ========================================================================== */
+.tbtt-gallery-section {
+    position: relative;
+    z-index: 10;
+    max-width: 1720px;
+    margin: 0 auto;
+    padding: 30px 28px 10px 28px;
+    width: 100%;
+}
+
+.tbtt-gallery-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    padding-bottom: 14px;
+}
+
+.tbtt-gallery-title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.tbtt-gallery-title {
+    font-family: var(--tbtt-font-heading);
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tbtt-gallery-title-icon {
+    color: var(--tbtt-gold);
+    font-size: 1.1rem;
+}
+
+.tbtt-gallery-sub {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.tbtt-gallery-all-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--tbtt-gold);
+    text-decoration: none;
+    font-size: 0.84rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.tbtt-gallery-all-btn:hover {
+    color: #ffffff;
+    transform: translateX(3px);
+}
+
+/* Gallery Track */
+.tbtt-gallery-container {
+    position: relative;
+    width: 100%;
+}
+
+.tbtt-gallery-track {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 4px 18px 4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tbtt-gallery-track::-webkit-scrollbar {
+    display: none;
+}
+
+.tbtt-gallery-card {
+    flex: 0 0 calc((100% - 54px) / 4);
+    min-width: 280px;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #090e18;
+    cursor: pointer;
+    scroll-snap-align: start;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tbtt-gallery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.tbtt-gallery-card:hover {
+    border-color: rgba(245, 158, 11, 0.6);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 158, 11, 0.3);
+    transform: translateY(-4px);
+}
+
+.tbtt-gallery-card:hover img {
+    transform: scale(1.06);
+}
+
+.tbtt-card-zoom-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(7, 9, 15, 0.8) 100%);
+    opacity: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+    transition: opacity 0.3s ease;
+}
+
+.tbtt-gallery-card:hover .tbtt-card-zoom-overlay {
+    opacity: 1;
+}
+
+.tbtt-card-caption {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* Nav arrows on gallery */
+.tbtt-gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(14, 18, 27, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 5;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+}
+
+.tbtt-gallery-arrow:hover {
+    background: var(--tbtt-gold);
+    border-color: var(--tbtt-gold);
+    color: #000000;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+}
+
+.tbtt-gallery-arrow.prev {
+    left: -16px;
+}
+
+.tbtt-gallery-arrow.next {
+    right: -16px;
+}
+
+/* ==========================================================================
+   4. TRUST & GUARANTEE BAR (PC: 4 Columns, Mobile: 2x2 Grid)
+   ========================================================================== */
+.tbtt-trust-section {
+    position: relative;
+    z-index: 10;
+    max-width: 1720px;
+    margin: 20px auto 35px auto;
+    padding: 0 28px;
+    width: 100%;
+}
+
+.tbtt-trust-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 22px 32px;
+    border-radius: 16px;
+    background: rgba(14, 18, 27, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    position: relative;
+}
+
+.tbtt-trust-bar::after {
+    display: none;
+}
+
+.tbtt-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    cursor: pointer;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.tbtt-trust-item:hover {
+    transform: translateY(-2px);
+}
+
+.tbtt-trust-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #090e18;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #ffffff;
+    transition: all 0.25s ease;
+}
+
+.tbtt-trust-icon-box svg {
+    display: block;
+}
+
+.tbtt-trust-item:hover .tbtt-trust-icon-box {
+    border-color: rgba(245, 158, 11, 0.6);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+    background: #14110a;
+}
+
+.tbtt-trust-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.tbtt-trust-title {
+    font-size: 0.94rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+}
+
+.tbtt-trust-desc {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: #8b9cb3;
+    line-height: 1.3;
+}
+
+/* ==========================================================================
+   5. SUPPORT & COMMUNITY SECTION (ĐỒNG BỘ PHÙ SINH MỘNG & THẦN MA GIÁNG THẾ)
+   ========================================================================== */
+.tbtt-support-section {
+    position: relative;
+    z-index: 10;
+    max-width: 1720px;
+    margin: 15px auto 35px auto;
+    padding: 0 28px;
+    width: 100%;
+}
+
+.tbtt-support-card {
+    background: rgba(14, 18, 27, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 20px;
+    padding: 26px 32px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 25px rgba(245, 158, 11, 0.15);
+}
+
+.tbtt-section-header {
+    margin-bottom: 16px;
+}
+
+.tbtt-section-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    background: rgba(245, 158, 11, 0.18);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-radius: 999px;
+    color: #fbbf24;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.tbtt-section-title {
+    font-family: var(--tbtt-font-heading);
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.tbtt-support-alert {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: #fed7aa;
+    font-size: 0.88rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* 4 Buttons: 4 columns on PC, 2 columns on Mobile */
+.tbtt-support-tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.tbtt-support-tile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    min-width: 0;
+}
+
+.tbtt-support-tile:hover {
+    background: rgba(245, 158, 11, 0.18);
+    border-color: var(--tbtt-gold);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+    transform: translateY(-2px);
+}
+
+.tbtt-support-icon {
+    font-size: 1.35rem;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+}
+
+.tbtt-support-tile:hover .tbtt-support-icon {
+    background: rgba(245, 158, 11, 0.25);
+    border-color: var(--tbtt-gold);
+}
+
+.tbtt-support-label {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.3;
+    word-break: break-word;
+}
+
+/* ==========================================================================
+   6. FOOTER COPYRIGHT
+   ========================================================================== */
+.tbtt-footer {
+    position: relative;
+    z-index: 10;
+    margin-top: 16px;
+    border-top: 1px solid rgba(245, 158, 11, 0.15);
+    background: #04060a;
+    padding: 20px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.tbtt-footer-copy {
+    font-size: 0.78rem;
+    color: #64748b;
+}
+
+/* ==========================================================================
+   7. MODALS & LIGHTBOX (ĐỒNG BỘ PHÙ SINH MỘNG)
+   ========================================================================== */
+/* Lightbox */
+.tbtt-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tbtt-lightbox.open {
+    display: flex;
+    opacity: 1;
+}
+
+.tbtt-lightbox-img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.tbtt-lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.tbtt-lightbox-close:hover {
+    color: var(--tbtt-gold);
+}
+
+/* Install Guide & Support Modal */
+.tbtt-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9990;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tbtt-modal-backdrop.open {
+    display: flex;
+    opacity: 1;
+}
+
+.tbtt-modal-box {
+    position: relative;
+    max-width: 540px;
+    width: 90%;
+    background: #0d121d;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.15);
+    color: #ffffff;
+}
+
+.tbtt-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.tbtt-modal-close:hover {
+    color: #ffffff;
+}
+
+.tbtt-modal-title {
+    font-family: var(--tbtt-font-heading);
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tbtt-modal-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+}
+
+.tbtt-modal-tab-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.tbtt-modal-tab-btn:hover {
+    color: #ffffff;
+}
+
+.tbtt-modal-tab-btn.active {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--tbtt-gold);
+}
+
+.tbtt-step-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tbtt-step-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.tbtt-step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid var(--tbtt-gold);
+    color: #fbbf24;
+    font-weight: 700;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tbtt-step-text {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   7B. PLATFORM DOWNLOAD MODAL (MOCKUP EXACT ĐỒNG BỘ PHÙ SINH MỘNG)
+   ========================================================================== */
+.tbtt-download-modal-box {
+    max-width: 480px;
+    width: 92%;
+    padding: 32px 30px 24px 30px;
+    background: #0b0f19;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(225, 29, 72, 0.12);
+}
+
+.tbtt-dl-header {
+    margin-bottom: 22px;
+}
+
+.tbtt-dl-badge {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 800;
+    color: var(--tbtt-crimson);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.tbtt-dl-title {
+    font-family: var(--tbtt-font-body);
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+}
+
+.tbtt-dl-sub {
+    font-size: 0.9rem;
+    color: #8b9cb3;
+    font-weight: 400;
+}
+
+.tbtt-dl-platforms {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.tbtt-dl-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 18px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.22s ease;
+    cursor: pointer;
+}
+
+.tbtt-dl-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    transform: translateY(-2px);
+}
+
+.tbtt-dl-card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tbtt-dl-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.tbtt-dl-card-title svg {
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.tbtt-dl-card-sub {
+    font-size: 0.8rem;
+    color: #8b9cb3;
+    padding-left: 30px;
+}
+
+.tbtt-dl-card-arrow {
+    font-size: 1.3rem;
+    color: var(--tbtt-crimson);
+    transition: transform 0.22s ease;
+    line-height: 1;
+}
+
+.tbtt-dl-card:hover .tbtt-dl-card-arrow {
+    transform: translateX(4px);
+    color: var(--tbtt-crimson-hover);
+}
+
+.tbtt-dl-footer-meta {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 15px;
+    font-size: 0.74rem;
+    color: #64748b;
+    text-align: left;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   8. RESPONSIVE DESIGN (BREAKPOINTS HOÀN TOÀN ĐỒNG BỘ PHÙ SINH MỘNG)
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .tbtt-hero-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 30px;
+        padding: 20px 24px;
+    }
+
+    .tbtt-hero-right {
+        display: none;
+    }
+
+    .tbtt-gallery-track {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tbtt-trust-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tbtt-support-tiles {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14.5px;
+    }
+
+    body.tbtt-body {
+        padding-bottom: 0 !important;
+        font-size: 0.88rem;
+    }
+
+    .tbtt-header {
+        padding: 0 16px;
+        height: 58px;
+    }
+
+    .tbtt-brand {
+        gap: 8px;
+        max-width: calc(100% - 110px);
+    }
+
+    .tbtt-brand-icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+    }
+
+    .tbtt-brand-name {
+        font-size: 0.88rem;
+        letter-spacing: 1px;
+        line-height: 1.15;
+    }
+
+    .tbtt-brand-sub {
+        font-size: 0.58rem;
+        line-height: 1.15;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .tbtt-home-btn {
+        padding: 5px 11px;
+        font-size: 0.72rem;
+        gap: 5px;
+        flex-shrink: 0;
+    }
+
+    .tbtt-nav-menu {
+        display: none;
+        /* Hide top links on mobile, keep brand & action */
+    }
+
+    .tbtt-hero {
+        min-height: auto;
+        height: auto;
+        padding-top: 66px;
+        padding-bottom: 20px;
+        overflow: visible;
+    }
+
+    .tbtt-hero-container {
+        padding: 10px 16px;
+        gap: 16px;
+    }
+
+    .tbtt-hero-badge {
+        font-size: 0.65rem;
+        padding: 3px 10px;
+        margin-bottom: 10px;
+    }
+
+    .tbtt-hero-title {
+        font-size: clamp(1.7rem, 7.5vw, 2.1rem);
+        line-height: 1.12;
+        margin-bottom: 8px;
+    }
+
+    .tbtt-hero-subtitle {
+        font-size: 0.82rem;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+    }
+
+    .tbtt-hero-desc {
+        font-size: 0.78rem;
+        line-height: 1.45;
+        margin-bottom: 14px;
+    }
+
+    .tbtt-platforms {
+        display: inline-flex;
+        width: auto;
+        gap: 8px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+    }
+
+    .tbtt-plat-btn {
+        flex: none;
+        padding: 5px 12px;
+        font-size: 0.72rem;
+        gap: 5px;
+    }
+
+    .tbtt-download-cta {
+        width: auto;
+        min-width: 180px;
+        max-width: 220px;
+        padding: 9px 22px;
+        font-size: 0.88rem;
+        letter-spacing: 1.1px;
+        gap: 8px;
+        border-radius: 999px;
+        align-self: flex-start;
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+        margin-bottom: 4px;
+    }
+
+    .tbtt-download-cta svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tbtt-meta-info {
+        gap: 6px 10px;
+        font-size: 0.66rem;
+        margin-top: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+    }
+
+    .tbtt-hero-thumbs {
+        width: 100%;
+        gap: 8px;
+        padding: 6px 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        max-width: 100%;
+    }
+
+    .tbtt-hero-thumbs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tbtt-thumb-item {
+        width: 78px;
+        height: 44px;
+        flex-shrink: 0;
+        border-radius: 6px;
+    }
+
+    .tbtt-gallery-section {
+        padding: 20px 16px 6px 16px;
+    }
+
+    .tbtt-gallery-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        gap: 10px;
+    }
+
+    .tbtt-gallery-title-wrap {
+        gap: 4px;
+        min-width: 0;
+    }
+
+    .tbtt-gallery-title {
+        font-size: 1.15rem;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        gap: 8px;
+    }
+
+    .tbtt-gallery-title-icon {
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+
+    .tbtt-gallery-sub {
+        font-size: 0.72rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .tbtt-gallery-all-btn {
+        font-size: 0.72rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .tbtt-gallery-arrow {
+        display: none;
+    }
+
+    .tbtt-gallery-track {
+        gap: 12px;
+        padding-bottom: 8px;
+    }
+
+    .tbtt-gallery-card {
+        flex: 0 0 78%;
+        min-width: 78%;
+        max-width: 78%;
+        border-radius: 10px;
+    }
+
+    /* Trust Section on Mobile (2x2 Grid with Center Divider Line) */
+    .tbtt-trust-section {
+        padding-left: 14px;
+        padding-right: 14px;
+        margin: 8px auto 12px auto;
+    }
+
+    .tbtt-trust-bar {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 16px;
+        row-gap: 10px;
+        padding: 12px 14px;
+        border-radius: 14px;
+    }
+
+    .tbtt-trust-bar::after {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 8px;
+        bottom: 8px;
+        left: 50%;
+        width: 1px;
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    .tbtt-trust-item {
+        gap: 10px;
+    }
+
+    .tbtt-trust-icon-box {
+        width: 36px;
+        height: 36px;
+    }
+
+    .tbtt-trust-icon-box svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tbtt-trust-title {
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    .tbtt-trust-desc {
+        font-size: 0.65rem;
+        line-height: 1.15;
+    }
+
+    /* Support Section on Mobile */
+    .tbtt-support-section {
+        padding: 0 14px;
+        margin: 10px auto 25px auto;
+    }
+
+    .tbtt-support-card {
+        padding: 20px 16px;
+    }
+
+    .tbtt-section-badge {
+        font-size: 0.72rem;
+        padding: 3px 12px;
+    }
+
+    .tbtt-section-title {
+        font-size: 1.25rem;
+        letter-spacing: 0.5px;
+    }
+
+    .tbtt-support-alert {
+        font-size: 0.78rem;
+        line-height: 1.5;
+        padding: 12px 14px;
+    }
+
+    .tbtt-support-tiles {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .tbtt-support-tile {
+        padding: 12px 10px;
+        gap: 10px;
+        border-radius: 12px;
+    }
+
+    .tbtt-support-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.15rem;
+        border-radius: 9px;
+    }
+
+    .tbtt-support-label {
+        font-size: 0.76rem;
+        line-height: 1.25;
+    }
+
+    /* Footer on Mobile */
+    .tbtt-footer {
+        margin-top: 10px;
+        padding: 14px 16px 68px 16px !important;
+    }
+}
+
+/* Modal on Small Mobile */
+@media (max-width: 480px) {
+    .tbtt-download-modal-box {
+        padding: 22px 18px 18px 18px;
+        border-radius: 18px;
+    }
+
+    .tbtt-dl-title {
+        font-size: 1.35rem;
+    }
+
+    .tbtt-dl-card {
+        padding: 13px 14px;
+    }
+
+    .tbtt-dl-card-title {
+        font-size: 0.98rem;
+    }
+
+    .tbtt-dl-card-sub {
+        font-size: 0.72rem;
+        padding-left: 28px;
+    }
+}
+
+/* Extra Small Mobile Screens <= 375px */
+@media (max-width: 375px) {
+    .tbtt-trust-bar {
+        column-gap: 12px;
+        padding: 10px 10px;
+    }
+
+    .tbtt-trust-icon-box {
+        width: 32px;
+        height: 32px;
+    }
+
+    .tbtt-trust-icon-box svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .tbtt-trust-title {
+        font-size: 0.74rem;
+    }
+
+    .tbtt-trust-desc {
+        font-size: 0.62rem;
+    }
+
+    .tbtt-support-tiles {
+        gap: 8px;
+    }
+
+    .tbtt-support-tile {
+        padding: 10px 8px;
+        gap: 8px;
+    }
+
+    .tbtt-support-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+
+    .tbtt-support-label {
+        font-size: 0.74rem;
+    }
+}
+
+/* ==========================================================================
+   SIDEBOTTOM NAVIGATION (MOBILE ONLY)
+   ========================================================================== */
+#sidebottom-root {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    #sidebottom-root {
+        display: block !important;
+        width: 100%;
+    }
+
+    #sidebottom-root .sidebottom,
+    .sidebottom.fixed-bottom {
+        position: fixed !important;
+        left: 50% !important;
+        right: auto !important;
+        bottom: 0 !important;
+        transform: translateX(-50%) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        z-index: 9999 !important;
+        box-sizing: border-box !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+    }
+
+    #sidebottom-root .sidebottom .container,
+    .sidebottom.fixed-bottom .container {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    #sidebottom-root .sidebottom .bg-color {
+        width: 100% !important;
+        background: linear-gradient(180deg, rgba(14, 18, 27, 0.98) 0%, rgba(7, 9, 15, 0.99) 100%) !important;
+        border-top: 1px solid rgba(245, 158, 11, 0.45) !important;
+        border-left: none !important;
+        border-right: none !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border-radius: 20px 20px 0 0 !important;
+        box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.8), 0 -2px 14px rgba(245, 158, 11, 0.25) !important;
+    }
+
+    #sidebottom-root .sidebottom ul {
+        width: 100% !important;
+        height: 60px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-around !important;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #sidebottom-root .sidebottom ul li {
+        flex: 1 !important;
+        height: 100% !important;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a {
+        color: #cbd5e1 !important;
+        transition: all 0.2s ease !important;
+        text-decoration: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100% !important;
+        gap: 3px !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a span {
+        font-size: 10.5px !important;
+        line-height: 1 !important;
+        white-space: nowrap !important;
+        color: #cbd5e1 !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a svg {
+        width: 20px !important;
+        height: 20px !important;
+        display: block !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a:hover {
+        color: #ffffff !important;
+        background: radial-gradient(49.41% 49.15% at 50% 50.85%, rgba(245, 158, 11, 0.4) 0, rgba(245, 158, 11, 0) 100%) !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a:hover span {
+        color: #ffffff !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a.active {
+        background: radial-gradient(49.41% 49.15% at 50% 50.85%, rgba(245, 158, 11, 0.8) 0, rgba(245, 158, 11, 0) 100%) !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+
+    #sidebottom-root .sidebottom ul li a.active span {
+        color: #ffffff !important;
+    }
+}
