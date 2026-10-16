@@ -1,0 +1,778 @@
+/* ==========================================================================
+   LAMON GAME — TRANG ĐỔI ĐIỂM (THẦN MA GIÁNG THẾ)
+   File: assets/css/pages/doi-diem.css
+   Theme: TỐI HOÀN TOÀN (DARK THEME) — DỊU MẮT, KHỬ CHÓI, CHUẨN GAMING MMORPG
+   Tông màu: Đêm Huyền Bí (#070b14, #0f172a) kết hợp Xanh Băng & Sky Blue (#38bdf8, #0284c7)
+   Điểm thưởng: Vàng hổ phách ánh kim (#fbbf24) dễ đọc, sang trọng
+   Tuân thủ: AI_RULES_PHP_MVC.md (Rule 8)
+   ========================================================================== */
+
+:root {
+    /* Base Dark Palette */
+    --dd-bg: #070b14;
+    --dd-surface: rgba(15, 23, 42, 0.88);
+    --dd-surface-card: rgba(20, 30, 52, 0.82);
+    --dd-surface-card-hover: rgba(28, 42, 72, 0.92);
+    --dd-surface-subtle: rgba(11, 18, 32, 0.9);
+    --dd-border: rgba(255, 255, 255, 0.1);
+    --dd-border-glow: rgba(56, 189, 248, 0.4);
+    --dd-primary: #38bdf8;
+    --dd-primary-hover: #7dd3fc;
+    --dd-azure: #0284c7;
+    --dd-cyan: #06b6d4;
+    --dd-gold: #fbbf24;
+    --dd-text-title: #f8fafc;
+    --dd-text-body: #cbd5e1;
+    --dd-text-muted: #94a3b8;
+    --dd-primary-gradient: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
+    --dd-primary-gradient-hover: linear-gradient(135deg, #0369a1 0%, #0891b2 100%);
+    --dd-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --dd-card-shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 20px rgba(2, 132, 199, 0.22);
+}
+
+/* ==========================================================================
+   1. BASE OVERRIDES: NỀN TỐI CHUẨN & THANH CUỘN DỊU MẮT
+   ========================================================================== */
+html,
+body,
+body.dd-page-body {
+    background-color: var(--dd-bg) !important;
+    background-image:
+        radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.16) 0%, transparent 60%),
+        radial-gradient(circle at 100% 30%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+        linear-gradient(rgba(7, 11, 20, 0.92), rgba(7, 11, 20, 0.98)),
+        url('https://lamongame.com/images/pattern-bg.png') !important;
+    background-size: 100% 100%, 100% 100%, cover, cover !important;
+    background-position: center top !important;
+    background-attachment: fixed !important;
+    color: var(--dd-text-title) !important;
+    min-height: 100vh;
+}
+
+/* Custom Scrollbars tối dịu mắt */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #070b14;
+}
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+
+/* Glass Panels: Nền Tối Huyền Ảo */
+.glass-panel {
+    background: var(--dd-surface) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--dd-border) !important;
+    box-shadow: var(--dd-card-shadow) !important;
+}
+
+.glass-panel-card {
+    background: var(--dd-surface-card) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--dd-border) !important;
+    box-shadow: var(--dd-card-shadow) !important;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.glass-panel-card:hover {
+    background: var(--dd-surface-card-hover) !important;
+    border-color: var(--dd-border-glow) !important;
+    box-shadow: var(--dd-card-shadow-hover) !important;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   2. HERO HEADER SECTION
+   ========================================================================== */
+.dd-hero-panel {
+    background: linear-gradient(135deg, rgba(20, 30, 52, 0.92) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dd-hero-title {
+    background: linear-gradient(135deg, #ffffff 40%, #7dd3fc 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 12px rgba(2, 132, 199, 0.3);
+}
+
+.dd-badge-live {
+    background: rgba(16, 185, 129, 0.18) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    font-weight: 800 !important;
+}
+
+.dd-btn-sync {
+    background: rgba(30, 41, 59, 0.85) !important;
+    color: #94a3b8 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.dd-btn-sync:hover {
+    background: rgba(51, 65, 85, 0.95) !important;
+    border-color: var(--dd-primary) !important;
+    color: #f8fafc !important;
+    transform: translateY(-1px);
+}
+
+.dd-btn-cart-header {
+    background: var(--dd-primary-gradient) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 18px rgba(2, 132, 199, 0.45) !important;
+    transition: all 0.2s ease !important;
+}
+
+.dd-btn-cart-header:hover {
+    background: var(--dd-primary-gradient-hover) !important;
+    box-shadow: 0 6px 24px rgba(2, 132, 199, 0.6) !important;
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   3. STATS OVERVIEW CARDS
+   ========================================================================== */
+.dd-stat-card {
+    background: var(--dd-surface-card) !important;
+    border: 1px solid var(--dd-border) !important;
+    box-shadow: var(--dd-card-shadow) !important;
+    border-radius: 14px;
+    transition: all 0.22s ease;
+}
+
+.dd-stat-card:hover {
+    background: var(--dd-surface-card-hover) !important;
+    border-color: var(--dd-border-glow) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--dd-card-shadow-hover) !important;
+}
+
+.dd-stat-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.dd-stat-icon-wrap.items {
+    background: rgba(2, 132, 199, 0.18);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #38bdf8;
+}
+
+.dd-stat-icon-wrap.categories {
+    background: rgba(6, 182, 212, 0.18);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    color: #22d3ee;
+}
+
+.dd-stat-icon-wrap.min {
+    background: rgba(99, 102, 241, 0.18);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    color: #818cf8;
+}
+
+.dd-stat-icon-wrap.max {
+    background: rgba(245, 158, 11, 0.18);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    color: #fbbf24;
+}
+
+.dd-stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--dd-text-muted);
+    font-weight: 700;
+    display: block;
+}
+
+.dd-stat-value {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.25;
+}
+
+/* ==========================================================================
+   4. SEARCH & FILTER TOOLBAR
+   ========================================================================== */
+.dd-search-input {
+    background: var(--dd-surface-subtle) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    color: #f8fafc !important;
+    border-radius: 12px !important;
+    transition: all 0.2s ease !important;
+}
+
+.dd-search-input:focus {
+    border-color: var(--dd-primary) !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22) !important;
+    outline: none !important;
+}
+
+.dd-search-input::placeholder {
+    color: #64748b !important;
+}
+
+.dd-sort-select {
+    background-color: var(--dd-surface-subtle) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    color: #f1f5f9 !important;
+    border-radius: 12px !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer;
+}
+
+.dd-sort-select:focus {
+    border-color: var(--dd-primary) !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22) !important;
+    outline: none !important;
+}
+
+/* Category Filter Pills */
+.category-pill {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 6px 14px !important;
+    border-radius: 10px !important;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    user-select: none !important;
+}
+
+.category-pill:not(.active) {
+    background: rgba(15, 23, 42, 0.8) !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.category-pill:not(.active):hover {
+    background: rgba(30, 41, 59, 0.95) !important;
+    border-color: rgba(56, 189, 248, 0.45) !important;
+    color: var(--dd-primary) !important;
+    transform: translateY(-1px);
+}
+
+.category-pill.active {
+    background: var(--dd-primary-gradient) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(56, 189, 248, 0.6) !important;
+    box-shadow: 0 3px 14px rgba(2, 132, 199, 0.45) !important;
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   5. ITEM CARD & CONTROLS (TỐI SANG TRỌNG & RÕ RÀNG)
+   ========================================================================== */
+.dd-item-card {
+    background: var(--dd-surface-card) !important;
+    border: 1px solid var(--dd-border) !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    box-shadow: var(--dd-card-shadow) !important;
+    position: relative;
+}
+
+.dd-item-card:hover {
+    background: var(--dd-surface-card-hover) !important;
+    border-color: var(--dd-border-glow) !important;
+    box-shadow: var(--dd-card-shadow-hover) !important;
+    transform: translateY(-3px);
+}
+
+.dd-item-card.is-selected {
+    border-color: var(--dd-primary) !important;
+    background: rgba(16, 32, 58, 0.95) !important;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4), var(--dd-card-shadow-hover) !important;
+}
+
+/* Điểm quy đổi: Vàng hổ phách ánh kim dịu mắt & dễ đọc */
+.dd-item-points-badge {
+    background: rgba(245, 158, 11, 0.16) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.38) !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    padding: 3px 10px !important;
+    border-radius: 999px !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dd-item-title {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #f8fafc !important;
+    line-height: 1.4 !important;
+    transition: color 0.2s ease !important;
+}
+
+.dd-item-card:hover .dd-item-title {
+    color: #7dd3fc !important;
+}
+
+/* Nút Xem ảnh trên Card */
+.btn-view-image {
+    background: rgba(15, 23, 42, 0.85) !important;
+    color: #7dd3fc !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+    font-size: 11.5px !important;
+    font-weight: 700 !important;
+    padding: 4px 10px !important;
+    transition: all 0.2s ease !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-view-image:hover {
+    background: rgba(30, 41, 59, 0.95) !important;
+    border-color: var(--dd-primary) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+/* Bộ Tăng Giảm Số Lượng */
+.dd-stepper-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(11, 18, 32, 0.9);
+    padding: 3px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn-step-minus {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+    background: rgba(30, 41, 59, 0.9) !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    font-weight: 800 !important;
+    font-size: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.15s ease !important;
+}
+
+.btn-step-minus:not(:disabled):hover {
+    background: rgba(51, 65, 85, 0.95) !important;
+    color: #ffffff !important;
+}
+
+.btn-step-minus:disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+}
+
+.input-qty {
+    width: 36px !important;
+    text-align: center !important;
+    background: transparent !important;
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    border: none !important;
+    outline: none !important;
+}
+
+.btn-step-plus {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+    background: var(--dd-primary-gradient) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-weight: 800 !important;
+    font-size: 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4) !important;
+    transition: all 0.15s ease !important;
+}
+
+.btn-step-plus:hover {
+    background: var(--dd-primary-gradient-hover) !important;
+    transform: scale(1.05);
+}
+
+/* ==========================================================================
+   6. PAGINATION CONTROLS
+   ========================================================================== */
+.btn-page {
+    border-radius: 10px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn-page:not(.active):not(:disabled) {
+    background: rgba(15, 23, 42, 0.85) !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.btn-page:not(.active):not(:disabled):hover {
+    background: rgba(30, 41, 59, 0.95) !important;
+    border-color: rgba(56, 189, 248, 0.4) !important;
+    color: var(--dd-primary) !important;
+}
+
+.btn-page.active {
+    background: var(--dd-primary-gradient) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(56, 189, 248, 0.6) !important;
+    box-shadow: 0 3px 12px rgba(2, 132, 199, 0.4) !important;
+}
+
+/* ==========================================================================
+   7. FLOATING CART & SLIDE-OVER DRAWER
+   ========================================================================== */
+#btnFloatingOpen {
+    background: var(--dd-primary-gradient) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(2, 132, 199, 0.45) !important;
+}
+
+#btnFloatingOpen:hover {
+    background: var(--dd-primary-gradient-hover) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(2, 132, 199, 0.6) !important;
+}
+
+#floatingPointsTotal {
+    color: #fef08a !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+#floatingBadgeCount {
+    background: #070b14 !important;
+    color: var(--dd-primary) !important;
+    border: 1px solid rgba(56, 189, 248, 0.5) !important;
+    font-weight: 900 !important;
+}
+
+/* Drawer Component */
+#cartDrawer {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7) !important;
+}
+
+#cartDrawer .dd-drawer-header {
+    background: #090e1a !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#cartDrawer .dd-drawer-footer {
+    background: #090e1a !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#drawerTotalPoints {
+    color: #38bdf8 !important;
+    font-weight: 900 !important;
+}
+
+#btnCopySummary {
+    background: var(--dd-primary-gradient) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4) !important;
+}
+
+#btnCopySummary:hover {
+    background: var(--dd-primary-gradient-hover) !important;
+}
+
+#btnSendMessenger {
+    background: linear-gradient(135deg, #0084ff 0%, #0066ff 100%) !important;
+    box-shadow: 0 4px 14px rgba(0, 132, 255, 0.4) !important;
+}
+
+#btnSendZalo {
+    background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%) !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4) !important;
+}
+
+/* ==========================================================================
+   8. IMAGE MODAL LIGHTBOX
+   ========================================================================== */
+#imageModalBox {
+    background: #0f172a !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8) !important;
+}
+
+#imageModalBox .dd-modal-header {
+    background: #090e1a !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#modalImageWrapper {
+    background: #070b14 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+#modalZoomControls,
+#modalImageCounter {
+    background: rgba(15, 23, 42, 0.92) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #f8fafc !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+}
+
+#zoomLevelIndicator {
+    color: var(--dd-primary) !important;
+    font-weight: 800;
+}
+
+#modalZoomControls button,
+#modalZoomControls a {
+    background: rgba(30, 41, 59, 0.85) !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+#modalZoomControls button:hover,
+#modalZoomControls a:hover {
+    background: rgba(51, 65, 85, 0.95) !important;
+    color: var(--dd-primary) !important;
+}
+
+/* ==========================================================================
+   9. CATEGORY BADGE COLOR MAP (TỐI SANG TRỌNG, DỊU MẮT)
+   ========================================================================== */
+.cat-badge-tinh-hoa {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #fcd34d !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+.cat-badge-thuoc-tinh {
+    background: rgba(168, 85, 247, 0.15) !important;
+    color: #d8b4fe !important;
+    border: 1px solid rgba(168, 85, 247, 0.35) !important;
+}
+
+.cat-badge-trang-bi {
+    background: rgba(244, 63, 94, 0.15) !important;
+    color: #fda4af !important;
+    border: 1px solid rgba(244, 63, 94, 0.35) !important;
+}
+
+.cat-badge-toa-ky {
+    background: rgba(6, 182, 212, 0.15) !important;
+    color: #67e8f9 !important;
+    border: 1px solid rgba(6, 182, 212, 0.35) !important;
+}
+
+.cat-badge-canh {
+    background: rgba(20, 184, 166, 0.15) !important;
+    color: #5eead4 !important;
+    border: 1px solid rgba(20, 184, 166, 0.35) !important;
+}
+
+.cat-badge-dan-duoc {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #6ee7b7 !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+}
+
+.cat-badge-nguyen-lieu {
+    background: rgba(59, 130, 246, 0.15) !important;
+    color: #93c5fd !important;
+    border: 1px solid rgba(59, 130, 246, 0.35) !important;
+}
+
+.cat-badge-than-binh {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #fca5a5 !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+}
+
+.cat-badge-phap-bao {
+    background: rgba(99, 102, 241, 0.15) !important;
+    color: #a5b4fc !important;
+    border: 1px solid rgba(99, 102, 241, 0.35) !important;
+}
+
+.cat-badge-default {
+    background: rgba(71, 85, 105, 0.25) !important;
+    color: #cbd5e1 !important;
+    border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+
+/* ==========================================================================
+   10. SIDEBOTTOM NAVIGATION: DOCK DƯỚI CÙNG HOÀN CHỈNH & ĐỒNG BỘ NỀN TỐI
+   Đảm bảo luôn hiển thị dạng thanh ngang cố định (fixed horizontal dock), 5 icon dàn đều
+   ========================================================================== */
+#sidebottom-root,
+.sidebottom,
+.sidebottom.fixed-bottom {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.sidebottom .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+}
+
+.sidebottom .bg-color {
+    width: 100% !important;
+    background: linear-gradient(0deg, rgba(7, 11, 20, 0.98), rgba(7, 11, 20, 0.98)), linear-gradient(0deg, rgba(0, 0, 0, 0) 34%, rgba(2, 132, 199, 0.75) 267%) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-radius: 20px 20px 0 0 !important;
+    border-top: 1px solid rgba(56, 189, 248, 0.35) !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.8), 0 -2px 14px rgba(2, 132, 199, 0.25) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+}
+
+.sidebottom ul {
+    list-style: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    height: 62px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.sidebottom ul li {
+    flex: 1 1 0% !important;
+    height: 100% !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.sidebottom ul li a {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    gap: 3px !important;
+    color: #94a3b8 !important;
+    text-decoration: none !important;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    user-select: none !important;
+    padding: 4px 2px !important;
+    box-sizing: border-box !important;
+}
+
+.sidebottom ul li a span {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.2px !important;
+    white-space: nowrap !important;
+    color: inherit !important;
+    transition: color 0.2s ease !important;
+}
+
+.sidebottom ul li a svg {
+    width: 22px !important;
+    height: 22px !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    transition: transform 0.2s ease !important;
+}
+
+.sidebottom ul li a svg path {
+    fill: currentColor !important;
+    transition: fill 0.2s ease !important;
+}
+
+.sidebottom ul li a:hover {
+    color: #38bdf8 !important;
+    background: radial-gradient(49% 49% at 50% 50%, rgba(56, 189, 248, 0.25) 0%, transparent 100%) !important;
+}
+
+.sidebottom ul li a:hover svg {
+    transform: translateY(-2px);
+}
+
+.sidebottom ul li a.active {
+    color: #38bdf8 !important;
+    font-weight: 700 !important;
+    background: radial-gradient(37% 78% at 50% 50%, rgba(2, 132, 199, 0.45) 0%, transparent 100%) !important;
+}
+
+.sidebottom ul li a.active span {
+    color: #38bdf8 !important;
+}
+
+.sidebottom ul li a.active svg path {
+    fill: #38bdf8 !important;
+}
+
+/* Đảm bảo nội dung trang không bị che bởi sidebottom dock */
+body.dd-page-body {
+    padding-bottom: 74px !important;
+}
+
+@media (max-width: 640px) {
+    .sidebottom ul {
+        height: 58px !important;
+    }
+    .sidebottom ul li a svg {
+        width: 20px !important;
+        height: 20px !important;
+    }
+    .sidebottom ul li a span {
+        font-size: 10px !important;
+    }
+}
