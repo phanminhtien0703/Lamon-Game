@@ -18,18 +18,27 @@ document.addEventListener('DOMContentLoaded', function () {
     // === 2. Hero Background & Thumbnail Switcher ===
     const heroBg = document.getElementById('heroBg');
     const thumbItems = document.querySelectorAll('.tmgt-thumb-item');
-    const scenes = [
-        '/images/tmgt/tmgt-scene-3.jpg?v=3',
-        '/images/tmgt/tmgt-banner.jpg',
-        '/images/tmgt/tmgt-scene-1.jpg?v=3',
-        '/images/tmgt/tmgt-scene-2.jpg?v=3'
+    const desktopScenes = [
+        '/images/tmgt/tmgt-scene-3.webp',
+        '/images/tmgt/tmgt-banner.webp',
+        '/images/tmgt/tmgt-scene-1.webp',
+        '/images/tmgt/tmgt-scene-2.webp'
+    ];
+    const mobileScenes = [
+        '/images/tmgt/tmgt-scene-3-mobile.webp',
+        '/images/tmgt/tmgt-banner-mobile.webp',
+        '/images/tmgt/tmgt-scene-1-mobile.webp',
+        '/images/tmgt/tmgt-scene-2-mobile.webp'
     ];
     let currentSceneIdx = 0;
 
     function switchScene(idx) {
-        if (!heroBg || idx < 0 || idx >= scenes.length) return;
+        if (!heroBg || idx < 0 || idx >= desktopScenes.length) return;
         currentSceneIdx = idx;
-        heroBg.style.backgroundImage = `url('${scenes[idx]}')`;
+        const activeList = window.innerWidth <= 768 ? mobileScenes : desktopScenes;
+        const newBg = `url('${activeList[idx]}')`;
+        heroBg.style.backgroundImage = newBg;
+        heroBg.style.setProperty('background-image', newBg, 'important');
         thumbItems.forEach((thumb, i) => {
             if (i === idx) {
                 thumb.classList.add('active');
@@ -106,22 +115,30 @@ document.addEventListener('DOMContentLoaded', function () {
     const lightboxClose = document.getElementById('tmgtLightboxClose');
     const galleryCards = document.querySelectorAll('.tmgt-gallery-card');
 
+    function closeLightbox() {
+        if (!lightbox) return;
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+        if (lightboxImg) lightboxImg.src = '';
+    }
+
     galleryCards.forEach(card => {
         card.addEventListener('click', function () {
             const fullSrc = this.getAttribute('data-full') || this.querySelector('img').src;
             if (lightbox && lightboxImg) {
                 lightboxImg.src = fullSrc;
                 lightbox.classList.add('open');
+                document.body.style.overflow = 'hidden';
             }
         });
     });
 
     if (lightboxClose) {
-        lightboxClose.addEventListener('click', () => lightbox.classList.remove('open'));
+        lightboxClose.addEventListener('click', closeLightbox);
     }
     if (lightbox) {
         lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) lightbox.classList.remove('open');
+            if (e.target === lightbox) closeLightbox();
         });
     }
 
@@ -221,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ESC key closes all modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            if (lightbox && lightbox.classList.contains('open')) lightbox.classList.remove('open');
+            if (lightbox && lightbox.classList.contains('open')) closeLightbox();
             if (guideModal && guideModal.classList.contains('open')) guideModal.classList.remove('open');
             if (downloadModal && downloadModal.classList.contains('open')) closeDownloadModal();
         }

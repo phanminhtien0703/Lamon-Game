@@ -243,7 +243,7 @@ body.tmgt-body::-webkit-scrollbar-thumb:hover {
     background-size: cover;
     background-position: center 20%;
     background-repeat: no-repeat;
-    transition: background-image 0.8s ease-in-out;
+    background-image: url('/images/tmgt/tmgt-scene-3.webp');
 }
 
 .tmgt-hero-overlay {
@@ -409,12 +409,13 @@ body.tmgt-body::-webkit-scrollbar-thumb:hover {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
+    left: 0;
     width: 60%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transform: skewX(-25deg);
-    transition: 0.6s ease;
+    transform: translateX(-160%) skewX(-25deg);
+    transition: transform 0.6s ease;
+    will-change: transform;
 }
 
 .tmgt-download-cta:hover {
@@ -423,7 +424,7 @@ body.tmgt-body::-webkit-scrollbar-thumb:hover {
 }
 
 .tmgt-download-cta:hover::before {
-    left: 140%;
+    transform: translateX(280%) skewX(-25deg);
 }
 
 .tmgt-download-cta svg {
@@ -1040,11 +1041,16 @@ a.tmgt-trust-item,
 }
 
 .tmgt-lightbox-img {
-    max-width: 90vw;
-    max-height: 85vh;
+    display: block;
+    width: auto !important;
+    height: auto !important;
+    max-width: 92vw !important;
+    max-height: 82vh !important;
+    object-fit: contain !important;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.15);
+    margin: auto;
 }
 
 .tmgt-lightbox-close {
@@ -1391,6 +1397,10 @@ a.tmgt-trust-item,
         overflow: visible;
     }
 
+    .tmgt-hero-bg {
+        background-image: url('/images/tmgt/tmgt-scene-3-mobile.webp');
+    }
+
     .tmgt-hero-container {
         padding: 10px 16px;
         gap: 16px;
@@ -1553,10 +1563,9 @@ a.tmgt-trust-item,
     }
 
     .tmgt-gallery-sub {
-        font-size: 0.72rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 0.74rem;
+        white-space: normal;
+        line-height: 1.35;
     }
 
     .tmgt-gallery-all-btn {
@@ -1572,13 +1581,24 @@ a.tmgt-trust-item,
     .tmgt-gallery-track {
         gap: 12px;
         padding-bottom: 8px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
     }
 
     .tmgt-gallery-card {
         flex: 0 0 78%;
         min-width: 78%;
         max-width: 78%;
+        aspect-ratio: 16 / 9;
         border-radius: 10px;
+    }
+
+    .tmgt-lightbox-close {
+        top: 14px;
+        right: 16px;
+        width: 38px;
+        height: 38px;
+        font-size: 22px;
     }
 
     /* Trust Section on Mobile */
