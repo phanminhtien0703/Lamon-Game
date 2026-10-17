@@ -18,18 +18,27 @@ document.addEventListener('DOMContentLoaded', function () {
     // === 2. Hero Background & Thumbnail Switcher ===
     const heroBg = document.getElementById('heroBg');
     const thumbItems = document.querySelectorAll('.psm-thumb-item');
-    const scenes = [
-        '/images/psm/psm-hero-xianxia.jpg?v=2',
-        '/images/psm/psm-scene-portal.jpg',
-        '/images/psm/psm-scene-dragon.jpg',
-        '/images/psm/psm-scene-halo.jpg'
+    const desktopScenes = [
+        '/images/psm/psm-hero-xianxia.webp',
+        '/images/psm/psm-scene-portal.webp',
+        '/images/psm/psm-scene-dragon.webp',
+        '/images/psm/psm-scene-halo.webp'
+    ];
+    const mobileScenes = [
+        '/images/psm/psm-hero-xianxia-mobile.webp',
+        '/images/psm/psm-scene-portal-mobile.webp',
+        '/images/psm/psm-scene-dragon-mobile.webp',
+        '/images/psm/psm-scene-halo-mobile.webp'
     ];
     let currentSceneIdx = 0;
 
     function switchScene(idx) {
-        if (!heroBg || idx < 0 || idx >= scenes.length) return;
+        if (!heroBg || idx < 0 || idx >= desktopScenes.length) return;
         currentSceneIdx = idx;
-        heroBg.style.backgroundImage = `url('${scenes[idx]}')`;
+        const activeList = window.innerWidth <= 768 ? mobileScenes : desktopScenes;
+        const newBg = `url('${activeList[idx]}')`;
+        heroBg.style.backgroundImage = newBg;
+        heroBg.style.setProperty('background-image', newBg, 'important');
         thumbItems.forEach((thumb, i) => {
             if (i === idx) {
                 thumb.classList.add('active');
@@ -147,22 +156,30 @@ document.addEventListener('DOMContentLoaded', function () {
     const lightboxClose = document.getElementById('psmLightboxClose');
     const galleryCards = document.querySelectorAll('.psm-gallery-card');
 
+    function closeLightbox() {
+        if (!lightbox) return;
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+        if (lightboxImg) lightboxImg.src = '';
+    }
+
     galleryCards.forEach(card => {
         card.addEventListener('click', function () {
             const fullSrc = this.getAttribute('data-full') || this.querySelector('img').src;
             if (lightbox && lightboxImg) {
                 lightboxImg.src = fullSrc;
                 lightbox.classList.add('open');
+                document.body.style.overflow = 'hidden';
             }
         });
     });
 
     if (lightboxClose) {
-        lightboxClose.addEventListener('click', () => lightbox.classList.remove('open'));
+        lightboxClose.addEventListener('click', closeLightbox);
     }
     if (lightbox) {
         lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) lightbox.classList.remove('open');
+            if (e.target === lightbox) closeLightbox();
         });
     }
 
@@ -262,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ESC key closes all modals
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            if (lightbox && lightbox.classList.contains('open')) lightbox.classList.remove('open');
+            if (lightbox && lightbox.classList.contains('open')) closeLightbox();
             if (guideModal && guideModal.classList.contains('open')) guideModal.classList.remove('open');
             if (downloadModal && downloadModal.classList.contains('open')) closeDownloadModal();
         }

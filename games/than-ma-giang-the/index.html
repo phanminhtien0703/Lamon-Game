@@ -60,7 +60,7 @@
             var gaScript = document.createElement('script');
             gaScript.async = true;
             gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-QWZDCG2D5J';
-            gaScript.onload = function() {
+            gaScript.onload = function () {
                 gtag('config', 'G-QWZDCG2D5J');
                 gtag('config', 'G-MR75NX67PE');
             };
@@ -75,36 +75,155 @@
         } else {
             window.addEventListener('load', scheduleTracking, { once: true });
         }
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             if (window.scrollY > 150) initTracking();
         }, { once: true, passive: true });
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (e.target && e.target.closest && e.target.closest('a, button')) initTracking();
         }, { once: true, passive: true });
     </script>
 
     <!-- Preload Critical Hero Background for LCP (Responsive) -->
-    <link rel="preload" as="image" href="/images/tmgt/tmgt-scene-3-mobile.webp" media="(max-width: 768px)" fetchpriority="high">
-    <link rel="preload" as="image" href="/images/tmgt/tmgt-scene-3.webp" media="(min-width: 769px)" fetchpriority="high">
+    <link rel="preload" as="image" href="/images/tmgt/tmgt-scene-3-mobile.webp" media="(max-width: 768px)"
+        fetchpriority="high">
+    <link rel="preload" as="image" href="/images/tmgt/tmgt-scene-3.webp" media="(min-width: 769px)"
+        fetchpriority="high">
 
     <!-- Critical Inlined CSS for Instant Hero Render & Sub-2s LCP -->
     <style>
-        :root{--tmgt-blue:#38bdf8;--tmgt-primary:#38bdf8;--tmgt-dark-bg:#07090f;--tmgt-text-main:#f8fafc;--tmgt-text-muted:#94a3b8;--tmgt-font-heading:'Playfair Display',serif;--tmgt-font-body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}
-        *{box-sizing:border-box;margin:0;padding:0}
-        body.tmgt-body{background-color:var(--tmgt-dark-bg);color:var(--tmgt-text-main);font-family:var(--tmgt-font-body);line-height:1.6;overflow-x:hidden}
-        .tmgt-header{position:fixed;top:0;left:0;width:100%;height:72px;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:transparent;border-bottom:1px solid rgba(0,0,0,0.45)}
-        .tmgt-hero{position:relative;min-height:clamp(560px,72vh,670px);display:flex;flex-direction:column;justify-content:space-between;padding-top:72px;padding-bottom:24px;overflow:hidden;border-bottom:1px solid rgba(56,189,248,0.35)}
-        .tmgt-hero-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background-size:cover;background-position:center 20%;background-repeat:no-repeat;background-image:url('/images/tmgt/tmgt-scene-3.webp')}
-        .tmgt-hero-overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 75% 25%,transparent 45%,rgba(7,9,15,0.5) 95%),linear-gradient(to right,rgba(7,9,15,0.85) 0%,rgba(7,9,15,0.45) 32%,rgba(7,9,15,0.05) 60%,transparent 100%),linear-gradient(to top,#07090f 0%,rgba(7,9,15,0.8) 8%,transparent 24%)}
-        .tmgt-hero-container{position:relative;z-index:10;max-width:1720px;width:100%;margin:0 auto;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;gap:40px;flex:1}
-        .tmgt-hero-title{font-family:var(--tmgt-font-heading);font-size:clamp(3.1rem,5.2vw,4.4rem);font-weight:900;line-height:1.08;margin-bottom:12px;background:linear-gradient(180deg,#ffffff 0%,#e0f2fe 30%,#38bdf8 75%,#0284c7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        @media (max-width:768px){
-            .tmgt-header{padding:0 16px;height:58px}
-            .tmgt-nav-menu{display:none}
-            .tmgt-hero{min-height:auto;height:auto;padding-top:66px;padding-bottom:20px;overflow:visible}
-            .tmgt-hero-bg{background-image:url('/images/tmgt/tmgt-scene-3-mobile.webp')}
-            .tmgt-hero-container{padding:10px 16px;gap:16px}
-            .tmgt-hero-title{font-size:clamp(1.85rem,8vw,2.3rem);font-weight:900;line-height:1.1;margin-bottom:8px}
+        :root {
+            --tmgt-blue: #38bdf8;
+            --tmgt-primary: #38bdf8;
+            --tmgt-dark-bg: #07090f;
+            --tmgt-text-main: #f8fafc;
+            --tmgt-text-muted: #94a3b8;
+            --tmgt-font-heading: 'Playfair Display', serif;
+            --tmgt-font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body.tmgt-body {
+            background-color: var(--tmgt-dark-bg);
+            color: var(--tmgt-text-main);
+            font-family: var(--tmgt-font-body);
+            line-height: 1.6;
+            overflow-x: hidden
+        }
+
+        .tmgt-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 72px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: transparent;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.45)
+        }
+
+        .tmgt-hero {
+            position: relative;
+            min-height: clamp(560px, 72vh, 670px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-top: 72px;
+            padding-bottom: 24px;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.35)
+        }
+
+        .tmgt-hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background-size: cover;
+            background-position: center 20%;
+            background-repeat: no-repeat;
+            background-image: url('/images/tmgt/tmgt-scene-3.webp')
+        }
+
+        .tmgt-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 75% 25%, transparent 45%, rgba(7, 9, 15, 0.5) 95%), linear-gradient(to right, rgba(7, 9, 15, 0.85) 0%, rgba(7, 9, 15, 0.45) 32%, rgba(7, 9, 15, 0.05) 60%, transparent 100%), linear-gradient(to top, #07090f 0%, rgba(7, 9, 15, 0.8) 8%, transparent 24%)
+        }
+
+        .tmgt-hero-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1720px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 16px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            flex: 1
+        }
+
+        .tmgt-hero-title {
+            font-family: var(--tmgt-font-heading);
+            font-size: clamp(3.1rem, 5.2vw, 4.4rem);
+            font-weight: 900;
+            line-height: 1.08;
+            margin-bottom: 12px;
+            background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 30%, #38bdf8 75%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        @media (max-width:768px) {
+            .tmgt-header {
+                padding: 0 16px;
+                height: 58px
+            }
+
+            .tmgt-nav-menu {
+                display: none
+            }
+
+            .tmgt-hero {
+                min-height: auto;
+                height: auto;
+                padding-top: 66px;
+                padding-bottom: 20px;
+                overflow: visible
+            }
+
+            .tmgt-hero-bg {
+                background-image: url('/images/tmgt/tmgt-scene-3-mobile.webp')
+            }
+
+            .tmgt-hero-container {
+                padding: 10px 16px;
+                gap: 16px
+            }
+
+            .tmgt-hero-title {
+                font-size: clamp(1.85rem, 8vw, 2.3rem);
+                font-weight: 900;
+                line-height: 1.1;
+                margin-bottom: 8px
+            }
         }
     </style>
 
@@ -119,7 +238,8 @@
         <!-- Brand Logo -->
         <a href="/" class="tmgt-brand" title="Về trang chủ Lamon Game">
             <div class="tmgt-brand-icon">
-                <img src="/images/logo.jpg?v=2" alt="Logo Lamon Game" width="40" height="40" class="tmgt-brand-logo-img">
+                <img src="/images/logo.jpg?v=2" alt="Logo Lamon Game" width="40" height="40"
+                    class="tmgt-brand-logo-img">
             </div>
             <div class="tmgt-brand-text">
                 <span class="tmgt-brand-name">LAMON GAME</span>
@@ -137,7 +257,7 @@
             <a href="https://zalo.me/g/kbqnel556" target="_blank" rel="noopener noreferrer" class="tmgt-nav-link">Cộng
                 đồng</a>
             <a href="https://www.facebook.com/lamongame" target="_blank" rel="noopener noreferrer"
-                class="tmgt-nav-link">Hỗ trợ</a>
+                class="tmgt-nav-link">Fanpage</a>
         </nav>
 
         <!-- Right Action Button -->
@@ -233,16 +353,20 @@
                 <!-- Thumbnail Switcher Carousel -->
                 <div class="tmgt-hero-thumbs">
                     <div class="tmgt-thumb-item active" data-index="0" title="Nguyệt Dạ Long Cảnh">
-                        <img src="/images/tmgt/tmgt-scene-3-thumb.webp" alt="Nguyệt Dạ Long Cảnh" width="82" height="48" loading="lazy" decoding="async">
+                        <img src="/images/tmgt/tmgt-scene-3-thumb.webp" alt="Nguyệt Dạ Long Cảnh" width="82" height="48"
+                            loading="lazy" decoding="async">
                     </div>
                     <div class="tmgt-thumb-item" data-index="1" title="Thiên Ngoại Tiên Cảnh">
-                        <img src="/images/tmgt/tmgt-banner-thumb.webp" alt="Thiên Ngoại Tiên Cảnh" width="82" height="48" loading="lazy" decoding="async">
+                        <img src="/images/tmgt/tmgt-banner-thumb.webp" alt="Thiên Ngoại Tiên Cảnh" width="82"
+                            height="48" loading="lazy" decoding="async">
                     </div>
                     <div class="tmgt-thumb-item" data-index="2" title="Vạn Cổ Tiên Môn">
-                        <img src="/images/tmgt/tmgt-scene-1-thumb.webp" alt="Vạn Cổ Tiên Môn" width="82" height="48" loading="lazy" decoding="async">
+                        <img src="/images/tmgt/tmgt-scene-1-thumb.webp" alt="Vạn Cổ Tiên Môn" width="82" height="48"
+                            loading="lazy" decoding="async">
                     </div>
                     <div class="tmgt-thumb-item" data-index="3" title="Hư Không Trận Đồ">
-                        <img src="/images/tmgt/tmgt-scene-2-thumb.webp" alt="Hư Không Trận Đồ" width="82" height="48" loading="lazy" decoding="async">
+                        <img src="/images/tmgt/tmgt-scene-2-thumb.webp" alt="Hư Không Trận Đồ" width="82" height="48"
+                            loading="lazy" decoding="async">
                     </div>
                 </div>
             </div>
@@ -281,7 +405,8 @@
             <div class="tmgt-gallery-track" id="galleryTrack">
                 <!-- Card 1: tmgt-1 -->
                 <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-1.webp">
-                    <img src="/images/tmgt/tmgt-1-thumb.webp" alt="Không Chiến Tự Do" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/tmgt/tmgt-1-thumb.webp" alt="Không Chiến Tự Do" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="tmgt-card-zoom-overlay">
                         <span class="tmgt-card-caption">Không Chiến Tự Do</span>
                     </div>
@@ -289,7 +414,8 @@
 
                 <!-- Card 2: tmgt-2 -->
                 <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-2.webp">
-                    <img src="/images/tmgt/tmgt-2-thumb.webp" alt="Đại Chiến Tiên Ma" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/tmgt/tmgt-2-thumb.webp" alt="Đại Chiến Tiên Ma" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="tmgt-card-zoom-overlay">
                         <span class="tmgt-card-caption">Đại Chiến Tiên Ma</span>
                     </div>
@@ -297,7 +423,8 @@
 
                 <!-- Card 3: tmgt-3 -->
                 <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-3.webp">
-                    <img src="/images/tmgt/tmgt-3-thumb.webp" alt="Ấp Trứng Hóa Rồng" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/tmgt/tmgt-3-thumb.webp" alt="Ấp Trứng Hóa Rồng" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="tmgt-card-zoom-overlay">
                         <span class="tmgt-card-caption">Ấp Trứng Hóa Rồng</span>
                     </div>
@@ -305,7 +432,8 @@
 
                 <!-- Card 4: tmgt-4 -->
                 <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-4.webp">
-                    <img src="/images/tmgt/tmgt-4-thumb.webp" alt="Thần Binh Xuất Thế" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/tmgt/tmgt-4-thumb.webp" alt="Thần Binh Xuất Thế" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="tmgt-card-zoom-overlay">
                         <span class="tmgt-card-caption">Thần Binh Xuất Thế</span>
                     </div>
@@ -313,7 +441,8 @@
 
                 <!-- Card 5: tmgt-5 -->
                 <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-5.webp">
-                    <img src="/images/tmgt/tmgt-5-thumb.webp" alt="Vạn Giới Tranh Bá" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/tmgt/tmgt-5-thumb.webp" alt="Vạn Giới Tranh Bá" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="tmgt-card-zoom-overlay">
                         <span class="tmgt-card-caption">Vạn Giới Tranh Bá</span>
                     </div>
@@ -321,7 +450,8 @@
 
                 <!-- Card 6: screenshot-20260911-002642 -->
                 <div class="tmgt-gallery-card" data-full="/images/tmgt/screenshot-20260911-002642.webp">
-                    <img src="/images/tmgt/screenshot-20260911-002642-thumb.webp" alt="Đồ Họa 3D Đỉnh Cao" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/tmgt/screenshot-20260911-002642-thumb.webp" alt="Đồ Họa 3D Đỉnh Cao" width="400"
+                        height="225" loading="lazy" decoding="async">
                     <div class="tmgt-card-zoom-overlay">
                         <span class="tmgt-card-caption">Đồ Họa 3D Đỉnh Cao</span>
                     </div>

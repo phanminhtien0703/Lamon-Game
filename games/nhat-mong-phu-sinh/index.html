@@ -5,17 +5,17 @@
     <script src="/assets/js/core/fbclid-cleaner.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Phù Sinh Mộng | Mở Ra Thế Giới Tu Tiên Đích Thực - Lamon Game</title>
+    <title>Nhất Mộng Phù Sinh | Mở Ra Thế Giới Tu Tiên Đích Thực - Lamon Game</title>
     <meta name="description"
-        content="Phù Sinh Mộng — Tuyệt tác MMORPG Tiên Hiệp 3D mở ra thế giới tu tiên đích thực, kết duyên tiên lữ, ngự kiếm phi hành và vạn giới tranh hùng. Tải game miễn phí cho Android, iOS và PC.">
+        content="Nhất Mộng Phù Sinh — Tuyệt tác MMORPG Tiên Hiệp 3D mở ra thế giới tu tiên đích thực, kết duyên tiên lữ, ngự kiếm phi hành và vạn giới tranh hùng. Tải game miễn phí cho Android, iOS và PC.">
     <meta name="theme-color" content="#38bdf8">
-    <link rel="canonical" href="https://lamongame.com/games/phu-sinh-mong/">
+    <link rel="canonical" href="https://lamongame.com/games/nhat-mong-phu-sinh/">
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:title" content="Phù Sinh Mộng | Mở Ra Thế Giới Tu Tiên Đích Thực - Lamon Game" />
+    <meta property="og:title" content="Nhất Mộng Phù Sinh | Mở Ra Thế Giới Tu Tiên Đích Thực - Lamon Game" />
     <meta property="og:description"
-        content="Hành trình tu tiên, kết duyên đồng hành, khám phá vạn giới. Tải game Phù Sinh Mộng ngay để bắt đầu!" />
-    <meta property="og:url" content="https://lamongame.com/games/phu-sinh-mong/" />
+        content="Hành trình tu tiên, kết duyên đồng hành, khám phá vạn giới. Tải game Nhất Mộng Phù Sinh ngay để bắt đầu!" />
+    <meta property="og:url" content="https://lamongame.com/games/nhat-mong-phu-sinh/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Lamon Game" />
     <meta property="og:image" content="https://lamongame.com/images/psm/psm-hero-xianxia.jpg" />
@@ -24,40 +24,94 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Phù Sinh Mộng | Mở Ra Thế Giới Tu Tiên Đích Thực - Lamon Game" />
+    <meta name="twitter:title" content="Nhất Mộng Phù Sinh | Mở Ra Thế Giới Tu Tiên Đích Thực - Lamon Game" />
     <meta name="twitter:description"
-        content="Hành trình tu tiên, kết duyên đồng hành, khám phá vạn giới. Tải game Phù Sinh Mộng ngay để bắt đầu!" />
+        content="Hành trình tu tiên, kết duyên đồng hành, khám phá vạn giới. Tải game Nhất Mộng Phù Sinh ngay để bắt đầu!" />
     <meta name="twitter:image" content="https://lamongame.com/images/psm/psm-hero-xianxia.jpg" />
 
-    <link rel="icon" href="/images/psm/psm-logo.jpg" type="image/jpeg" sizes="32x32">
-    <link rel="preload" as="image" href="/images/psm/psm-hero-xianxia.jpg?v=2">
+    <link rel="icon" href="/images/psm/psm-logo.webp" type="image/webp" sizes="32x32">
 
-    <!-- Google Fonts: Cinzel & Philosopher for Xianxia Calligraphy, Plus Jakarta Sans for UI -->
+    <!-- Google Fonts: Playfair Display, Plus Jakarta Sans (Non-render-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Noto+Serif:ital,wght@0,600;0,700;1,600;1,700&family=Philosopher:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap">
+    </noscript>
 
-    <!-- Google Tag Manager & Analytics -->
-    <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MWFF33CD"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QWZDCG2D5J"></script>
+    <!-- Google Tag Manager & Analytics (Deferred to preserve FCP & TBT) -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { window.dataLayer.push(arguments); }
         gtag('js', new Date());
-        gtag('config', 'G-QWZDCG2D5J');
+
+        function initTracking() {
+            if (window._trackingLoaded) return;
+            window._trackingLoaded = true;
+
+            var gtmScript = document.createElement('script');
+            gtmScript.async = true;
+            gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MWFF33CD';
+            document.head.appendChild(gtmScript);
+
+            var gaScript = document.createElement('script');
+            gaScript.async = true;
+            gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-QWZDCG2D5J';
+            gaScript.onload = function() {
+                gtag('config', 'G-QWZDCG2D5J');
+                gtag('config', 'G-MR75NX67PE');
+            };
+            document.head.appendChild(gaScript);
+        }
+
+        function scheduleTracking() {
+            setTimeout(initTracking, 7000);
+        }
+        if (document.readyState === 'complete') {
+            scheduleTracking();
+        } else {
+            window.addEventListener('load', scheduleTracking, { once: true });
+        }
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 150) initTracking();
+        }, { once: true, passive: true });
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.closest && e.target.closest('a, button')) initTracking();
+        }, { once: true, passive: true });
     </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MR75NX67PE"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { window.dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-MR75NX67PE');
-    </script>
+
+    <!-- Preload Critical Hero Background for LCP (Responsive) -->
+    <link rel="preload" as="image" href="/images/psm/psm-hero-xianxia-mobile.webp" media="(max-width: 768px)" fetchpriority="high">
+    <link rel="preload" as="image" href="/images/psm/psm-hero-xianxia.webp" media="(min-width: 769px)" fetchpriority="high">
+
+    <!-- Critical Inlined CSS for Instant Hero Render & Sub-2s LCP -->
+    <style>
+        :root{--psm-blue:#38bdf8;--psm-primary:#38bdf8;--psm-dark-bg:#07090f;--psm-text-main:#f8fafc;--psm-text-muted:#94a3b8;--psm-font-heading:'Playfair Display','Cormorant Garamond',serif;--psm-font-body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body.psm-body{background-color:var(--psm-dark-bg);color:var(--psm-text-main);font-family:var(--psm-font-body);line-height:1.6;overflow-x:hidden}
+        .psm-header{position:fixed;top:0;left:0;width:100%;height:72px;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:transparent;border-bottom:1px solid rgba(0,0,0,0.45)}
+        .psm-hero{position:relative;min-height:clamp(560px,72vh,670px);display:flex;flex-direction:column;justify-content:space-between;padding-top:72px;padding-bottom:24px;overflow:hidden;border-bottom:1px solid rgba(56,189,248,0.35)}
+        .psm-hero-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background-size:cover;background-position:center 15%;background-repeat:no-repeat;background-image:url('/images/psm/psm-hero-xianxia.webp')}
+        .psm-hero-overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 75% 25%,transparent 45%,rgba(7,9,15,0.5) 95%),linear-gradient(to right,rgba(7,9,15,0.85) 0%,rgba(7,9,15,0.45) 32%,rgba(7,9,15,0.05) 60%,transparent 100%),linear-gradient(to top,#07090f 0%,rgba(7,9,15,0.8) 8%,transparent 24%)}
+        .psm-hero-container{position:relative;z-index:10;max-width:1720px;width:100%;margin:0 auto;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;gap:40px;flex:1}
+        .psm-hero-title{font-family:var(--psm-font-heading);font-size:clamp(2.8rem,4.8vw,4.2rem);font-weight:900;font-style:normal;line-height:1.1;margin-bottom:12px;background:linear-gradient(180deg,#ffffff 0%,#e0f2fe 30%,#38bdf8 75%,#0284c7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        @media (max-width:768px){
+            .psm-header{padding:0 16px;height:58px}
+            .psm-nav-menu{display:none}
+            .psm-hero{min-height:auto;height:auto;padding-top:66px;padding-bottom:20px;overflow:visible}
+            .psm-hero-bg{background-image:url('/images/psm/psm-hero-xianxia-mobile.webp')}
+            .psm-hero-main{padding:10px 16px;gap:16px}
+            .psm-hero-title{font-size:clamp(1.85rem,8vw,2.3rem);font-weight:900;line-height:1.1;margin-bottom:8px}
+        }
+    </style>
 
     <!-- Master Xianxia Stylesheet for Phù Sinh Mộng -->
-    <link rel="stylesheet" href="/assets/css/pages/phu-sinh-mong.css?v=24">
+    <link rel="stylesheet" href="/assets/css/pages/phu-sinh-mong.min.css?v=26">
 </head>
 
 <body class="psm-body">
@@ -67,7 +121,7 @@
         <!-- Brand Logo -->
         <a href="/" class="psm-brand" title="Về trang chủ Lamon Game">
             <div class="psm-brand-icon">
-                <img src="/images/logo.jpg?v=2" alt="Logo Lamon Game" class="psm-brand-logo-img" width="40" height="40">
+                <img src="/images/logo.webp" alt="Logo Lamon Game" class="psm-brand-logo-img" width="40" height="40" decoding="async">
             </div>
             <div class="psm-brand-text">
                 <span class="psm-brand-name">LAMON GAME</span>
@@ -80,10 +134,12 @@
             <ul class="psm-nav-menu">
                 <li><a href="#hero" class="psm-nav-link active">Trang chủ</a></li>
                 <li><a href="#gallery" class="psm-nav-link">Hình ảnh</a></li>
-                <li><a href="https://www.facebook.com/gameprivate/" target="_blank" rel="noopener noreferrer"
+                <li><a href="#trust" class="psm-nav-link">Đặc sắc</a></li>
+                <li><a href="https://m.me/NhatMongPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20M%E1%BB%99ng%20Ph%C3%B9%20Sinh"
+                        target="_blank" rel="noopener noreferrer" class="psm-nav-link" data-track="top-giftcode">Nhận Code</a></li>
+                <li><a href="https://zalo.me/g/kbqnel556" target="_blank" rel="noopener noreferrer"
                         class="psm-nav-link">Cộng đồng</a></li>
-                <li><a href="https://m.me/gameprivate" target="_blank" rel="noopener noreferrer" class="psm-nav-link">Hỗ
-                        trợ</a></li>
+                <li><a href="https://www.facebook.com/NhatMongPhuSinh.LamonGame/" target="_blank" rel="noopener noreferrer" class="psm-nav-link">Fanpage</a></li>
             </ul>
         </nav>
 
@@ -103,8 +159,7 @@
     <!-- 2. HERO SECTION -->
     <section class="psm-hero" id="hero">
         <!-- Dynamic Background -->
-        <div class="psm-hero-bg" id="heroBg" style="background-image: url('/images/psm/psm-hero-xianxia.jpg?v=2');">
-        </div>
+        <div class="psm-hero-bg" id="heroBg"></div>
         <div class="psm-hero-overlay"></div>
 
         <!-- Hero Content Grid -->
@@ -112,11 +167,10 @@
 
             <!-- Center Showcase & Download -->
             <div class="psm-hero-center">
-                <div class="psm-hero-badge">✦ PHÙ SINH MỘNG</div>
-                <h1 class="psm-hero-title">Phù Sinh<br>Mộng</h1>
+                <h1 class="psm-hero-title">Nhất Mộng<br>Phù Sinh</h1>
                 <h2 class="psm-hero-subtitle">MỞ RA THẾ GIỚI TU TIÊN ĐÍCH THỰC</h2>
                 <p class="psm-hero-desc">
-                    Hành trình tu tiên, kết duyên đồng hành, khám phá vạn giới. Tải game ngay để bắt đầu!
+                    Hành trình tu tiên, kết duyên đồng hành, khám phá vạn giới. Tải game Nhất Mộng Phù Sinh ngay để bắt đầu!
                 </p>
 
                 <!-- Platform Tabs -->
@@ -150,14 +204,29 @@
                     </a>
                 </div>
 
-                <!-- Main CTA Button (Opens Platform Selection Modal) -->
-                <a id="downloadCta" class="psm-download-cta open-download-modal" href="javascript:void(0)"
-                    data-track="psm-download-hero">
-                    <span>TẢI GAME</span>
-                    <svg viewBox="0 0 24 24">
-                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-                    </svg>
-                </a>
+                <!-- CTA Action Buttons -->
+                <div class="psm-cta-row">
+                    <!-- Main CTA Button (Opens Platform Selection Modal) -->
+                    <a id="downloadCta" class="psm-download-cta open-download-modal" href="javascript:void(0)"
+                        data-track="psm-download-hero">
+                        <span>TẢI GAME</span>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                        </svg>
+                    </a>
+
+                    <!-- Giftcode CTA Button (Auto Pre-filled Messenger Text) -->
+                    <a id="giftcodeCta" class="psm-giftcode-cta"
+                        href="https://m.me/NhatMongPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20M%E1%BB%99ng%20Ph%C3%B9%20Sinh"
+                        target="_blank" rel="noopener noreferrer" data-track="psm-giftcode-hero"
+                        title="Nhận code qua Messenger">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1h-2V5c0-.55.45-1 1-1zM9 4c.55 0 1 .45 1 1v1H8c0-.55.45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76V14h2V8.76L15.38 12 17 10.83 14.92 8H20v6z" />
+                        </svg>
+                        <span>NHẬN CODE</span>
+                    </a>
+                </div>
 
                 <!-- Meta Details -->
                 <div class="psm-meta-info">
@@ -171,16 +240,16 @@
                 <!-- Thumbnail Switcher Carousel (Placed directly under metadata like reference image) -->
                 <div class="psm-hero-thumbs">
                     <div class="psm-thumb-item active" data-index="0" title="Thần Sơn Tuyệt Cảnh">
-                        <img src="/images/psm/psm-hero-xianxia.jpg?v=2" alt="Thần Sơn Tuyệt Cảnh" width="110" height="62">
+                        <img src="/images/psm/psm-hero-xianxia-thumb.webp" alt="Thần Sơn Tuyệt Cảnh" width="82" height="48" loading="lazy" decoding="async">
                     </div>
                     <div class="psm-thumb-item" data-index="1" title="Vạn Giới Môn">
-                        <img src="/images/psm/psm-scene-portal.jpg" alt="Vạn Giới Môn" width="110" height="62">
+                        <img src="/images/psm/psm-scene-portal-thumb.webp" alt="Vạn Giới Môn" width="82" height="48" loading="lazy" decoding="async">
                     </div>
                     <div class="psm-thumb-item" data-index="2" title="Nguyệt Lạc Long Ngâm">
-                        <img src="/images/psm/psm-scene-dragon.jpg" alt="Nguyệt Lạc Long Ngâm" width="110" height="62">
+                        <img src="/images/psm/psm-scene-dragon-thumb.webp" alt="Nguyệt Lạc Long Ngâm" width="82" height="48" loading="lazy" decoding="async">
                     </div>
                     <div class="psm-thumb-item" data-index="3" title="Hư Không Luân Hồi">
-                        <img src="/images/psm/psm-scene-halo.jpg" alt="Hư Không Luân Hồi" width="110" height="62">
+                        <img src="/images/psm/psm-scene-halo-thumb.webp" alt="Hư Không Luân Hồi" width="82" height="48" loading="lazy" decoding="async">
                     </div>
                 </div>
             </div>
@@ -205,7 +274,7 @@
                     HÌNH ẢNH GAME
                 </h2>
                 <p class="psm-gallery-sub">
-                    Khám phá thế giới Phù Sinh Mộng qua những khung hình chân thực
+                    Khám phá thế giới Nhất Mộng Phù Sinh qua những khung hình chân thực
                 </p>
             </div>
             <a href="javascript:void(0)" class="psm-gallery-all-btn" id="viewAllGallery">
@@ -218,56 +287,56 @@
             <button class="psm-gallery-arrow prev" id="galleryPrev" aria-label="Xem ảnh trước">‹</button>
             <div class="psm-gallery-track" id="galleryTrack">
                 <!-- Card 1 -->
-                <div class="psm-gallery-card" data-full="/images/psm/psm-1.jpg">
-                    <img src="/images/psm/psm-1.jpg" alt="Tiên Cảnh Phù Sinh 01" width="400" height="225" loading="lazy">
+                <div class="psm-gallery-card" data-full="/images/psm/psm-1.webp">
+                    <img src="/images/psm/psm-1-thumb.webp" alt="Tiên Cảnh Phù Sinh 01" width="400" height="225" loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 01</span>
                     </div>
                 </div>
 
                 <!-- Card 2 -->
-                <div class="psm-gallery-card" data-full="/images/psm/psm-2.jpg">
-                    <img src="/images/psm/psm-2.jpg" alt="Tiên Cảnh Phù Sinh 02" width="400" height="225" loading="lazy">
+                <div class="psm-gallery-card" data-full="/images/psm/psm-2.webp">
+                    <img src="/images/psm/psm-2-thumb.webp" alt="Tiên Cảnh Phù Sinh 02" width="400" height="225" loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 02</span>
                     </div>
                 </div>
 
                 <!-- Card 3 -->
-                <div class="psm-gallery-card" data-full="/images/psm/psm-3.jpg">
-                    <img src="/images/psm/psm-3.jpg" alt="Tiên Cảnh Phù Sinh 03" width="400" height="225" loading="lazy">
+                <div class="psm-gallery-card" data-full="/images/psm/psm-3.webp">
+                    <img src="/images/psm/psm-3-thumb.webp" alt="Tiên Cảnh Phù Sinh 03" width="400" height="225" loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 03</span>
                     </div>
                 </div>
 
                 <!-- Card 4 -->
-                <div class="psm-gallery-card" data-full="/images/psm/psm-4.jpg">
-                    <img src="/images/psm/psm-4.jpg" alt="Tiên Cảnh Phù Sinh 04" width="400" height="225" loading="lazy">
+                <div class="psm-gallery-card" data-full="/images/psm/psm-4.webp">
+                    <img src="/images/psm/psm-4-thumb.webp" alt="Tiên Cảnh Phù Sinh 04" width="400" height="225" loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 04</span>
                     </div>
                 </div>
 
                 <!-- Card 5 -->
-                <div class="psm-gallery-card" data-full="/images/psm/psm-5.jpg">
-                    <img src="/images/psm/psm-5.jpg" alt="Tiên Cảnh Phù Sinh 05" width="400" height="225" loading="lazy">
+                <div class="psm-gallery-card" data-full="/images/psm/psm-5.webp">
+                    <img src="/images/psm/psm-5-thumb.webp" alt="Tiên Cảnh Phù Sinh 05" width="400" height="225" loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 05</span>
                     </div>
                 </div>
 
                 <!-- Card 6 -->
-                <div class="psm-gallery-card" data-full="/images/psm/psm-6.jpg">
-                    <img src="/images/psm/psm-6.jpg" alt="Tiên Cảnh Phù Sinh 06" width="400" height="225" loading="lazy">
+                <div class="psm-gallery-card" data-full="/images/psm/psm-6.webp">
+                    <img src="/images/psm/psm-6-thumb.webp" alt="Tiên Cảnh Phù Sinh 06" width="400" height="225" loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 06</span>
                     </div>
                 </div>
 
                 <!-- Card 7 -->
-                <div class="psm-gallery-card" data-full="/images/psm/psm-7.jpg">
-                    <img src="/images/psm/psm-7.jpg" alt="Tiên Cảnh Phù Sinh 07" width="400" height="225" loading="lazy">
+                <div class="psm-gallery-card" data-full="/images/psm/psm-7.webp">
+                    <img src="/images/psm/psm-7-thumb.webp" alt="Tiên Cảnh Phù Sinh 07" width="400" height="225" loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 07</span>
                     </div>
@@ -278,7 +347,7 @@
     </section>
 
     <!-- 4. TRUST & GUARANTEE BAR (2x2 Grid Matching Mockup) -->
-    <section class="psm-trust-section">
+    <section class="psm-trust-section" id="trust">
         <div class="psm-trust-bar">
             <!-- 1. An toàn (Top Left) -->
             <div class="psm-trust-item" title="Đảm bảo an toàn không virus">
@@ -310,7 +379,7 @@
             </div>
 
             <!-- 3. Hỗ trợ 24/7 (Bottom Left) -->
-            <a href="https://m.me/gameprivate" target="_blank" rel="noopener noreferrer" class="psm-trust-item"
+            <a href="https://m.me/NhatMongPhuSinh.LamonGame" target="_blank" rel="noopener noreferrer" class="psm-trust-item"
                 title="Liên hệ CSKH 24/7">
                 <div class="psm-trust-icon-box">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3">
@@ -352,11 +421,11 @@
             <div class="tmgt-support-alert">
                 <strong>🎁 Hỗ trợ phát Giftcode trong 24h đầu tiên:</strong><br>
                 Các tiên hữu vui lòng gửi <strong>Tên nhân vật</strong> + <strong>Server</strong> qua Messenger hoặc
-                Zalo CTV để nhận bộ Giftcode Tân Thủ Phù Sinh Mộng nhanh nhất!
+                Zalo CTV để nhận bộ Giftcode Tân Thủ Nhất Mộng Phù Sinh nhanh nhất!
             </div>
 
             <div class="tmgt-support-tiles">
-                <a href="https://m.me/gameprivate" target="_blank" rel="noopener noreferrer" class="tmgt-support-tile"
+                <a href="https://m.me/NhatMongPhuSinh.LamonGame" target="_blank" rel="noopener noreferrer" class="tmgt-support-tile"
                     data-track="psm-support-messenger">
                     <div class="tmgt-support-icon">💬</div>
                     <div class="tmgt-support-label">Messenger CSKH</div>
@@ -373,10 +442,10 @@
                     <div class="tmgt-support-label">Group Zalo Cộng Đồng</div>
                 </a>
 
-                <a href="https://www.facebook.com/gameprivate/" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.facebook.com/NhatMongPhuSinh.LamonGame/" target="_blank" rel="noopener noreferrer"
                     class="tmgt-support-tile" data-track="psm-support-facebook">
                     <div class="tmgt-support-icon">📘</div>
-                    <div class="tmgt-support-label">Fanpage Game Private</div>
+                    <div class="tmgt-support-label">Fanpage Nhất Mộng Phù Sinh</div>
                 </a>
             </div>
         </div>
@@ -406,7 +475,7 @@
             <div class="psm-dl-header">
                 <span class="psm-dl-badge">Lamon Game</span>
                 <h3 class="psm-dl-title">Chọn nền tảng tải game</h3>
-                <p class="psm-dl-sub">Phù Sinh Mộng</p>
+                <p class="psm-dl-sub">Nhất Mộng Phù Sinh</p>
             </div>
 
             <div class="psm-dl-platforms">
@@ -494,8 +563,8 @@
                     </li>
                     <li class="psm-step-item">
                         <span class="psm-step-num">3</span>
-                        <div class="psm-step-text">Chờ hoàn tất cài đặt, mở ứng dụng và bắt đầu hành trình tu tiên Phù
-                            Sinh Mộng!</div>
+                        <div class="psm-step-text">Chờ hoàn tất cài đặt, mở ứng dụng và bắt đầu hành trình tu tiên Nhất
+                            Mộng Phù Sinh!</div>
                     </li>
                 </ul>
             </div>
@@ -533,7 +602,7 @@
                     </li>
                     <li class="psm-step-item">
                         <span class="psm-step-num">2</span>
-                        <div class="psm-step-text">Tải file APK Android của Phù Sinh Mộng về PC.</div>
+                        <div class="psm-step-text">Tải file APK Android của Nhất Mộng Phù Sinh về PC.</div>
                     </li>
                     <li class="psm-step-item">
                         <span class="psm-step-num">3</span>
@@ -546,19 +615,19 @@
     </div>
 
     <!-- Sidebottom and Interactive Scripts -->
-    <script src="/components/sidebottom.js"></script>
+    <script src="/components/sidebottom.min.js"></script>
     <script>
         renderSidebottom({
             items: [
                 { href: 'https://zalo.me/g/kbqnel556', icon: 'zalo', label: 'Cộng Đồng', track: 'side-zalo' },
-                { href: 'https://m.me/gameprivate?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Ph%C3%B9%20Sinh%20M%E1%BB%99ng', icon: 'giftcode', label: 'Giftcode', track: 'side-giftcode', target: '_blank', rel: 'noopener noreferrer', ariaLabel: 'Mở Messenger để nhận giftcode' },
+                { href: 'https://m.me/NhatMongPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20M%E1%BB%99ng%20Ph%C3%B9%20Sinh', icon: 'giftcode', label: 'Giftcode', track: 'side-giftcode', target: '_blank', rel: 'noopener noreferrer', ariaLabel: 'Mở Messenger để nhận giftcode' },
                 { href: '/', icon: 'home', label: 'Trang chủ', track: 'side-home' },
-                { href: 'https://www.facebook.com/gameprivate/', icon: 'support', label: 'Hỗ trợ', track: 'side-support' },
+                { href: 'https://www.facebook.com/NhatMongPhuSinh.LamonGame/', icon: 'support', label: 'Fanpage', track: 'side-support' },
                 { href: '', icon: 'moreGames', label: 'Game khác', track: 'side-more-games' }
             ]
         });
     </script>
-    <script src="/assets/js/pages/phu-sinh-mong.js?v=21"></script>
+    <script src="/assets/js/pages/phu-sinh-mong.min.js?v=22" defer></script>
 </body>
 
 </html>
