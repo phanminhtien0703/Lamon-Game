@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Era of Warfare | Epic 3D MMORPG - Lamon Game</title>
+    <meta name="description"
+        content="Era of Warfare — Epic 3D MMORPG with fiery battlegrounds, cross-server arenas, and generous novice rewards. Download Era of Warfare today!">
+    <link rel="canonical" href="https://lamongame.com/games/era-of-warfare/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Era of Warfare | Epic 3D MMORPG - Lamon Game" />
+    <meta property="og:description"
+        content="Era of Warfare — Action 3D MMORPG featuring intense warfare, peak battle arenas, and free novice starter rewards." />
+    <meta property="og:url" content="https://lamongame.com/games/era-of-warfare/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Lamon Game" />
+    <meta property="og:image" content="https://lamongame.com/images/tmgt/tmgt-banner.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Era of Warfare | Epic 3D MMORPG - Lamon Game" />
+    <meta name="twitter:description"
+        content="Era of Warfare — Action 3D MMORPG featuring intense warfare, peak battle arenas, and free novice starter rewards." />
+    <meta name="twitter:image" content="https://lamongame.com/images/tmgt/tmgt-banner.jpg" />
+
+    <link rel="icon" href="/images/tmgt/tmgt-logo.jpg" type="image/jpeg" sizes="32x32">
+
+    <!-- Google Fonts: Playfair Display, Plus Jakarta Sans (Non-render-blocking) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap">
+    </noscript>
+
+    <!-- Google Tag Manager & Analytics (Deferred to preserve FCP & TBT) -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        function initTracking() {
+            if (window._trackingLoaded) return;
+            window._trackingLoaded = true;
+
+            var gtmScript = document.createElement('script');
+            gtmScript.async = true;
+            gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MWFF33CD';
+            document.head.appendChild(gtmScript);
+
+            var gaScript = document.createElement('script');
+            gaScript.async = true;
+            gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-QWZDCG2D5J';
+            gaScript.onload = function () {
+                gtag('config', 'G-QWZDCG2D5J');
+                gtag('config', 'G-MR75NX67PE');
+            };
+            document.head.appendChild(gaScript);
+        }
+
+        function scheduleTracking() {
+            setTimeout(initTracking, 7000);
+        }
+        if (document.readyState === 'complete') {
+            scheduleTracking();
+        } else {
+            window.addEventListener('load', scheduleTracking, { once: true });
+        }
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 150) initTracking();
+        }, { once: true, passive: true });
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.closest && e.target.closest('a, button')) initTracking();
+        }, { once: true, passive: true });
+    </script>
+
+    <!-- Preload Critical Hero Background for LCP (Responsive) -->
+    <link rel="preload" as="image" href="/images/tmgt/tmgt-scene-3-mobile.webp" media="(max-width: 768px)"
+        fetchpriority="high">
+    <link rel="preload" as="image" href="/images/tmgt/tmgt-scene-3.webp" media="(min-width: 769px)"
+        fetchpriority="high">
+
+    <!-- Critical Inlined CSS for Instant Hero Render & Sub-2s LCP -->
+    <style>
+        :root {
+            --tmgt-blue: #38bdf8;
+            --tmgt-primary: #38bdf8;
+            --tmgt-dark-bg: #07090f;
+            --tmgt-text-main: #f8fafc;
+            --tmgt-text-muted: #94a3b8;
+            --tmgt-font-heading: 'Playfair Display', serif;
+            --tmgt-font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body.tmgt-body {
+            background-color: var(--tmgt-dark-bg);
+            color: var(--tmgt-text-main);
+            font-family: var(--tmgt-font-body);
+            line-height: 1.6;
+            overflow-x: hidden
+        }
+
+        .tmgt-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 72px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: transparent;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.45)
+        }
+
+        .tmgt-hero {
+            position: relative;
+            min-height: clamp(560px, 72vh, 670px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-top: 72px;
+            padding-bottom: 24px;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.35)
+        }
+
+        .tmgt-hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background-size: cover;
+            background-position: center 20%;
+            background-repeat: no-repeat;
+            background-image: url('/images/tmgt/tmgt-scene-3.webp')
+        }
+
+        .tmgt-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 75% 25%, transparent 45%, rgba(7, 9, 15, 0.5) 95%), linear-gradient(to right, rgba(7, 9, 15, 0.85) 0%, rgba(7, 9, 15, 0.45) 32%, rgba(7, 9, 15, 0.05) 60%, transparent 100%), linear-gradient(to top, #07090f 0%, rgba(7, 9, 15, 0.8) 8%, transparent 24%)
+        }
+
+        .tmgt-hero-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1720px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 16px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            flex: 1
+        }
+
+        .tmgt-hero-title {
+            font-family: var(--tmgt-font-heading);
+            font-size: clamp(3.1rem, 5.2vw, 4.4rem);
+            font-weight: 900;
+            line-height: 1.08;
+            margin-bottom: 12px;
+            background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 30%, #38bdf8 75%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        @media (max-width:768px) {
+            .tmgt-header {
+                padding: 0 16px;
+                height: 58px
+            }
+
+            .tmgt-nav-menu {
+                display: none
+            }
+
+            .tmgt-hero {
+                min-height: auto;
+                height: auto;
+                padding-top: 66px;
+                padding-bottom: 20px;
+                overflow: visible
+            }
+
+            .tmgt-hero-bg {
+                background-image: url('/images/tmgt/tmgt-scene-3-mobile.webp')
+            }
+
+            .tmgt-hero-container {
+                padding: 10px 16px;
+                gap: 16px
+            }
+
+            .tmgt-hero-title {
+                font-size: clamp(1.85rem, 8vw, 2.3rem);
+                font-weight: 900;
+                line-height: 1.1;
+                margin-bottom: 8px
+            }
+        }
+    </style>
+
+    <!-- Master Stylesheet for Era of Warfare -->
+    <link rel="stylesheet" href="/assets/css/pages/era-of-warfare.min.css?v=1">
+</head>
+
+<body class="tmgt-body">
+
+    <!-- 1. TOP NAVIGATION BAR -->
+    <header class="tmgt-header">
+        <!-- Brand Logo -->
+        <a href="/" class="tmgt-brand" title="Back to Lamon Game Home">
+            <div class="tmgt-brand-icon">
+                <img src="/images/logo.jpg?v=2" alt="Lamon Game Logo" width="40" height="40"
+                    class="tmgt-brand-logo-img">
+            </div>
+            <div class="tmgt-brand-text">
+                <span class="tmgt-brand-name">LAMON GAME</span>
+                <span class="tmgt-brand-sub">Epic gaming at your fingertips</span>
+            </div>
+        </a>
+
+        <!-- Menu Navigation -->
+        <nav class="tmgt-nav-menu">
+            <a href="#hero" class="tmgt-nav-link active">Home</a>
+            <a href="#gallery" class="tmgt-nav-link">Gallery</a>
+            <a href="#trust" class="tmgt-nav-link">Features</a>
+            <a href="https://m.me/Era.of.Warfare.Private?text=I%20want%20to%20receive%20code%20for%20Era%20of%20Warfare"
+                target="_blank" rel="noopener noreferrer" class="tmgt-nav-link" data-track="top-giftcode">Claim Code</a>
+            <a href="https://discord.gg/XMAEWqYQB" target="_blank" rel="noopener noreferrer" class="tmgt-nav-link">Discord</a>
+            <a href="https://www.facebook.com/Era.of.Warfare.Private" target="_blank" rel="noopener noreferrer"
+                class="tmgt-nav-link">Fanpage</a>
+        </nav>
+
+        <!-- Right Action Button -->
+        <a href="/" class="tmgt-home-btn" title="Back to Lamon Game Portal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            <span>Main Portal</span>
+        </a>
+    </header>
+
+    <!-- 2. HERO SECTION -->
+    <section class="tmgt-hero" id="hero">
+        <!-- Background Layer with Smooth Dynamic Switcher -->
+        <div class="tmgt-hero-bg" id="heroBg"></div>
+        <div class="tmgt-hero-overlay"></div>
+
+        <div class="tmgt-hero-container">
+            <!-- Left Info & CTA -->
+            <div class="tmgt-hero-main">
+                <h1 class="tmgt-hero-title">Era of<br>Warfare</h1>
+                <h2 class="tmgt-hero-subtitle">FIERY BATTLEGROUNDS · SUPREME CONQUEST</h2>
+
+                <p class="tmgt-hero-desc">
+                    Explore the intense world of Era of Warfare with thrilling cross-server battlegrounds and claim your 3,000 Ruby starter package for free. Download and battle today!
+                </p>
+
+                <!-- Platform Filter Tabs -->
+                <div class="tmgt-platforms">
+                    <a href="https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4/THANMAGIANGTHEYL784Z4_EdIf1XkalZCqknYO0sCRwA.apk"
+                        class="tmgt-plat-btn" data-platform="windows" aria-label="Download for Windows (PC Emulator)"
+                        title="Download for Windows" data-track="hero-plat-windows">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.949-1.801" />
+                        </svg>
+                        <span>Windows</span>
+                    </a>
+                    <a href="https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4/THANMAGIANGTHEYL784Z4_EdIf1XkalZCqknYO0sCRwA.apk"
+                        class="tmgt-plat-btn active" data-platform="android" aria-label="Download for Android (APK)"
+                        title="Download for Android" data-track="hero-plat-android">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.4116 13.8533 8 12 8s-3.5902.4116-5.1367.9507L4.841 5.4477a.416.416 0 00-.5676-.1521.416.416 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396" />
+                        </svg>
+                        <span>Android</span>
+                    </a>
+                    <a href="itms-services://?action=download-manifest&url=https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4IOS/THANMAGIANGTHEYL784Z4IOS_EdIf1XkalZCqknYO0sCRwA.plist"
+                        class="tmgt-plat-btn" data-platform="ios" aria-label="Download for iOS" title="Download for iOS"
+                        data-track="hero-plat-ios">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 0.93-2.85-.9.04-1.99.6-2.63 1.35-.57.65-1.07 1.72-.94 2.74 1.01.08 2.03-.5 2.64-1.24" />
+                        </svg>
+                        <span>iOS</span>
+                    </a>
+                </div>
+
+                <!-- CTA Action Buttons -->
+                <div class="tmgt-cta-row">
+                    <!-- Main CTA Button (Opens Platform Selection Modal) -->
+                    <a id="downloadCta" class="tmgt-download-cta open-download-modal" href="javascript:void(0)"
+                        data-track="tmgt-download-hero">
+                        <span>DOWNLOAD</span>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                        </svg>
+                    </a>
+
+                    <!-- Giftcode CTA Button (Auto Pre-filled Messenger Text) -->
+                    <a id="giftcodeCta" class="tmgt-giftcode-cta"
+                        href="https://m.me/Era.of.Warfare.Private?text=I%20want%20to%20receive%20code%20for%20Era%20of%20Warfare"
+                        target="_blank" rel="noopener noreferrer" data-track="tmgt-giftcode-hero"
+                        title="Claim code via Messenger">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.65-.5-.65C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1h-2V5c0-.55.45-1 1-1zM9 4c.55 0 1 .45 1 1v1H8c0-.55.45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76V14h2V8.76L15.38 12 17 10.83 14.92 8H20v6z" />
+                        </svg>
+                        <span>CLAIM CODE</span>
+                    </a>
+                </div>
+
+                <!-- Meta Details -->
+                <div class="tmgt-meta-info">
+                    <span>• Version 2.1.0</span>
+                    <span class="tmgt-meta-dot"></span>
+                    <span>• Size 1.8 GB</span>
+                    <span class="tmgt-meta-dot"></span>
+                    <span>• Updated 10/10/2026</span>
+                </div>
+
+                <!-- Thumbnail Switcher Carousel -->
+                <div class="tmgt-hero-thumbs">
+                    <div class="tmgt-thumb-item active" data-index="0" title="Moonlit Dragon Realm">
+                        <img src="/images/tmgt/tmgt-scene-3-thumb.webp" alt="Moonlit Dragon Realm" width="82" height="48"
+                            loading="lazy" decoding="async">
+                    </div>
+                    <div class="tmgt-thumb-item" data-index="1" title="Celestial Wonderland">
+                        <img src="/images/tmgt/tmgt-banner-thumb.webp" alt="Celestial Wonderland" width="82"
+                            height="48" loading="lazy" decoding="async">
+                    </div>
+                    <div class="tmgt-thumb-item" data-index="2" title="Eternal Immortal Gate">
+                        <img src="/images/tmgt/tmgt-scene-1-thumb.webp" alt="Eternal Immortal Gate" width="82" height="48"
+                            loading="lazy" decoding="async">
+                    </div>
+                    <div class="tmgt-thumb-item" data-index="3" title="Void Battle Array">
+                        <img src="/images/tmgt/tmgt-scene-2-thumb.webp" alt="Void Battle Array" width="82" height="48"
+                            loading="lazy" decoding="async">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Decorative Couplet -->
+            <div class="tmgt-hero-right">
+                <div class="tmgt-couplet-wrap">
+                    <div class="tmgt-couplet-col">烽火紀元</div>
+                    <div class="tmgt-couplet-col">萬界爭雄</div>
+                </div>
+                <div class="tmgt-seal">戰</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. SECTION: GAME GALLERY -->
+    <section class="tmgt-gallery-section" id="gallery">
+        <div class="tmgt-gallery-header">
+            <div class="tmgt-gallery-title-wrap">
+                <h2 class="tmgt-gallery-title">
+                    <span class="tmgt-gallery-title-icon">✦</span>
+                    GAME GALLERY
+                </h2>
+                <p class="tmgt-gallery-sub">
+                    Explore the world of Era of Warfare through authentic in-game moments
+                </p>
+            </div>
+            <a href="javascript:void(0)" class="tmgt-gallery-all-btn" id="viewAllGallery">
+                <span>View All</span>
+                <span>➔</span>
+            </a>
+        </div>
+
+        <div class="tmgt-gallery-container">
+            <button class="tmgt-gallery-arrow prev" id="galleryPrev" aria-label="Previous image">‹</button>
+            <div class="tmgt-gallery-track" id="galleryTrack">
+                <!-- Card 1: tmgt-1 -->
+                <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-1.webp">
+                    <img src="/images/tmgt/tmgt-1-thumb.webp" alt="Aerial Combat" width="400" height="225"
+                        loading="lazy" decoding="async">
+                    <div class="tmgt-card-zoom-overlay">
+                        <span class="tmgt-card-caption">Aerial Combat</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: tmgt-2 -->
+                <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-2.webp">
+                    <img src="/images/tmgt/tmgt-2-thumb.webp" alt="Epic Battlefield" width="400" height="225"
+                        loading="lazy" decoding="async">
+                    <div class="tmgt-card-zoom-overlay">
+                        <span class="tmgt-card-caption">Epic Battlefield</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: tmgt-3 -->
+                <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-3.webp">
+                    <img src="/images/tmgt/tmgt-3-thumb.webp" alt="Hatch Dragon Egg" width="400" height="225"
+                        loading="lazy" decoding="async">
+                    <div class="tmgt-card-zoom-overlay">
+                        <span class="tmgt-card-caption">Hatch Dragon Egg</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: tmgt-4 -->
+                <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-4.webp">
+                    <img src="/images/tmgt/tmgt-4-thumb.webp" alt="Divine Weapons" width="400" height="225"
+                        loading="lazy" decoding="async">
+                    <div class="tmgt-card-zoom-overlay">
+                        <span class="tmgt-card-caption">Divine Weapons</span>
+                    </div>
+                </div>
+
+                <!-- Card 5: tmgt-5 -->
+                <div class="tmgt-gallery-card" data-full="/images/tmgt/tmgt-5.webp">
+                    <img src="/images/tmgt/tmgt-5-thumb.webp" alt="Realm Conquest" width="400" height="225"
+                        loading="lazy" decoding="async">
+                    <div class="tmgt-card-zoom-overlay">
+                        <span class="tmgt-card-caption">Realm Conquest</span>
+                    </div>
+                </div>
+
+                <!-- Card 6: screenshot-20260911-002642 -->
+                <div class="tmgt-gallery-card" data-full="/images/tmgt/screenshot-20260911-002642.webp">
+                    <img src="/images/tmgt/screenshot-20260911-002642-thumb.webp" alt="Next-Gen 3D Graphics" width="400"
+                        height="225" loading="lazy" decoding="async">
+                    <div class="tmgt-card-zoom-overlay">
+                        <span class="tmgt-card-caption">Next-Gen 3D Graphics</span>
+                    </div>
+                </div>
+            </div>
+            <button class="tmgt-gallery-arrow next" id="galleryNext" aria-label="Next image">›</button>
+        </div>
+    </section>
+
+    <!-- 4. TRUST & GUARANTEE BAR (PC: 4 Columns, Mobile: 2x2 Grid) -->
+    <section class="tmgt-trust-section" id="trust">
+        <div class="tmgt-trust-bar">
+            <!-- 1. Safe & Secure -->
+            <div class="tmgt-trust-item" title="100% Virus-Free Guarantee">
+                <div class="tmgt-trust-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4.5" y="4.5" width="15" height="15" rx="2" transform="rotate(45 12 12)" />
+                    </svg>
+                </div>
+                <div class="tmgt-trust-info">
+                    <strong class="tmgt-trust-title">Safe & Secure</strong>
+                    <span class="tmgt-trust-desc">Official file, 100% virus-free</span>
+                </div>
+            </div>
+
+            <!-- 2. Always Updated -->
+            <div class="tmgt-trust-item" title="Always updated to the latest version">
+                <div class="tmgt-trust-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <polyline points="3 3 3 8 8 8" />
+                    </svg>
+                </div>
+                <div class="tmgt-trust-info">
+                    <strong class="tmgt-trust-title">Latest Updates</strong>
+                    <span class="tmgt-trust-desc">Always current version</span>
+                </div>
+            </div>
+
+            <!-- 3. 24/7 Support -->
+            <a href="https://m.me/Era.of.Warfare.Private" target="_blank" rel="noopener noreferrer" class="tmgt-trust-item"
+                title="Contact 24/7 Customer Support">
+                <div class="tmgt-trust-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3">
+                        <circle cx="12" cy="12" r="9" />
+                        <circle cx="12" cy="12" r="4.5" />
+                    </svg>
+                </div>
+                <div class="tmgt-trust-info">
+                    <strong class="tmgt-trust-title">24/7 Support</strong>
+                    <span class="tmgt-trust-desc">Fast & dedicated assistance</span>
+                </div>
+            </a>
+
+            <!-- 4. Install Guide -->
+            <div class="tmgt-trust-item open-guide-btn" title="Click to view installation guide">
+                <div class="tmgt-trust-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3.5" y="3.5" width="17" height="17" rx="2" />
+                        <rect x="8.5" y="8.5" width="7" height="7" rx="1" />
+                    </svg>
+                </div>
+                <div class="tmgt-trust-info">
+                    <strong class="tmgt-trust-title">Install Guide</strong>
+                    <span class="tmgt-trust-desc">Clear & step-by-step</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CUSTOMER SUPPORT CENTER -->
+    <section class="tmgt-support-section" id="support">
+        <div class="tmgt-support-header">
+            <div class="tmgt-support-title-wrap">
+                <h2 class="tmgt-support-title">
+                    <span class="tmgt-support-title-icon">✦</span>
+                    CUSTOMER SUPPORT CENTER
+                </h2>
+                <p class="tmgt-support-sub">
+                    Contact the Lamon Game support team for inquiries and 24/7 assistance
+                </p>
+            </div>
+            <a href="https://m.me/Era.of.Warfare.Private" target="_blank" rel="noopener noreferrer" class="tmgt-support-all-btn">
+                <span>Send Message</span>
+                <span>➔</span>
+            </a>
+        </div>
+
+        <div class="tmgt-support-card">
+
+            <div class="tmgt-support-alert">
+                <strong>🎁 24-Hour Starter Giftcode Support:</strong><br>
+                Warriors, please send your <strong>Character Name</strong> + <strong>Server</strong> via Messenger or
+                Discord Supporter to receive the Era of Warfare Starter Giftcode (3,000 Rubies + VIP Equipment) as quickly as possible!
+            </div>
+
+            <div class="tmgt-support-tiles">
+                <a href="https://m.me/Era.of.Warfare.Private" target="_blank" rel="noopener noreferrer" class="tmgt-support-tile"
+                    data-track="tmgt-support-messenger">
+                    <div class="tmgt-support-icon">💬</div>
+                    <div class="tmgt-support-label">Messenger Support</div>
+                </a>
+
+                <a href="https://discord.gg/XMAEWqYQB" target="_blank" rel="noopener noreferrer"
+                    class="tmgt-support-tile" data-track="tmgt-support-discord">
+                    <div class="tmgt-support-icon">🎮</div>
+                    <div class="tmgt-support-label">Discord Community</div>
+                </a>
+
+                <a href="tel:0925187240" class="tmgt-support-tile" data-track="tmgt-support-hotline">
+                    <div class="tmgt-support-icon">📞</div>
+                    <div class="tmgt-support-label">Support Hotline: 0925 187 240</div>
+                </a>
+
+                <a href="https://www.facebook.com/Era.of.Warfare.Private" target="_blank" rel="noopener noreferrer"
+                    class="tmgt-support-tile" data-track="tmgt-support-facebook">
+                    <div class="tmgt-support-icon">📘</div>
+                    <div class="tmgt-support-label">Official Fanpage</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FOOTER BẢN QUYỀN -->
+    <footer class="tmgt-footer">
+        <div class="tmgt-footer-copy">
+            © 2026 Lamon Game. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- LIGHTBOX MODAL -->
+    <div class="tmgt-lightbox" id="tmgtLightbox">
+        <button class="tmgt-lightbox-close" id="tmgtLightboxClose" aria-label="Close">&times;</button>
+        <img src="" alt="Enlarged image preview" class="tmgt-lightbox-img" id="tmgtLightboxImg">
+    </div>
+
+    <!-- DOWNLOAD PLATFORM SELECTION MODAL -->
+    <div class="tmgt-modal-backdrop" id="downloadModal">
+        <div class="tmgt-download-modal-box">
+            <button class="tmgt-modal-close" id="closeDownloadModalBtn" aria-label="Close">&times;</button>
+            <h3 class="tmgt-dl-title">SELECT PLATFORM</h3>
+            <p class="tmgt-dl-subtitle">Choose the right version for your device</p>
+
+            <div class="tmgt-dl-cards">
+                <!-- 1. Windows -->
+                <a href="https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4/THANMAGIANGTHEYL784Z4_EdIf1XkalZCqknYO0sCRwA.apk"
+                    class="tmgt-dl-card" data-platform="windows" data-track="dl-modal-windows">
+                    <div class="tmgt-dl-card-left">
+                        <div class="tmgt-dl-card-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.949-1.801" />
+                            </svg>
+                            <span>Windows</span>
+                        </div>
+                        <div class="tmgt-dl-card-sub">PC (Emulator) · 1.8 GB</div>
+                    </div>
+                    <div class="tmgt-dl-card-arrow">➔</div>
+                </a>
+
+                <!-- 2. Android -->
+                <a href="https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4/THANMAGIANGTHEYL784Z4_EdIf1XkalZCqknYO0sCRwA.apk"
+                    class="tmgt-dl-card" data-platform="android" data-track="dl-modal-android">
+                    <div class="tmgt-dl-card-left">
+                        <div class="tmgt-dl-card-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.551 0 .9993.4482.9993.9993.0001.5511-.4483.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.4116 13.8533 8 12 8s-3.5902.4116-5.1367.9507L4.841 5.4477a.416.416 0 00-.5676-.1521.416.416 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3432-4.1021-2.6889-7.5743-6.1185-9.4396" />
+                            </svg>
+                            <span>Android</span>
+                        </div>
+                        <div class="tmgt-dl-card-sub">Mobile · High-Speed APK</div>
+                    </div>
+                    <div class="tmgt-dl-card-arrow">➔</div>
+                </a>
+
+                <!-- 3. iOS -->
+                <a href="itms-services://?action=download-manifest&url=https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4IOS/THANMAGIANGTHEYL784Z4IOS_EdIf1XkalZCqknYO0sCRwA.plist"
+                    class="tmgt-dl-card" data-platform="ios" data-track="dl-modal-ios">
+                    <div class="tmgt-dl-card-left">
+                        <div class="tmgt-dl-card-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 0.93-2.85-.9.04-1.99.6-2.63 1.35-.57.65-1.07 1.72-.94 2.74 1.01.08 2.03-.5 2.64-1.24" />
+                            </svg>
+                            <span>iOS</span>
+                        </div>
+                        <div class="tmgt-dl-card-sub">iPhone / iPad · Direct Installation</div>
+                    </div>
+                    <div class="tmgt-dl-card-arrow">➔</div>
+                </a>
+            </div>
+
+            <div class="tmgt-dl-footer-meta">
+                Version 2.1.0 · Size 1.8 GB · Updated 10/10/2026
+            </div>
+        </div>
+    </div>
+
+    <!-- INSTALL GUIDE MODAL -->
+    <div class="tmgt-modal-backdrop" id="guideModal">
+        <div class="tmgt-modal-box">
+            <button class="tmgt-modal-close" id="closeGuideBtn" aria-label="Close">&times;</button>
+            <h3 class="tmgt-modal-title">
+                <span>🚀 GAME INSTALLATION GUIDE</span>
+            </h3>
+
+            <div class="tmgt-modal-tabs">
+                <button type="button" class="tmgt-modal-tab-btn active" data-tab="android">Android (APK)</button>
+                <button type="button" class="tmgt-modal-tab-btn" data-tab="ios">iOS (iPhone/iPad)</button>
+                <button type="button" class="tmgt-modal-tab-btn" data-tab="pc">PC (Computer)</button>
+            </div>
+
+            <!-- Android Steps -->
+            <div class="tmgt-modal-content" data-content="android">
+                <ul class="tmgt-step-list">
+                    <li class="tmgt-step-item">
+                        <span class="tmgt-step-num">1</span>
+                        <div class="tmgt-step-text">Click the <strong>DOWNLOAD (Android)</strong> button to download the APK file directly to your phone.</div>
+                    </li>
+                    <li class="tmgt-step-item">
+                        <span class="tmgt-step-num">2</span>
+                        <div class="tmgt-step-text">Open the downloaded file; if prompted by the system, select <strong>"Allow installation from this source"</strong>.</div>
+                    </li>
+                    <li class="tmgt-step-item">
+                        <span class="tmgt-step-num">3</span>
+                        <div class="tmgt-step-text">Wait for the installation to finish, launch the game, and embark on your Era of Warfare journey!</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- iOS Steps -->
+            <div class="tmgt-modal-content" data-content="ios" style="display: none;">
+                <ul class="tmgt-step-list">
+                    <li class="tmgt-step-item">
+                        <span class="tmgt-step-num">1</span>
+                        <div class="tmgt-step-text">Click the <strong>DOWNLOAD (iOS)</strong> button using <strong>Safari</strong> browser to download the configuration profile.
+                        </div>
+                    </li>
+                    <li class="tmgt-step-item">
+                        <span class="tmgt-step-num">2</span>
+                        <div class="tmgt-step-text">Go to <strong>Settings ➔ General ➔ VPN & Device Management</strong>, select the developer profile, and tap <strong>Trust</strong>.</div>
+                    </li>
+                    <li class="tmgt-step-item">
+                        <span class="tmgt-step-num">3</span>
+                        <div class="tmgt-step-text">Return to the home screen, launch the game, and enjoy right away!</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- PC Steps -->
+            <div class="tmgt-modal-content" data-content="pc" style="display: none;">
+                <ul class="tmgt-step-list">
+                    <li class="tmgt-step-item">
+                        <span class="tmgt-step-num">1</span>
+                        <div class="tmgt-step-text">Install an Android emulator on your PC (recommended: <strong>LDPlayer 9</strong> or <strong>NoxPlayer</strong>).
+                        </div>
+                    </li>
+                    <li class="tmgt-step-item">
+                        <span class="tmgt-step-num">2</span>
+                        <div class="tmgt-step-text">Download the Era of Warfare Android APK file to your PC.</div>
+                    </li>
+                    <li class="tmgt-step-item">
+                        <span class="tmgt-step-num">3</span>
+                        <div class="tmgt-step-text">Drag and drop the APK file into the emulator window to automatically install and battle smoothly at 60 FPS!</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebottom Navigation Root for Mobile -->
+    <div id="sidebottom-root"></div>
+
+    <!-- Sidebottom and Interactive Scripts -->
+    <script src="/components/sidebottom.min.js"></script>
+    <script>
+        renderSidebottom({
+            items: [
+                { href: 'https://discord.gg/XMAEWqYQB', icon: 'discord', label: 'Discord', track: 'side-discord', target: '_blank', rel: 'noopener noreferrer' },
+                { href: 'https://m.me/Era.of.Warfare.Private?text=I%20want%20to%20receive%20code%20for%20Era%20of%20Warfare', icon: 'giftcode', label: 'Giftcode', track: 'side-giftcode', target: '_blank', rel: 'noopener noreferrer', ariaLabel: 'Open Messenger to claim giftcode' },
+                { href: '/', icon: 'home', label: 'Home', track: 'side-home' },
+                { href: 'https://www.facebook.com/Era.of.Warfare.Private', icon: 'support', label: 'Support', track: 'side-support' },
+                { href: '', icon: 'moreGames', label: 'More Games', track: 'side-more-games' }
+            ]
+        });
+    </script>
+    <script src="/assets/js/pages/era-of-warfare.min.js?v=1" defer></script>
+</body>
+
+</html>
