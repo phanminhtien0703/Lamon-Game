@@ -187,6 +187,55 @@
         box-shadow: 0 4px 16px rgba(2, 132, 199, 0.05) !important;
     }
 
+    @media (max-width: 768px) {
+        .portal-promo-grid {
+            display: flex !important;
+            flex-direction: row !important;
+            gap: 12px !important;
+            overflow-x: auto !important;
+            scroll-behavior: smooth !important;
+            scroll-snap-type: x mandatory !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: none !important;
+            padding: 4px 2px 10px 2px !important;
+            margin: 0 !important;
+        }
+
+        .portal-promo-grid::-webkit-scrollbar {
+            display: none !important;
+        }
+
+        .portal-promo-card {
+            flex: 0 0 78% !important;
+            min-width: 78% !important;
+            max-width: 78% !important;
+            aspect-ratio: 16 / 9 !important;
+            border-radius: 10px !important;
+            overflow: hidden !important;
+            position: relative !important;
+            scroll-snap-align: start !important;
+            flex-shrink: 0 !important;
+            display: block !important;
+            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.08) !important;
+            border: 1px solid #dbeafe !important;
+            background: #ffffff !important;
+        }
+
+        .portal-promo-card picture {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .portal-promo-card img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            display: block !important;
+            border-radius: 9px !important;
+        }
+    }
+
     /* Giftcode Tân Thủ */
     .portal-giftcode-card {
         background: #ffffff !important;
