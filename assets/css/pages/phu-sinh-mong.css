@@ -9,16 +9,16 @@
     --psm-blue-hover: #7dd3fc;
     --psm-blue-glow: rgba(56, 189, 248, 0.45);
     --psm-azure: #0284c7;
-    --psm-gold: #f59e0b;
-    --psm-gold-light: #fed7aa;
-    --psm-gold-glow: rgba(245, 158, 11, 0.35);
+    --psm-primary: #38bdf8;
+    --psm-primary-hover: #7dd3fc;
+    --psm-primary-glow: rgba(56, 189, 248, 0.45);
     --psm-dark-bg: #07090f;
     --psm-dark-surface: rgba(14, 18, 27, 0.78);
     --psm-card-border: rgba(255, 255, 255, 0.08);
     --psm-card-border-active: #38bdf8;
     --psm-text-main: #f8fafc;
     --psm-text-muted: #94a3b8;
-    --psm-font-heading: 'Cinzel', 'Philosopher', 'Noto Serif', serif;
+    --psm-font-heading: 'Playfair Display', 'Cormorant Garamond', serif;
     --psm-font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
@@ -238,7 +238,7 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
     background-size: cover;
     background-position: center 15%;
     background-repeat: no-repeat;
-    transition: background-image 0.8s ease-in-out;
+    background-image: url('/images/psm/psm-hero-xianxia.webp');
 }
 
 .psm-hero-overlay {
@@ -297,15 +297,15 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
 
 .psm-hero-title {
     font-family: var(--psm-font-heading);
-    font-size: clamp(2.6rem, 4.2vw, 3.6rem);
-    font-weight: 800;
-    font-style: italic;
-    line-height: 1.12;
-    margin-bottom: 10px;
-    background: linear-gradient(180deg, #ffffff 0%, #ffedd5 30%, #f59e0b 75%, #d97706 100%);
+    font-size: clamp(2.8rem, 4.8vw, 4.2rem);
+    font-weight: 900;
+    font-style: normal;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 30%, #38bdf8 75%, #0284c7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 4px 18px rgba(245, 158, 11, 0.35));
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 24px rgba(56, 189, 248, 0.55));
     letter-spacing: 1px;
 }
 
@@ -367,6 +367,14 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
     box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
 }
 
+/* CTA Buttons Row */
+.psm-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
 /* Big Download Button */
 .psm-download-cta {
     display: inline-flex;
@@ -396,12 +404,13 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
+    left: 0;
     width: 60%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transform: skewX(-25deg);
-    transition: 0.6s ease;
+    transform: translateX(-160%) skewX(-25deg);
+    transition: transform 0.6s ease;
+    will-change: transform;
 }
 
 .psm-download-cta:hover {
@@ -410,7 +419,7 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
 }
 
 .psm-download-cta:hover::before {
-    left: 140%;
+    transform: translateX(280%) skewX(-25deg);
 }
 
 .psm-download-cta svg {
@@ -422,6 +431,52 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
 
 .psm-download-cta:hover svg {
     transform: translateY(2px);
+}
+
+/* Giftcode Button */
+.psm-giftcode-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 190px;
+    padding: 13px 28px;
+    border-radius: 999px;
+    background: rgba(14, 18, 27, 0.75);
+    border: 1.5px solid rgba(56, 189, 248, 0.55);
+    color: #38bdf8;
+    font-family: var(--psm-font-heading);
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.psm-giftcode-cta:hover {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(2, 132, 199, 0.35) 100%);
+    border-color: #7dd3fc;
+    color: #ffffff;
+    box-shadow: 0 10px 32px rgba(56, 189, 248, 0.6), 0 0 24px rgba(56, 189, 248, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+.psm-giftcode-cta svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    transition: transform 0.25s ease;
+}
+
+.psm-giftcode-cta:hover svg {
+    transform: rotate(-10deg) scale(1.15);
 }
 
 /* Metadata underneath */
@@ -481,7 +536,7 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 12px rgba(56, 189, 248, 0.5));
     user-select: none;
     line-height: 1.35;
-    background: linear-gradient(180deg, #ffffff 0%, #fed7aa 60%, #cbd5e1 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 60%, #bae6fd 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -866,11 +921,16 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
 }
 
 .psm-lightbox-img {
-    max-width: 90vw;
-    max-height: 85vh;
+    display: block;
+    width: auto !important;
+    height: auto !important;
+    max-width: 92vw !important;
+    max-height: 82vh !important;
+    object-fit: contain !important;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.15);
+    margin: auto;
 }
 
 .psm-lightbox-close {
@@ -1252,6 +1312,10 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
         overflow: visible;
     }
 
+    .psm-hero-bg {
+        background-image: url('/images/psm/psm-hero-xianxia-mobile.webp');
+    }
+
     .psm-hero-main {
         padding: 10px 16px;
         gap: 16px;
@@ -1264,8 +1328,9 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
     }
 
     .psm-hero-title {
-        font-size: clamp(1.7rem, 7.5vw, 2.1rem);
-        line-height: 1.12;
+        font-size: clamp(1.85rem, 8vw, 2.3rem);
+        font-weight: 900;
+        line-height: 1.1;
         margin-bottom: 8px;
     }
 
@@ -1296,21 +1361,46 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
         gap: 5px;
     }
 
+    .psm-cta-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        margin-bottom: 4px;
+        flex-wrap: wrap;
+    }
+
     .psm-download-cta {
         width: auto;
-        min-width: 180px;
-        max-width: 220px;
-        padding: 9px 22px;
+        min-width: 135px;
+        padding: 9px 18px;
         font-size: 0.88rem;
         letter-spacing: 1.1px;
-        gap: 8px;
+        gap: 7px;
         border-radius: 999px;
         align-self: flex-start;
         box-shadow: 0 6px 20px rgba(56, 189, 248, 0.45);
-        margin-bottom: 4px;
+        margin-bottom: 0;
     }
 
     .psm-download-cta svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .psm-giftcode-cta {
+        width: auto;
+        min-width: 130px;
+        padding: 9px 16px;
+        font-size: 0.88rem;
+        letter-spacing: 1.1px;
+        gap: 6px;
+        border-radius: 999px;
+        align-self: flex-start;
+        margin-bottom: 0;
+    }
+
+    .psm-giftcode-cta svg {
         width: 16px;
         height: 16px;
     }
@@ -1375,10 +1465,9 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
     }
 
     .psm-gallery-sub {
-        font-size: 0.72rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 0.74rem;
+        white-space: normal;
+        line-height: 1.35;
     }
 
     .psm-gallery-all-btn {
@@ -1394,13 +1483,24 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
     .psm-gallery-track {
         gap: 12px;
         padding-bottom: 8px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
     }
 
     .psm-gallery-card {
         flex: 0 0 78%;
         min-width: 78%;
         max-width: 78%;
+        aspect-ratio: 16 / 9;
         border-radius: 10px;
+    }
+
+    .psm-lightbox-close {
+        top: 14px;
+        right: 16px;
+        width: 38px;
+        height: 38px;
+        font-size: 22px;
     }
 
     .psm-gallery-section {
@@ -1536,11 +1636,11 @@ body.psm-body::-webkit-scrollbar-thumb:hover {
 }
 
 .tmgt-support-alert {
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.25);
     border-radius: 12px;
     padding: 14px 18px;
-    color: #fed7aa;
+    color: #bae6fd;
     font-size: 0.88rem;
     margin-bottom: 20px;
     line-height: 1.6;
