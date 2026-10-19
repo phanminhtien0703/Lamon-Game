@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
             target: '_self'
         },
         'ios': {
-            url: 'https://t.skeideng.com/S2Pxl3.html',
+            url: 'https://apps.apple.com/vn/app/lăng-tiêu-chí/id6752824409',
             label: 'TẢI GAME BẢN IOS',
             target: '_blank'
         },
