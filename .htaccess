@@ -1,3 +1,9 @@
+# Chặn IP truy cập toàn bộ website
+<RequireAll>
+    Require all granted
+    Require not ip 171.243.48.91
+</RequireAll>
+
 RewriteEngine On
 
 # Chuyển link .html sang link đẹp
