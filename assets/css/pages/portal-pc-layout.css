@@ -10,6 +10,7 @@
    1. QUI TẮC DÀNH CHO MOBILE (< 1024px) — ĐỒNG BỘ TÔNG XANH NƯỚC TIÊN HIỆP TƯƠNG THÍCH PC
    ------------------------------------------------------------- */
 @media (max-width: 1023px) {
+
     /* Ẩn các thành phần độc quyền PC & theme toggle để giữ header thanh thoát */
     .pc-nav-menu,
     .pc-header-search,
@@ -39,8 +40,8 @@
     body {
         background-color: #f0f7fb !important;
         background-image: radial-gradient(circle at 10% 12%, rgba(14, 165, 233, 0.08) 0%, transparent 45%),
-                          radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.07) 0%, transparent 40%),
-                          linear-gradient(180deg, #f0f7fb 0%, #eaf4fb 50%, #f0f7fb 100%) !important;
+            radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.07) 0%, transparent 40%),
+            linear-gradient(180deg, #f0f7fb 0%, #eaf4fb 50%, #f0f7fb 100%) !important;
         background-attachment: fixed !important;
         color: #0f172a !important;
         min-height: 100vh !important;
@@ -419,14 +420,22 @@
 
     :root {
         /* Bích Thủy Tiên Vận — Xianxia Luminous Water Blue Palette */
-        --pc-water: #0284c7;             /* Thanh Thủy Lam chủ đạo (Sky 600) */
-        --pc-water-hover: #0369a1;       /* Thâm Lam huyền ảo (Sky 700) */
-        --pc-water-light: #0ea5e9;       /* Linh Tuyền Lam rực sáng (Sky 500) */
-        --pc-water-cyan: #06b6d4;        /* Bích Thủy Ngọc (Cyan 500) */
-        --pc-water-soft: rgba(2, 132, 199, 0.08); /* Ánh ngọc mờ */
-        --pc-water-border: #bae6fd;      /* Viền Băng Tinh (Sky 200) */
-        --pc-water-glow: 0 4px 18px rgba(2, 132, 199, 0.32); /* Hào quang linh khí nước */
-        --pc-water-grad: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%); /* Dòng chảy Bích Thủy */
+        --pc-water: #0284c7;
+        /* Thanh Thủy Lam chủ đạo (Sky 600) */
+        --pc-water-hover: #0369a1;
+        /* Thâm Lam huyền ảo (Sky 700) */
+        --pc-water-light: #0ea5e9;
+        /* Linh Tuyền Lam rực sáng (Sky 500) */
+        --pc-water-cyan: #06b6d4;
+        /* Bích Thủy Ngọc (Cyan 500) */
+        --pc-water-soft: rgba(2, 132, 199, 0.08);
+        /* Ánh ngọc mờ */
+        --pc-water-border: #bae6fd;
+        /* Viền Băng Tinh (Sky 200) */
+        --pc-water-glow: 0 4px 18px rgba(2, 132, 199, 0.32);
+        /* Hào quang linh khí nước */
+        --pc-water-grad: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
+        /* Dòng chảy Bích Thủy */
         --pc-water-grad-hover: linear-gradient(135deg, #0369a1 0%, #0891b2 100%);
 
         /* Tương thích biến hệ thống */
@@ -437,9 +446,11 @@
         /* Nền mây nước tiên cảnh sáng sủa, thanh khiết */
         --pc-bg: #f0f7fb;
         --pc-card-bg: #ffffff;
-        --pc-card-border: #dbeafe;       /* Viền lam sương sáng */
+        --pc-card-border: #dbeafe;
+        /* Viền lam sương sáng */
         --pc-card-border-subtle: #e0f2fe;
-        --pc-text-dark: #0f172a;         /* Đen tuyền sắc nét */
+        --pc-text-dark: #0f172a;
+        /* Đen tuyền sắc nét */
         --pc-text-muted: #334155;
         --pc-text-sub: #64748b;
         --pc-radius: 16px;
@@ -452,8 +463,8 @@
     body {
         background-color: #f0f7fb !important;
         background-image: radial-gradient(circle at 10% 12%, rgba(14, 165, 233, 0.08) 0%, transparent 45%),
-                          radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.07) 0%, transparent 40%),
-                          linear-gradient(180deg, #f0f7fb 0%, #eaf4fb 50%, #f0f7fb 100%) !important;
+            radial-gradient(circle at 90% 20%, rgba(6, 182, 212, 0.07) 0%, transparent 40%),
+            linear-gradient(180deg, #f0f7fb 0%, #eaf4fb 50%, #f0f7fb 100%) !important;
         background-attachment: fixed !important;
         color: #0f172a !important;
         min-height: 100vh !important;
@@ -637,11 +648,12 @@
     }
 
     /* =========================================================
-       PORTAL 2-COLUMN GRID SYSTEM (MỞ RỘNG 1640px & SIDEBAR 380px)
+       PORTAL 2-COLUMN GRID SYSTEM (SIDEBAR BÊN TRÁI 370px & MAIN BÊN PHẢI)
        ========================================================= */
     .portal-layout-pc {
         display: grid !important;
-        grid-template-columns: minmax(0, 1fr) 370px !important;
+        grid-template-columns: 370px minmax(0, 1fr) !important;
+        grid-template-areas: "sidebar main" !important;
         gap: 26px !important;
         align-items: start !important;
         max-width: 1520px !important;
@@ -651,17 +663,21 @@
         width: 100% !important;
     }
 
-    .portal-pc-main {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 28px !important;
-        min-width: 0 !important;
-    }
-
     .portal-pc-sidebar {
+        grid-area: sidebar !important;
+        order: 1 !important;
         display: flex !important;
         flex-direction: column !important;
         gap: 20px !important;
+        min-width: 0 !important;
+    }
+
+    .portal-pc-main {
+        grid-area: main !important;
+        order: 2 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 28px !important;
         min-width: 0 !important;
     }
 
@@ -682,7 +698,8 @@
     }
 
     .portal-slide-overlay {
-        display: none !important; /* Dùng overlay PC */
+        display: none !important;
+        /* Dùng overlay PC */
     }
 
     /* Haze mây sương trắng mờ bên trái tôn vinh khí chất tiên hiệp */
@@ -1329,7 +1346,8 @@
     }
 
     .tmgt-support-alert {
-        display: none !important; /* Tối ưu gọn gàng cho sidebar */
+        display: none !important;
+        /* Tối ưu gọn gàng cho sidebar */
     }
 
     .tmgt-support-tiles {
