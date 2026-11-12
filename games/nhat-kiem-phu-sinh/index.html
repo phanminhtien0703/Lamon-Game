@@ -63,7 +63,7 @@
             var gaScript = document.createElement('script');
             gaScript.async = true;
             gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-QWZDCG2D5J';
-            gaScript.onload = function() {
+            gaScript.onload = function () {
                 gtag('config', 'G-QWZDCG2D5J');
                 gtag('config', 'G-MR75NX67PE');
             };
@@ -78,36 +78,156 @@
         } else {
             window.addEventListener('load', scheduleTracking, { once: true });
         }
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             if (window.scrollY > 150) initTracking();
         }, { once: true, passive: true });
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (e.target && e.target.closest && e.target.closest('a, button')) initTracking();
         }, { once: true, passive: true });
     </script>
 
     <!-- Preload Critical Hero Background for LCP (Responsive) -->
-    <link rel="preload" as="image" href="/images/psm/psm-hero-xianxia-mobile.webp" media="(max-width: 768px)" fetchpriority="high">
-    <link rel="preload" as="image" href="/images/psm/psm-hero-xianxia.webp" media="(min-width: 769px)" fetchpriority="high">
+    <link rel="preload" as="image" href="/images/psm/psm-hero-xianxia-mobile.webp" media="(max-width: 768px)"
+        fetchpriority="high">
+    <link rel="preload" as="image" href="/images/psm/psm-hero-xianxia.webp" media="(min-width: 769px)"
+        fetchpriority="high">
 
     <!-- Critical Inlined CSS for Instant Hero Render & Sub-2s LCP -->
     <style>
-        :root{--psm-blue:#38bdf8;--psm-primary:#38bdf8;--psm-dark-bg:#07090f;--psm-text-main:#f8fafc;--psm-text-muted:#94a3b8;--psm-font-heading:'Playfair Display','Cormorant Garamond',serif;--psm-font-body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}
-        *{box-sizing:border-box;margin:0;padding:0}
-        body.psm-body{background-color:var(--psm-dark-bg);color:var(--psm-text-main);font-family:var(--psm-font-body);line-height:1.6;overflow-x:hidden}
-        .psm-header{position:fixed;top:0;left:0;width:100%;height:72px;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:transparent;border-bottom:1px solid rgba(0,0,0,0.45)}
-        .psm-hero{position:relative;min-height:clamp(560px,72vh,670px);display:flex;flex-direction:column;justify-content:space-between;padding-top:72px;padding-bottom:24px;overflow:hidden;border-bottom:1px solid rgba(56,189,248,0.35)}
-        .psm-hero-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background-size:cover;background-position:center 15%;background-repeat:no-repeat;background-image:url('/images/psm/psm-hero-xianxia.webp')}
-        .psm-hero-overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 75% 25%,transparent 45%,rgba(7,9,15,0.5) 95%),linear-gradient(to right,rgba(7,9,15,0.85) 0%,rgba(7,9,15,0.45) 32%,rgba(7,9,15,0.05) 60%,transparent 100%),linear-gradient(to top,#07090f 0%,rgba(7,9,15,0.8) 8%,transparent 24%)}
-        .psm-hero-container{position:relative;z-index:10;max-width:1720px;width:100%;margin:0 auto;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;gap:40px;flex:1}
-        .psm-hero-title{font-family:var(--psm-font-heading);font-size:clamp(2.8rem,4.8vw,4.2rem);font-weight:900;font-style:normal;line-height:1.1;margin-bottom:12px;background:linear-gradient(180deg,#ffffff 0%,#e0f2fe 30%,#38bdf8 75%,#0284c7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-        @media (max-width:768px){
-            .psm-header{padding:0 16px;height:58px}
-            .psm-nav-menu{display:none}
-            .psm-hero{min-height:auto;height:auto;padding-top:66px;padding-bottom:20px;overflow:visible}
-            .psm-hero-bg{background-image:url('/images/psm/psm-hero-xianxia-mobile.webp')}
-            .psm-hero-main{padding:10px 16px;gap:16px}
-            .psm-hero-title{font-size:clamp(1.85rem,8vw,2.3rem);font-weight:900;line-height:1.1;margin-bottom:8px}
+        :root {
+            --psm-blue: #38bdf8;
+            --psm-primary: #38bdf8;
+            --psm-dark-bg: #07090f;
+            --psm-text-main: #f8fafc;
+            --psm-text-muted: #94a3b8;
+            --psm-font-heading: 'Playfair Display', 'Cormorant Garamond', serif;
+            --psm-font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body.psm-body {
+            background-color: var(--psm-dark-bg);
+            color: var(--psm-text-main);
+            font-family: var(--psm-font-body);
+            line-height: 1.6;
+            overflow-x: hidden
+        }
+
+        .psm-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 72px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: transparent;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.45)
+        }
+
+        .psm-hero {
+            position: relative;
+            min-height: clamp(560px, 72vh, 670px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-top: 72px;
+            padding-bottom: 24px;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.35)
+        }
+
+        .psm-hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background-size: cover;
+            background-position: center 15%;
+            background-repeat: no-repeat;
+            background-image: url('/images/psm/psm-hero-xianxia.webp')
+        }
+
+        .psm-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 75% 25%, transparent 45%, rgba(7, 9, 15, 0.5) 95%), linear-gradient(to right, rgba(7, 9, 15, 0.85) 0%, rgba(7, 9, 15, 0.45) 32%, rgba(7, 9, 15, 0.05) 60%, transparent 100%), linear-gradient(to top, #07090f 0%, rgba(7, 9, 15, 0.8) 8%, transparent 24%)
+        }
+
+        .psm-hero-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1720px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 16px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            flex: 1
+        }
+
+        .psm-hero-title {
+            font-family: var(--psm-font-heading);
+            font-size: clamp(2.8rem, 4.8vw, 4.2rem);
+            font-weight: 900;
+            font-style: normal;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 30%, #38bdf8 75%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        @media (max-width:768px) {
+            .psm-header {
+                padding: 0 16px;
+                height: 58px
+            }
+
+            .psm-nav-menu {
+                display: none
+            }
+
+            .psm-hero {
+                min-height: auto;
+                height: auto;
+                padding-top: 66px;
+                padding-bottom: 20px;
+                overflow: visible
+            }
+
+            .psm-hero-bg {
+                background-image: url('/images/psm/psm-hero-xianxia-mobile.webp')
+            }
+
+            .psm-hero-main {
+                padding: 10px 16px;
+                gap: 16px
+            }
+
+            .psm-hero-title {
+                font-size: clamp(1.85rem, 8vw, 2.3rem);
+                font-weight: 900;
+                line-height: 1.1;
+                margin-bottom: 8px
+            }
         }
     </style>
 
@@ -125,7 +245,8 @@
         <!-- Brand Logo -->
         <a href="/" class="psm-brand" title="Về trang chủ Lamon Game">
             <div class="psm-brand-icon">
-                <img src="/images/logo.webp" alt="Logo Lamon Game" class="psm-brand-logo-img" width="40" height="40" decoding="async">
+                <img src="/images/logo.webp" alt="Logo Lamon Game" class="psm-brand-logo-img" width="40" height="40"
+                    decoding="async">
             </div>
             <div class="psm-brand-text">
                 <span class="psm-brand-name">LAMON GAME</span>
@@ -139,11 +260,13 @@
                 <li><a href="#hero" class="psm-nav-link active">Trang chủ</a></li>
                 <li><a href="#gallery" class="psm-nav-link">Hình ảnh</a></li>
                 <li><a href="#trust" class="psm-nav-link">Đặc sắc</a></li>
-                <li><a href="https://m.me/NhatMongPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20Ki%E1%BA%BFm%20Ph%C3%B9%20Sinh"
-                        target="_blank" rel="noopener noreferrer" class="psm-nav-link" data-track="top-giftcode">Nhận Code</a></li>
+                <li><a href="https://m.me/NhatKiemPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20Ki%E1%BA%BFm%20Ph%C3%B9%20Sinh"
+                        target="_blank" rel="noopener noreferrer" class="psm-nav-link" data-track="top-giftcode">Nhận
+                        Code</a></li>
                 <li><a href="https://zalo.me/g/kbqnel556" target="_blank" rel="noopener noreferrer"
                         class="psm-nav-link">Cộng đồng</a></li>
-                <li><a href="https://www.facebook.com/NhatMongPhuSinh.LamonGame/" target="_blank" rel="noopener noreferrer" class="psm-nav-link">Fanpage</a></li>
+                <li><a href="https://www.facebook.com/NhatKiemPhuSinh.LamonGame/" target="_blank"
+                        rel="noopener noreferrer" class="psm-nav-link">Fanpage</a></li>
             </ul>
         </nav>
 
@@ -174,7 +297,8 @@
                 <h1 class="psm-hero-title">Nhất Kiếm<br>Phù Sinh</h1>
                 <h2 class="psm-hero-subtitle">MỞ RA THẾ GIỚI TU TIÊN ĐÍCH THỰC</h2>
                 <p class="psm-hero-desc">
-                    Hành trình tu tiên, kết duyên đồng hành, khám phá vạn giới. Tải game Nhất Kiếm Phù Sinh ngay để bắt đầu!
+                    Hành trình tu tiên, kết duyên đồng hành, khám phá vạn giới. Tải game Nhất Kiếm Phù Sinh ngay để bắt
+                    đầu!
                 </p>
 
                 <!-- Platform Tabs -->
@@ -197,9 +321,9 @@
                         </svg>
                         <span>Android</span>
                     </a>
-                    <a href="https://apps.apple.com/vn/app/lăng-tiêu-chí/id6752824409" target="_blank" rel="noopener noreferrer"
-                        class="psm-plat-btn" data-platform="ios" aria-label="Tải bản iOS" title="Tải game bản iOS"
-                        data-track="hero-plat-ios">
+                    <a href="https://apps.apple.com/vn/app/lăng-tiêu-chí/id6752824409" target="_blank"
+                        rel="noopener noreferrer" class="psm-plat-btn" data-platform="ios" aria-label="Tải bản iOS"
+                        title="Tải game bản iOS" data-track="hero-plat-ios">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                             <path
                                 d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.38c.62-.75 1.04-1.8 0.93-2.85-.9.04-1.99.6-2.63 1.35-.57.65-1.07 1.72-.94 2.74 1.01.08 2.03-.5 2.64-1.24" />
@@ -221,7 +345,7 @@
 
                     <!-- Giftcode CTA Button (Auto Pre-filled Messenger Text) -->
                     <a id="giftcodeCta" class="psm-giftcode-cta"
-                        href="https://m.me/NhatMongPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20Ki%E1%BA%BFm%20Ph%C3%B9%20Sinh"
+                        href="https://m.me/NhatKiemPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20Ki%E1%BA%BFm%20Ph%C3%B9%20Sinh"
                         target="_blank" rel="noopener noreferrer" data-track="psm-giftcode-hero"
                         title="Nhận code qua Messenger">
                         <svg viewBox="0 0 24 24">
@@ -244,16 +368,20 @@
                 <!-- Thumbnail Switcher Carousel (Placed directly under metadata like reference image) -->
                 <div class="psm-hero-thumbs">
                     <div class="psm-thumb-item active" data-index="0" title="Thần Sơn Tuyệt Cảnh">
-                        <img src="/images/psm/psm-hero-xianxia-thumb.webp" alt="Thần Sơn Tuyệt Cảnh" width="82" height="48" loading="lazy" decoding="async">
+                        <img src="/images/psm/psm-hero-xianxia-thumb.webp" alt="Thần Sơn Tuyệt Cảnh" width="82"
+                            height="48" loading="lazy" decoding="async">
                     </div>
                     <div class="psm-thumb-item" data-index="1" title="Vạn Giới Môn">
-                        <img src="/images/psm/psm-scene-portal-thumb.webp" alt="Vạn Giới Môn" width="82" height="48" loading="lazy" decoding="async">
+                        <img src="/images/psm/psm-scene-portal-thumb.webp" alt="Vạn Giới Môn" width="82" height="48"
+                            loading="lazy" decoding="async">
                     </div>
                     <div class="psm-thumb-item" data-index="2" title="Nguyệt Lạc Long Ngâm">
-                        <img src="/images/psm/psm-scene-dragon-thumb.webp" alt="Nguyệt Lạc Long Ngâm" width="82" height="48" loading="lazy" decoding="async">
+                        <img src="/images/psm/psm-scene-dragon-thumb.webp" alt="Nguyệt Lạc Long Ngâm" width="82"
+                            height="48" loading="lazy" decoding="async">
                     </div>
                     <div class="psm-thumb-item" data-index="3" title="Hư Không Luân Hồi">
-                        <img src="/images/psm/psm-scene-halo-thumb.webp" alt="Hư Không Luân Hồi" width="82" height="48" loading="lazy" decoding="async">
+                        <img src="/images/psm/psm-scene-halo-thumb.webp" alt="Hư Không Luân Hồi" width="82" height="48"
+                            loading="lazy" decoding="async">
                     </div>
                 </div>
             </div>
@@ -292,7 +420,8 @@
             <div class="psm-gallery-track" id="galleryTrack">
                 <!-- Card 1 -->
                 <div class="psm-gallery-card" data-full="/images/psm/psm-1.webp">
-                    <img src="/images/psm/psm-1-thumb.webp" alt="Tiên Cảnh Phù Sinh 01" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/psm/psm-1-thumb.webp" alt="Tiên Cảnh Phù Sinh 01" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 01</span>
                     </div>
@@ -300,7 +429,8 @@
 
                 <!-- Card 2 -->
                 <div class="psm-gallery-card" data-full="/images/psm/psm-2.webp">
-                    <img src="/images/psm/psm-2-thumb.webp" alt="Tiên Cảnh Phù Sinh 02" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/psm/psm-2-thumb.webp" alt="Tiên Cảnh Phù Sinh 02" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 02</span>
                     </div>
@@ -308,7 +438,8 @@
 
                 <!-- Card 3 -->
                 <div class="psm-gallery-card" data-full="/images/psm/psm-3.webp">
-                    <img src="/images/psm/psm-3-thumb.webp" alt="Tiên Cảnh Phù Sinh 03" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/psm/psm-3-thumb.webp" alt="Tiên Cảnh Phù Sinh 03" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 03</span>
                     </div>
@@ -316,7 +447,8 @@
 
                 <!-- Card 4 -->
                 <div class="psm-gallery-card" data-full="/images/psm/psm-4.webp">
-                    <img src="/images/psm/psm-4-thumb.webp" alt="Tiên Cảnh Phù Sinh 04" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/psm/psm-4-thumb.webp" alt="Tiên Cảnh Phù Sinh 04" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 04</span>
                     </div>
@@ -324,7 +456,8 @@
 
                 <!-- Card 5 -->
                 <div class="psm-gallery-card" data-full="/images/psm/psm-5.webp">
-                    <img src="/images/psm/psm-5-thumb.webp" alt="Tiên Cảnh Phù Sinh 05" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/psm/psm-5-thumb.webp" alt="Tiên Cảnh Phù Sinh 05" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 05</span>
                     </div>
@@ -332,7 +465,8 @@
 
                 <!-- Card 6 -->
                 <div class="psm-gallery-card" data-full="/images/psm/psm-6.webp">
-                    <img src="/images/psm/psm-6-thumb.webp" alt="Tiên Cảnh Phù Sinh 06" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/psm/psm-6-thumb.webp" alt="Tiên Cảnh Phù Sinh 06" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 06</span>
                     </div>
@@ -340,7 +474,8 @@
 
                 <!-- Card 7 -->
                 <div class="psm-gallery-card" data-full="/images/psm/psm-7.webp">
-                    <img src="/images/psm/psm-7-thumb.webp" alt="Tiên Cảnh Phù Sinh 07" width="400" height="225" loading="lazy" decoding="async">
+                    <img src="/images/psm/psm-7-thumb.webp" alt="Tiên Cảnh Phù Sinh 07" width="400" height="225"
+                        loading="lazy" decoding="async">
                     <div class="psm-card-zoom-overlay">
                         <span class="psm-card-caption">Tiên Cảnh 07</span>
                     </div>
@@ -383,8 +518,8 @@
             </div>
 
             <!-- 3. Hỗ trợ 24/7 (Bottom Left) -->
-            <a href="https://m.me/NhatMongPhuSinh.LamonGame" target="_blank" rel="noopener noreferrer" class="psm-trust-item"
-                title="Liên hệ CSKH 24/7">
+            <a href="https://m.me/NhatKiemPhuSinh.LamonGame" target="_blank" rel="noopener noreferrer"
+                class="psm-trust-item" title="Liên hệ CSKH 24/7">
                 <div class="psm-trust-icon-box">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.3">
                         <circle cx="12" cy="12" r="9" />
@@ -429,8 +564,8 @@
             </div>
 
             <div class="tmgt-support-tiles">
-                <a href="https://m.me/NhatMongPhuSinh.LamonGame" target="_blank" rel="noopener noreferrer" class="tmgt-support-tile"
-                    data-track="psm-support-messenger">
+                <a href="https://m.me/NhatKiemPhuSinh.LamonGame" target="_blank" rel="noopener noreferrer"
+                    class="tmgt-support-tile" data-track="psm-support-messenger">
                     <div class="tmgt-support-icon">💬</div>
                     <div class="tmgt-support-label">Messenger CSKH</div>
                 </a>
@@ -446,7 +581,7 @@
                     <div class="tmgt-support-label">Group Zalo Cộng Đồng</div>
                 </a>
 
-                <a href="https://www.facebook.com/NhatMongPhuSinh.LamonGame/" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.facebook.com/NhatKiemPhuSinh.LamonGame/" target="_blank" rel="noopener noreferrer"
                     class="tmgt-support-tile" data-track="psm-support-facebook">
                     <div class="tmgt-support-icon">📘</div>
                     <div class="tmgt-support-label">Fanpage Nhất Kiếm Phù Sinh</div>
@@ -516,8 +651,8 @@
                 </a>
 
                 <!-- 3. iOS -->
-                <a href="https://apps.apple.com/vn/app/lăng-tiêu-chí/id6752824409" target="_blank" rel="noopener noreferrer"
-                    class="psm-dl-card" data-platform="ios" data-track="dl-modal-ios">
+                <a href="https://apps.apple.com/vn/app/lăng-tiêu-chí/id6752824409" target="_blank"
+                    rel="noopener noreferrer" class="psm-dl-card" data-platform="ios" data-track="dl-modal-ios">
                     <div class="psm-dl-card-left">
                         <div class="psm-dl-card-title">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -584,7 +719,8 @@
                     </li>
                     <li class="psm-step-item">
                         <span class="psm-step-num">2</span>
-                        <div class="psm-step-text">Bấm <strong>Nhận</strong> (hoặc biểu tượng đám mây) để tải và cài đặt game tự động.</div>
+                        <div class="psm-step-text">Bấm <strong>Nhận</strong> (hoặc biểu tượng đám mây) để tải và cài đặt
+                            game tự động.</div>
                     </li>
                     <li class="psm-step-item">
                         <span class="psm-step-num">3</span>
@@ -623,9 +759,9 @@
         renderSidebottom({
             items: [
                 { href: 'https://zalo.me/g/kbqnel556', icon: 'zalo', label: 'Cộng Đồng', track: 'side-zalo' },
-                { href: 'https://m.me/NhatMongPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20Ki%E1%BA%BFm%20Ph%C3%B9%20Sinh', icon: 'giftcode', label: 'Giftcode', track: 'side-giftcode', target: '_blank', rel: 'noopener noreferrer', ariaLabel: 'Mở Messenger để nhận giftcode' },
+                { href: 'https://m.me/NhatKiemPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20Ki%E1%BA%BFm%20Ph%C3%B9%20Sinh', icon: 'giftcode', label: 'Giftcode', track: 'side-giftcode', target: '_blank', rel: 'noopener noreferrer', ariaLabel: 'Mở Messenger để nhận giftcode' },
                 { href: '/', icon: 'home', label: 'Trang chủ', track: 'side-home' },
-                { href: 'https://www.facebook.com/NhatMongPhuSinh.LamonGame/', icon: 'support', label: 'Fanpage', track: 'side-support' },
+                { href: 'https://www.facebook.com/NhatKiemPhuSinh.LamonGame/', icon: 'support', label: 'Fanpage', track: 'side-support' },
                 { href: '', icon: 'moreGames', label: 'Game khác', track: 'side-more-games' }
             ]
         });
