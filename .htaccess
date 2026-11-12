@@ -6,6 +6,9 @@
 
 RewriteEngine On
 
+# Redirect cũ sang mới: Nhất Mộng Phù Sinh -> Nhất Kiếm Phù Sinh
+RewriteRule ^games/nhat-mong-phu-sinh/?(.*)$ /games/nhat-kiem-phu-sinh/$1 [R=301,L]
+
 # Chuyển link .html sang link đẹp
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L]
