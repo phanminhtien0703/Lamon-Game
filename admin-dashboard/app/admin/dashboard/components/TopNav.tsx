@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Menu,
@@ -41,6 +41,22 @@ export default function TopNav({
   lastUpdated,
 }: TopNavProps) {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setProfileDropdownOpen(false);
+      }
+    };
+    if (profileDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [profileDropdownOpen]);
 
   return (
     <header className="h-16 bg-white border-b border-slate-200/90 px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm transition-all duration-300">
@@ -148,7 +164,7 @@ export default function TopNav({
         <div className="h-6 w-[1px] bg-slate-200" />
 
         {/* Profile Avatar Dropdown (Concept Header Right) */}
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
             className="flex items-center gap-2 p-1 pl-1.5 rounded-full hover:bg-slate-100 transition cursor-pointer"
@@ -164,7 +180,7 @@ export default function TopNav({
 
           {/* Profile Dropdown Menu */}
           {profileDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs">
+            <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs animate-in fade-in slide-in-from-top-2 duration-150">
               <div className="px-3.5 py-2.5 border-b border-slate-100">
                 <p className="font-bold text-slate-800">Admin Manager</p>
                 <p className="text-[11px] text-slate-400 truncate">

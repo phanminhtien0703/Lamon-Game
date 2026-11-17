@@ -288,11 +288,11 @@ export default function AdminDashboardPage() {
         valA = a.startDate.getTime();
         valB = b.startDate.getTime();
       } else if (sortField === 'total') {
-        valA = a.total;
-        valB = b.total;
+        valA = Number(a.total) || 0;
+        valB = Number(b.total) || 0;
       } else {
-        valA = a[sortField as ChannelKey];
-        valB = b[sortField as ChannelKey];
+        valA = Number(a[sortField as ChannelKey]) || 0;
+        valB = Number(b[sortField as ChannelKey]) || 0;
       }
 
       if (sortDirection === 'asc') return valA - valB;
@@ -318,7 +318,7 @@ export default function AdminDashboardPage() {
   };
 
   // Copy TSV to Clipboard for Excel pasting
-  const handleCopyClipboard = () => {
+  const handleCopyClipboard = async () => {
     const headers = ['Thời gian', ...CHANNELS.map((c) => c.label), 'Tổng cộng'];
     const rows = finalDisplayItems.map((item) => [
       item.label,
@@ -346,9 +346,26 @@ export default function AdminDashboardPage() {
     ];
 
     const tsvContent = [headers.join('\t'), ...rows.map((r) => r.join('\t')), totalsRow.join('\t')].join('\n');
-    navigator.clipboard.writeText(tsvContent);
-    setCopiedSuccess(true);
-    setTimeout(() => setCopiedSuccess(false), 2500);
+    try {
+      if (navigator?.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(tsvContent);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = tsvContent;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+      }
+      setCopiedSuccess(true);
+      setTimeout(() => setCopiedSuccess(false), 2500);
+    } catch {
+      setCopiedSuccess(false);
+    }
   };
 
   // Day-of-week analysis
@@ -501,31 +518,28 @@ export default function AdminDashboardPage() {
                 <div className="flex items-center p-1 bg-[#f1f3f7] rounded-xl border border-slate-200/80">
                   <button
                     onClick={() => setGranularity('DAILY')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                      granularity === 'DAILY'
-                        ? 'bg-[#5969ff] text-white shadow-xs font-bold'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${granularity === 'DAILY'
+                      ? 'bg-[#5969ff] text-white shadow-xs font-bold'
+                      : 'text-slate-600 hover:text-slate-900'
+                      }`}
                   >
                     Theo Ngày
                   </button>
                   <button
                     onClick={() => setGranularity('WEEKLY')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                      granularity === 'WEEKLY'
-                        ? 'bg-[#5969ff] text-white shadow-xs font-bold'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${granularity === 'WEEKLY'
+                      ? 'bg-[#5969ff] text-white shadow-xs font-bold'
+                      : 'text-slate-600 hover:text-slate-900'
+                      }`}
                   >
                     Theo Tuần
                   </button>
                   <button
                     onClick={() => setGranularity('MONTHLY')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                      granularity === 'MONTHLY'
-                        ? 'bg-[#5969ff] text-white shadow-xs font-bold'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${granularity === 'MONTHLY'
+                      ? 'bg-[#5969ff] text-white shadow-xs font-bold'
+                      : 'text-slate-600 hover:text-slate-900'
+                      }`}
                   >
                     Theo Tháng
                   </button>
@@ -554,11 +568,10 @@ export default function AdminDashboardPage() {
                     <button
                       key={p.key}
                       onClick={() => setDatePreset(p.key as DatePreset)}
-                      className={`px-2.5 py-1.2 rounded-lg text-xs font-medium transition cursor-pointer ${
-                        isActive
-                          ? 'bg-[#5969ff] text-white shadow-xs font-bold'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-                      }`}
+                      className={`px-2.5 py-1.2 rounded-lg text-xs font-medium transition cursor-pointer ${isActive
+                        ? 'bg-[#5969ff] text-white shadow-xs font-bold'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+                        }`}
                     >
                       {p.label}
                     </button>
@@ -606,11 +619,10 @@ export default function AdminDashboardPage() {
               <div className="flex flex-wrap items-center gap-2.5">
                 <button
                   onClick={() => setCompareEnabled(!compareEnabled)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer active:scale-95 ${
-                    compareEnabled
-                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
-                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                  }`}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer active:scale-95 ${compareEnabled
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
                 >
                   <GitCompare className="w-3.5 h-3.5" />
                   <span>{compareEnabled ? 'Đang So Sánh (BẬT)' : 'So sánh với kỳ khác'}</span>
@@ -664,13 +676,13 @@ export default function AdminDashboardPage() {
               delta={
                 compareEnabled && aggregatedTotals.comparison
                   ? {
-                      value: `${aggregatedTotals.comparison.grandTotal.isPositive ? '+' : ''}${aggregatedTotals.comparison.grandTotal.percent}%`,
-                      isPositive: aggregatedTotals.comparison.grandTotal.isPositive,
-                    }
+                    value: `${aggregatedTotals.comparison.grandTotal.isPositive ? '+' : ''}${aggregatedTotals.comparison.grandTotal.percent}%`,
+                    isPositive: aggregatedTotals.comparison.grandTotal.isPositive,
+                  }
                   : {
-                      value: '+6.59%',
-                      isPositive: true,
-                    }
+                    value: '+6.59%',
+                    isPositive: true,
+                  }
               }
               subtext={
                 compareEnabled && aggregatedTotals.comparison
@@ -728,7 +740,7 @@ export default function AdminDashboardPage() {
           {/* ------------------------------------------------------------ */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" id="dataTableSection">
             {/* Left Column (8 cols): Detailed Traffic Data Table */}
-            <div className="lg:col-span-8 min-w-0">
+            <div className="lg:col-span-8">
               <TrafficTable
                 items={finalDisplayItems}
                 totals={aggregatedTotals}
@@ -751,7 +763,7 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Right Column (4 cols): Customer Acquisition Breakdown Card */}
-            <div className="lg:col-span-4 min-w-0">
+            <div className="lg:col-span-4">
               <AcquisitionCard
                 items={currentGroupedItems}
                 grandTotal={aggregatedTotals.grandTotal}

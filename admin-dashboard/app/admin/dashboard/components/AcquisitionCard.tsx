@@ -185,7 +185,7 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{
-                      width: `${Math.max(ch.percent, 1)}%`,
+                      width: ch.clicks > 0 ? `${Math.max(ch.percent, 1)}%` : '0%',
                       backgroundColor: ch.color,
                     }}
                   />

@@ -73,7 +73,8 @@ export default function SparklineCard({
   theme = 'blue',
   dataPoints = [],
 }: SparklineCardProps) {
-  const gradientId = useId();
+  const rawId = useId();
+  const gradientId = useMemo(() => 'spark_' + rawId.replace(/[^a-zA-Z0-9_-]/g, '_'), [rawId]);
   const config = THEME_CONFIG[theme] || THEME_CONFIG.blue;
 
   // Generate smooth SVG wave
