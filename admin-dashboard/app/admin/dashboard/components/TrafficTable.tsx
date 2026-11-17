@@ -168,14 +168,14 @@ export default function TrafficTable({
       </div>
 
       {/* Table Container */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+      <div className="overflow-x-auto w-full">
+        <table className="w-full text-left border-collapse min-w-[760px]">
           <thead>
             <tr className="border-b border-slate-200 bg-[#f8fafc] text-xs font-bold text-slate-500 uppercase tracking-wider select-none">
-              {/* Period Column */}
+              {/* Period Column - Sticky on left */}
               <th
                 onClick={() => onSort('period')}
-                className="py-3 px-4 cursor-pointer hover:text-slate-800 transition group"
+                className="py-3.5 pl-4 pr-3 text-left whitespace-nowrap min-w-[130px] w-[130px] sticky left-0 bg-[#f8fafc] z-20 border-r border-slate-200/80 shadow-[2px_0_4px_rgba(0,0,0,0.03)] cursor-pointer hover:text-slate-800 transition group select-none"
               >
                 <div className="flex items-center gap-1.5">
                   <span>
@@ -204,17 +204,17 @@ export default function TrafficTable({
                   <th
                     key={ch.key}
                     onClick={() => onSort(ch.key as SortField)}
-                    className="py-3 px-2.5 text-center cursor-pointer hover:text-slate-800 transition group"
+                    className="py-3.5 px-1.5 text-center whitespace-nowrap min-w-[62px] cursor-pointer hover:text-slate-800 transition group select-none text-[11px]"
                   >
-                    <div className="flex items-center justify-center gap-1">
+                    <div className="flex items-center justify-center gap-0.5">
                       <span style={{ color: isSorted ? ch.color : undefined }}>
                         {ch.label}
                       </span>
                       {isSorted ? (
                         sortDirection === 'asc' ? (
-                          <ArrowUp className="w-3 h-3 text-[#5969ff]" />
+                          <ArrowUp className="w-2.5 h-2.5 text-[#5969ff]" />
                         ) : (
-                          <ArrowDown className="w-3 h-3 text-[#5969ff]" />
+                          <ArrowDown className="w-2.5 h-2.5 text-[#5969ff]" />
                         )
                       ) : (
                         <ArrowUpDown className="w-2.5 h-2.5 text-slate-300 group-hover:text-slate-500" />
@@ -227,9 +227,9 @@ export default function TrafficTable({
               {/* Total Column */}
               <th
                 onClick={() => onSort('total')}
-                className="py-3 px-4 text-right font-bold text-[#5969ff] bg-blue-50/50 cursor-pointer hover:brightness-95 transition group"
+                className="py-3.5 pr-4 pl-2 text-right whitespace-nowrap min-w-[85px] font-bold text-[#5969ff] bg-blue-50/50 cursor-pointer hover:brightness-95 transition group select-none text-[11px]"
               >
-                <div className="flex items-center justify-end gap-1.5">
+                <div className="flex items-center justify-end gap-1">
                   <span>Tổng cộng</span>
                   {sortField === 'total' ? (
                     sortDirection === 'asc' ? (
@@ -238,7 +238,7 @@ export default function TrafficTable({
                       <ArrowDown className="w-3.5 h-3.5 text-[#5969ff]" />
                     )
                   ) : (
-                    <ArrowUpDown className="w-3 h-3 text-[#5969ff] opacity-60 group-hover:opacity-100" />
+                    <ArrowUpDown className="w-2.5 h-2.5 text-[#5969ff] opacity-60 group-hover:opacity-100" />
                   )}
                 </div>
               </th>
@@ -274,14 +274,14 @@ export default function TrafficTable({
                     key={row.key}
                     className="hover:bg-blue-50/30 transition duration-100 group"
                   >
-                    {/* Period Label */}
-                    <td className="py-3 px-4 font-medium text-slate-800">
+                    {/* Period Label - Sticky on left */}
+                    <td className="py-3 pl-4 pr-3 font-medium text-slate-800 whitespace-nowrap min-w-[130px] w-[130px] sticky left-0 bg-white group-hover:bg-blue-50/60 z-10 border-r border-slate-100 shadow-[2px_0_4px_rgba(0,0,0,0.03)] transition-colors">
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-[#5969ff] opacity-70 group-hover:opacity-100 flex-shrink-0" />
+                        <Calendar className="w-3.5 h-3.5 text-[#5969ff] opacity-75 group-hover:opacity-100 flex-shrink-0" />
                         <div>
-                          <span className="font-semibold block">{row.label}</span>
+                          <span className="font-semibold block text-slate-800 leading-tight">{row.label}</span>
                           {row.subLabel && (
-                            <span className="text-[11px] text-slate-400 block font-normal">
+                            <span className="text-[10px] text-slate-400 block font-normal leading-tight">
                               {row.subLabel}
                             </span>
                           )}
@@ -298,11 +298,11 @@ export default function TrafficTable({
                       return (
                         <td
                           key={ch.key}
-                          className="py-2.5 px-2 text-center font-mono"
+                          className="py-2.5 px-1.5 text-center font-mono whitespace-nowrap min-w-[62px]"
                         >
                           <div className="flex flex-col items-center justify-center">
                             {val > 0 ? (
-                              <span className="text-slate-700 font-bold">
+                              <span className="text-slate-800 font-bold">
                                 {val}
                               </span>
                             ) : (
@@ -310,7 +310,7 @@ export default function TrafficTable({
                             )}
 
                             {showPercentShare && val > 0 && (
-                              <span className="text-[10px] text-slate-400">
+                              <span className="text-[10px] text-slate-400 font-sans">
                                 {sharePct}%
                               </span>
                             )}
@@ -318,7 +318,7 @@ export default function TrafficTable({
                             {compareEnabled && comp && comp.hasPrevious && (
                               <div
                                 title={`Kỳ trước: ${comp.previous}`}
-                                className={`text-[10px] font-semibold px-1 rounded mt-0.5 inline-flex items-center gap-0.5 ${
+                                className={`text-[9px] font-semibold px-1 rounded mt-0.5 inline-flex items-center gap-0.5 font-sans ${
                                   comp.diff > 0
                                     ? 'text-emerald-600 bg-emerald-50'
                                     : comp.diff < 0
@@ -338,7 +338,7 @@ export default function TrafficTable({
                     })}
 
                     {/* Total Column */}
-                    <td className="py-3 px-4 text-right font-mono font-bold text-slate-900 bg-blue-50/20 group-hover:bg-blue-50/50 group-hover:text-[#5969ff] transition">
+                    <td className="py-2.5 pr-4 pl-2 text-right font-mono font-bold text-slate-900 bg-blue-50/20 group-hover:bg-blue-50/50 group-hover:text-[#5969ff] whitespace-nowrap min-w-[85px] transition">
                       <div className="flex flex-col items-end">
                         <span className="text-sm font-extrabold text-slate-900">
                           {row.total.toLocaleString()}
@@ -347,18 +347,18 @@ export default function TrafficTable({
                         {compareEnabled && row.comparison?.total && (
                           <div
                             title={`Kỳ trước: ${row.comparison.total.previous}`}
-                            className={`text-[10px] font-semibold px-1 rounded mt-0.5 inline-flex items-center gap-0.5 ${
+                            className={`text-[9px] font-semibold px-1 rounded mt-0.5 inline-flex items-center gap-0.5 font-sans ${
                               row.comparison.total.isPositive
                                 ? 'text-emerald-600 bg-emerald-50'
                                 : 'text-rose-600 bg-rose-50'
                             }`}
                           >
                             <span>
-                              {row.comparison.total.diff >= 0 ? '+' : ''}
-                              {row.comparison.total.diff.toLocaleString()}
+                              {row.comparison.total.diff > 0 ? '+' : ''}
+                              {row.comparison.total.diff}
                             </span>
                             <span>
-                              ({row.comparison.total.percent >= 0 ? '+' : ''}
+                              ({row.comparison.total.percent > 0 ? '+' : ''}
                               {row.comparison.total.percent}%)
                             </span>
                           </div>
@@ -374,7 +374,7 @@ export default function TrafficTable({
           <tfoot>
             {/* Totals Row */}
             <tr className="border-t-2 border-slate-200 bg-[#f8fafc] font-bold text-xs uppercase text-slate-700">
-              <td className="py-3.5 px-4 text-[#5969ff] font-extrabold tracking-wider">
+              <td className="py-3 pl-4 pr-3 text-[#5969ff] font-extrabold tracking-wider whitespace-nowrap min-w-[130px] w-[130px] sticky left-0 bg-[#f8fafc] z-10 border-r border-slate-200/80 shadow-[2px_0_4px_rgba(0,0,0,0.03)]">
                 Tổng ({items.length} chu kỳ)
               </td>
 
@@ -383,7 +383,7 @@ export default function TrafficTable({
                 const comp = totals.comparison?.[ch.key as ChannelKey];
 
                 return (
-                  <td key={ch.key} className="py-3.5 px-2 text-center font-mono">
+                  <td key={ch.key} className="py-3 px-1.5 text-center font-mono whitespace-nowrap min-w-[62px]">
                     <div className="flex flex-col items-center">
                       <span className="text-xs font-extrabold text-slate-800">
                         {totalClicks.toLocaleString()}
@@ -392,7 +392,7 @@ export default function TrafficTable({
                       {compareEnabled && comp && (
                         <div
                           title={`Kỳ trước: ${comp.previous.toLocaleString()}`}
-                          className={`text-[10px] font-semibold px-1 rounded mt-0.5 ${
+                          className={`text-[9px] font-semibold px-1 rounded mt-0.5 font-sans ${
                             comp.isPositive
                               ? 'text-emerald-600 bg-emerald-50'
                               : 'text-rose-600 bg-rose-50'
@@ -407,12 +407,12 @@ export default function TrafficTable({
                 );
               })}
 
-              <td className="py-3.5 px-4 text-right font-mono font-black text-sm text-[#5969ff] bg-blue-50/60">
+              <td className="py-3 pr-4 pl-2 text-right font-mono font-black text-sm text-[#5969ff] bg-blue-50/60 whitespace-nowrap min-w-[85px]">
                 <div className="flex flex-col items-end">
                   <span>{totals.grandTotal.toLocaleString()}</span>
                   {compareEnabled && totals.comparison && (
                     <div
-                      className={`text-[10px] font-semibold mt-0.5 ${
+                      className={`text-[9px] font-semibold mt-0.5 font-sans ${
                         totals.comparison.grandTotal.isPositive
                           ? 'text-emerald-600'
                           : 'text-rose-600'
@@ -429,8 +429,8 @@ export default function TrafficTable({
             </tr>
 
             {/* % Share Row */}
-            <tr className="border-t border-slate-200 bg-slate-50 text-[11px] font-semibold text-slate-500">
-              <td className="py-2.5 px-4 font-bold uppercase tracking-wider text-slate-600">
+            <tr className="border-t border-slate-200 bg-slate-50 text-[10px] font-semibold text-slate-500">
+              <td className="py-2.5 pl-4 pr-3 font-bold uppercase tracking-wider text-slate-600 whitespace-nowrap min-w-[130px] w-[130px] sticky left-0 bg-slate-50 z-10 border-r border-slate-200/80 shadow-[2px_0_4px_rgba(0,0,0,0.03)]">
                 % Tỷ Trọng Đóng Góp
               </td>
 
@@ -440,7 +440,7 @@ export default function TrafficTable({
                 const pct = Math.round((totalClicks / grand) * 1000) / 10;
 
                 return (
-                  <td key={ch.key} className="py-2.5 px-2 text-center font-mono">
+                  <td key={ch.key} className="py-2.5 px-1.5 text-center font-mono whitespace-nowrap min-w-[62px]">
                     <span className="font-bold text-[#5969ff] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">
                       {pct}%
                     </span>
@@ -448,7 +448,7 @@ export default function TrafficTable({
                 );
               })}
 
-              <td className="py-2.5 px-4 text-right font-mono font-bold text-slate-800 bg-blue-50/40">
+              <td className="py-2.5 pr-4 pl-2 text-right font-mono font-bold text-slate-800 bg-blue-50/40 whitespace-nowrap min-w-[85px] text-[11px]">
                 100.0%
               </td>
             </tr>

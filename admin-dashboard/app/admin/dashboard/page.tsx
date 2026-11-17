@@ -684,7 +684,7 @@ export default function AdminDashboardPage() {
           {/* ------------------------------------------------------------ */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" id="dataTableSection">
             {/* Left Column (8 cols): Detailed Traffic Data Table */}
-            <div className="lg:col-span-8">
+            <div className="lg:col-span-8 min-w-0">
               <TrafficTable
                 items={finalDisplayItems}
                 totals={aggregatedTotals}
@@ -707,7 +707,7 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Right Column (4 cols): Customer Acquisition Breakdown Card */}
-            <div className="lg:col-span-4">
+            <div className="lg:col-span-4 min-w-0">
               <AcquisitionCard
                 items={currentGroupedItems}
                 grandTotal={aggregatedTotals.grandTotal}
