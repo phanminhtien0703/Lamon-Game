@@ -105,56 +105,44 @@ export function calculateDiff(current: number, previous: number): DiffMetric {
     diff,
     percent,
     isPositive: diff >= 0,
-    hasPrevious: typeof previous === 'number' && !isNaN(previous),
+    hasPrevious: previous > 0 || current > 0,
   };
 }
 
 /**
- * Determine anchor date for presets: use current system date,
- * but if all data items are prior to today (e.g. archived test data), use the latest date in data.
- */
-export function getEffectiveAnchorDate(items: DailyTrackingItem[]): Date {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  if (!items.length) return today;
-
-  const dates = items.map((i) => parseDate(i.date)?.getTime() || 0).filter((t) => t > 0);
-  if (!dates.length) return today;
-
-  const maxDataTime = Math.max(...dates);
-  // If today is within or before dataset latest date, use max(today, maxDataTime)
-  if (today.getTime() < maxDataTime) {
-    return new Date(maxDataTime);
-  }
-  return today;
-}
-
-/**
- * Resolve start and end date for a preset
+ * Resolve start and end dates from preset
  */
 export function resolvePresetDateRange(
   preset: DatePreset,
-  items: DailyTrackingItem[],
-  customStart?: string,
-  customEnd?: string
+  allSortedItems: DailyTrackingItem[],
+  customStartStr?: string,
+  customEndStr?: string
 ): { startDate: Date | null; endDate: Date | null } {
-  if (preset === 'ALL') {
+  if (allSortedItems.length === 0) {
     return { startDate: null, endDate: null };
   }
 
-  const anchor = getEffectiveAnchorDate(items);
+  const latestDateObj = parseDate(allSortedItems[allSortedItems.length - 1].date) || new Date();
+  const earliestDateObj = parseDate(allSortedItems[0].date) || new Date();
+
+  // Normalize end of latest day
+  const endOfLatest = new Date(latestDateObj);
+  endOfLatest.setHours(23, 59, 59, 999);
+
+  if (preset === 'ALL') {
+    const s = new Date(earliestDateObj);
+    s.setHours(0, 0, 0, 0);
+    return { startDate: s, endDate: endOfLatest };
+  }
 
   if (preset === 'TODAY') {
-    const s = new Date(anchor);
+    const s = new Date(latestDateObj);
     s.setHours(0, 0, 0, 0);
-    const e = new Date(anchor);
-    e.setHours(23, 59, 59, 999);
-    return { startDate: s, endDate: e };
+    return { startDate: s, endDate: endOfLatest };
   }
 
   if (preset === 'YESTERDAY') {
-    const s = new Date(anchor);
+    const s = new Date(latestDateObj);
     s.setDate(s.getDate() - 1);
     s.setHours(0, 0, 0, 0);
     const e = new Date(s);
@@ -163,38 +151,33 @@ export function resolvePresetDateRange(
   }
 
   if (preset === '7D') {
-    const e = new Date(anchor);
-    e.setHours(23, 59, 59, 999);
-    const s = new Date(anchor);
+    const s = new Date(latestDateObj);
     s.setDate(s.getDate() - 6);
     s.setHours(0, 0, 0, 0);
-    return { startDate: s, endDate: e };
+    return { startDate: s, endDate: endOfLatest };
   }
 
   if (preset === '30D') {
-    const e = new Date(anchor);
-    e.setHours(23, 59, 59, 999);
-    const s = new Date(anchor);
+    const s = new Date(latestDateObj);
     s.setDate(s.getDate() - 29);
     s.setHours(0, 0, 0, 0);
-    return { startDate: s, endDate: e };
+    return { startDate: s, endDate: endOfLatest };
   }
 
   if (preset === 'THIS_MONTH') {
-    const s = new Date(anchor.getFullYear(), anchor.getMonth(), 1, 0, 0, 0, 0);
-    const e = new Date(anchor.getFullYear(), anchor.getMonth() + 1, 0, 23, 59, 59, 999);
-    return { startDate: s, endDate: e };
+    const s = new Date(latestDateObj.getFullYear(), latestDateObj.getMonth(), 1, 0, 0, 0, 0);
+    return { startDate: s, endDate: endOfLatest };
   }
 
   if (preset === 'LAST_MONTH') {
-    const s = new Date(anchor.getFullYear(), anchor.getMonth() - 1, 1, 0, 0, 0, 0);
-    const e = new Date(anchor.getFullYear(), anchor.getMonth(), 0, 23, 59, 59, 999);
+    const s = new Date(latestDateObj.getFullYear(), latestDateObj.getMonth() - 1, 1, 0, 0, 0, 0);
+    const e = new Date(latestDateObj.getFullYear(), latestDateObj.getMonth(), 0, 23, 59, 59, 999);
     return { startDate: s, endDate: e };
   }
 
   if (preset === 'CUSTOM') {
-    const s = customStart ? new Date(customStart + 'T00:00:00') : null;
-    const e = customEnd ? new Date(customEnd + 'T23:59:59.999') : null;
+    const s = customStartStr ? new Date(`${customStartStr}T00:00:00`) : new Date(earliestDateObj);
+    const e = customEndStr ? new Date(`${customEndStr}T23:59:59`) : new Date(endOfLatest);
     return { startDate: s, endDate: e };
   }
 
@@ -209,72 +192,63 @@ export function filterItemsByDateRange(
   startDate: Date | null,
   endDate: Date | null
 ): DailyTrackingItem[] {
-  if (!startDate && !endDate) return items;
+  if (!startDate || !endDate) return items;
 
-  const startMs = startDate ? startDate.getTime() : 0;
-  const endMs = endDate ? endDate.getTime() : Infinity;
+  const sTime = startDate.getTime();
+  const eTime = endDate.getTime();
 
   return items.filter((item) => {
     const d = parseDate(item.date);
     if (!d) return false;
-    const t = d.getTime();
-    return t >= startMs && t <= endMs;
+    const time = d.getTime();
+    return time >= sTime && time <= eTime;
   });
 }
 
 /**
- * Compute previous comparison date range
+ * Resolve comparison date range based on mode
  */
 export function resolveComparisonRange(
   mode: ComparisonMode,
-  currentStart: Date | null,
-  currentEnd: Date | null,
-  items: DailyTrackingItem[],
-  customCompStart?: string,
-  customCompEnd?: string
+  currentStartDate: Date | null,
+  currentEndDate: Date | null,
+  allSortedItems: DailyTrackingItem[],
+  customCompStartStr?: string,
+  customCompEndStr?: string
 ): { compareStart: Date | null; compareEnd: Date | null } {
-  if (mode === 'NONE') {
+  if (mode === 'NONE' || !currentStartDate || !currentEndDate) {
     return { compareStart: null, compareEnd: null };
   }
 
   if (mode === 'CUSTOM') {
-    const s = customCompStart ? new Date(customCompStart + 'T00:00:00') : null;
-    const e = customCompEnd ? new Date(customCompEnd + 'T23:59:59.999') : null;
+    const s = customCompStartStr ? new Date(`${customCompStartStr}T00:00:00`) : null;
+    const e = customCompEndStr ? new Date(`${customCompEndStr}T23:59:59`) : null;
     return { compareStart: s, compareEnd: e };
   }
 
-  // If no date range specified, take whole chronological range
-  let sTime = currentStart ? currentStart.getTime() : 0;
-  let eTime = currentEnd ? currentEnd.getTime() : 0;
-
-  if (!currentStart || !currentEnd) {
-    const sorted = [...items].sort((a, b) => (parseDate(a.date)?.getTime() || 0) - (parseDate(b.date)?.getTime() || 0));
-    if (!sorted.length) return { compareStart: null, compareEnd: null };
-    sTime = parseDate(sorted[0].date)?.getTime() || 0;
-    eTime = parseDate(sorted[sorted.length - 1].date)?.getTime() || 0;
-  }
-
-  const durationMs = eTime - sTime + 1; // milliseconds
+  const durationMs = currentEndDate.getTime() - currentStartDate.getTime();
 
   if (mode === 'PREVIOUS_PERIOD') {
-    const prevEnd = new Date(sTime - 1);
-    const prevStart = new Date(prevEnd.getTime() - durationMs + 1);
-    return { compareStart: prevStart, compareEnd: prevEnd };
+    const compareEnd = new Date(currentStartDate.getTime() - 1); // 1 ms before current start
+    const compareStart = new Date(compareEnd.getTime() - durationMs);
+    compareStart.setHours(0, 0, 0, 0);
+    compareEnd.setHours(23, 59, 59, 999);
+    return { compareStart, compareEnd };
   }
 
   if (mode === 'YOY') {
-    const prevStart = new Date(sTime);
-    prevStart.setFullYear(prevStart.getFullYear() - 1);
-    const prevEnd = new Date(eTime);
-    prevEnd.setFullYear(prevEnd.getFullYear() - 1);
-    return { compareStart: prevStart, compareEnd: prevEnd };
+    const compareStart = new Date(currentStartDate);
+    compareStart.setFullYear(compareStart.getFullYear() - 1);
+    const compareEnd = new Date(currentEndDate);
+    compareEnd.setFullYear(compareEnd.getFullYear() - 1);
+    return { compareStart, compareEnd };
   }
 
   return { compareStart: null, compareEnd: null };
 }
 
 /**
- * Group raw items by Granularity (Daily, Weekly, Monthly)
+ * Group daily items by Granularity (DAILY, WEEKLY, MONTHLY)
  */
 export function groupItemsByGranularity(
   items: DailyTrackingItem[],
@@ -295,6 +269,7 @@ export function groupItemsByGranularity(
         kenhGameZ: item.kenhGameZ,
         other: item.other,
         webGameLau: item.webGameLau,
+        youtube: item.youtube || 0,
         zalo: item.zalo,
         total: item.total,
       };
@@ -315,6 +290,7 @@ export function groupItemsByGranularity(
         kenhGameZ: number;
         other: number;
         webGameLau: number;
+        youtube: number;
         zalo: number;
         total: number;
         count: number;
@@ -339,6 +315,7 @@ export function groupItemsByGranularity(
           kenhGameZ: 0,
           other: 0,
           webGameLau: 0,
+          youtube: 0,
           zalo: 0,
           total: 0,
           count: 0,
@@ -352,6 +329,7 @@ export function groupItemsByGranularity(
       w.kenhGameZ += item.kenhGameZ;
       w.other += item.other;
       w.webGameLau += item.webGameLau;
+      w.youtube += item.youtube || 0;
       w.zalo += item.zalo;
       w.total += item.total;
       w.count += 1;
@@ -373,6 +351,7 @@ export function groupItemsByGranularity(
         kenhGameZ: w.kenhGameZ,
         other: w.other,
         webGameLau: w.webGameLau,
+        youtube: w.youtube,
         zalo: w.zalo,
         total: w.total,
       });
@@ -393,6 +372,7 @@ export function groupItemsByGranularity(
         kenhGameZ: number;
         other: number;
         webGameLau: number;
+        youtube: number;
         zalo: number;
         total: number;
         count: number;
@@ -416,6 +396,7 @@ export function groupItemsByGranularity(
           kenhGameZ: 0,
           other: 0,
           webGameLau: 0,
+          youtube: 0,
           zalo: 0,
           total: 0,
           count: 0,
@@ -429,6 +410,7 @@ export function groupItemsByGranularity(
       m.kenhGameZ += item.kenhGameZ;
       m.other += item.other;
       m.webGameLau += item.webGameLau;
+      m.youtube += item.youtube || 0;
       m.zalo += item.zalo;
       m.total += item.total;
       m.count += 1;
@@ -450,6 +432,7 @@ export function groupItemsByGranularity(
         kenhGameZ: m.kenhGameZ,
         other: m.other,
         webGameLau: m.webGameLau,
+        youtube: m.youtube,
         zalo: m.zalo,
         total: m.total,
       });
@@ -469,16 +452,10 @@ export function attachComparisons(
   comparisonItems: GroupedTrackingItem[],
   granularity: Granularity
 ): GroupedTrackingItem[] {
-  // Map comparison items by index or offset
   return currentItems.map((curr, idx) => {
     let compItem: GroupedTrackingItem | undefined;
 
-    if (granularity === 'DAILY') {
-      // Find item with same day-offset or index
-      compItem = comparisonItems[idx];
-    } else if (granularity === 'WEEKLY') {
-      compItem = comparisonItems[idx];
-    } else if (granularity === 'MONTHLY') {
+    if (granularity === 'DAILY' || granularity === 'WEEKLY' || granularity === 'MONTHLY') {
       compItem = comparisonItems[idx];
     }
 
@@ -495,6 +472,7 @@ export function attachComparisons(
         kenhGameZ: calculateDiff(curr.kenhGameZ, compItem.kenhGameZ),
         other: calculateDiff(curr.other, compItem.other),
         webGameLau: calculateDiff(curr.webGameLau, compItem.webGameLau),
+        youtube: calculateDiff(curr.youtube, compItem.youtube),
         zalo: calculateDiff(curr.zalo, compItem.zalo),
         total: calculateDiff(curr.total, compItem.total),
       },
@@ -514,6 +492,7 @@ export function calculateTotals(
     kenhGameZ: number;
     other: number;
     webGameLau: number;
+    youtube: number;
     zalo: number;
     grandTotal: number;
   }
@@ -526,11 +505,12 @@ export function calculateTotals(
       acc.kenhGameZ += curr.kenhGameZ;
       acc.other += curr.other;
       acc.webGameLau += curr.webGameLau;
+      acc.youtube += curr.youtube;
       acc.zalo += curr.zalo;
       acc.grandTotal += curr.total;
       return acc;
     },
-    { direct: 0, facebook: 0, google: 0, kenhGameZ: 0, other: 0, webGameLau: 0, zalo: 0, grandTotal: 0 }
+    { direct: 0, facebook: 0, google: 0, kenhGameZ: 0, other: 0, webGameLau: 0, youtube: 0, zalo: 0, grandTotal: 0 }
   );
 
   if (!compareTotals) {
@@ -546,6 +526,7 @@ export function calculateTotals(
       kenhGameZ: calculateDiff(current.kenhGameZ, compareTotals.kenhGameZ),
       other: calculateDiff(current.other, compareTotals.other),
       webGameLau: calculateDiff(current.webGameLau, compareTotals.webGameLau),
+      youtube: calculateDiff(current.youtube, compareTotals.youtube),
       zalo: calculateDiff(current.zalo, compareTotals.zalo),
       grandTotal: calculateDiff(current.grandTotal, compareTotals.grandTotal),
     },
@@ -563,7 +544,7 @@ export function exportToCSV(
   filename = 'bao-cao-traffic.csv'
 ) {
   const channelHeaders = CHANNELS.map((c) => c.label);
-  
+
   // Headers
   let headerRow = ['Thời gian / Chu kỳ', ...channelHeaders, 'Tổng cộng'];
   if (showComparison) {
@@ -589,6 +570,7 @@ export function exportToCSV(
       String(item.kenhGameZ),
       String(item.other),
       String(item.webGameLau),
+      String(item.youtube),
       String(item.zalo),
       String(item.total),
     ];
@@ -618,6 +600,7 @@ export function exportToCSV(
     String(totals.kenhGameZ),
     String(totals.other),
     String(totals.webGameLau),
+    String(totals.youtube),
     String(totals.zalo),
     String(totals.grandTotal),
   ];
@@ -647,6 +630,7 @@ export function exportToCSV(
     `${Math.round((totals.kenhGameZ / grandTotal) * 1000) / 10}%`,
     `${Math.round((totals.other / grandTotal) * 1000) / 10}%`,
     `${Math.round((totals.webGameLau / grandTotal) * 1000) / 10}%`,
+    `${Math.round((totals.youtube / grandTotal) * 1000) / 10}%`,
     `${Math.round((totals.zalo / grandTotal) * 1000) / 10}%`,
     '100%',
   ];
