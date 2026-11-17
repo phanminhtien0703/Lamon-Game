@@ -80,7 +80,43 @@ export default function AdminDashboardPage() {
 
   // Layout states
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  // Load persisted collapse state & register Ctrl+B shortcut
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('concept_sidebar_collapsed');
+      if (saved !== null) {
+        setSidebarCollapsed(saved === 'true');
+      }
+    } catch {}
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        setSidebarCollapsed((prev) => {
+          const next = !prev;
+          try {
+            localStorage.setItem('concept_sidebar_collapsed', String(next));
+          } catch {}
+          return next;
+        });
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleToggleCollapse = useCallback(() => {
+    setSidebarCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('concept_sidebar_collapsed', String(next));
+      } catch {}
+      return next;
+    });
+  }, []);
 
   // 1. GRANULARITY (Chu kỳ xem)
   const [granularity, setGranularity] = useState<Granularity>('DAILY');
@@ -391,6 +427,8 @@ export default function AdminDashboardPage() {
       <Sidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
+        isCollapsed={sidebarCollapsed}
+        onToggleCollapse={handleToggleCollapse}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onExportCSV={handleExportCSV}
@@ -398,10 +436,16 @@ export default function AdminDashboardPage() {
       />
 
       {/* 2. MAIN CONTENT WRAPPER */}
-      <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
+      <div
+        className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out ${
+          sidebarCollapsed ? 'lg:pl-[72px]' : 'lg:pl-64'
+        }`}
+      >
         {/* Top Navigation Bar */}
         <TopNav
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+          isCollapsed={sidebarCollapsed}
+          onToggleCollapse={handleToggleCollapse}
           onRefresh={() => fetchData(true)}
           refreshing={refreshing}
           onLogout={handleLogout}
