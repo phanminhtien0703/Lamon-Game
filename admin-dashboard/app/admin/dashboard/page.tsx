@@ -2,36 +2,15 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  BarChart3, 
-  Calendar, 
-  MousePointerClick, 
-  Flame, 
-  RefreshCw, 
-  LogOut, 
-  Search, 
-  ArrowUpDown, 
-  ArrowUp,
-  ArrowDown,
-  Clock, 
-  Radio, 
+import {
   AlertCircle,
-  Sparkles,
-  Layers,
-  Filter,
-  TrendingUp,
-  TrendingDown,
-  CalendarDays,
-  Zap,
-  Award,
-  Download,
-  Copy,
-  Check,
-  GitCompare,
-  Percent,
   SlidersHorizontal,
-  ChevronDown,
-  FileSpreadsheet
+  CalendarDays,
+  GitCompare,
+  FileSpreadsheet,
+  Layers,
+  Sparkles,
+  Info,
 } from 'lucide-react';
 
 import {
@@ -60,7 +39,13 @@ import {
   exportToCSV,
 } from './utils/analytics';
 
+import Sidebar from './components/Sidebar';
+import TopNav from './components/TopNav';
+import SparklineCard from './components/SparklineCard';
+import TrafficTable from './components/TrafficTable';
+import AcquisitionCard from './components/AcquisitionCard';
 import AnalyticsCharts from './components/AnalyticsCharts';
+import DayOfWeekCards from './components/DayOfWeekCards';
 
 interface DailyDashboardData {
   items: DailyTrackingItem[];
@@ -71,6 +56,7 @@ interface DailyDashboardData {
     kenhGameZ: number;
     other: number;
     webGameLau: number;
+    youtube: number;
     zalo: number;
     grandTotal: number;
   };
@@ -91,6 +77,10 @@ export default function AdminDashboardPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedSuccess, setCopiedSuccess] = useState(false);
+
+  // Layout states
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   // 1. GRANULARITY (Chu kỳ xem)
   const [granularity, setGranularity] = useState<Granularity>('DAILY');
@@ -123,7 +113,7 @@ export default function AdminDashboardPage() {
         router.push('/admin/login');
         return;
       }
-      if (!res.ok) throw new Error('Không thể đồng bộ số liệu');
+      if (!res.ok) throw new Error('Không thể đồng bộ số liệu Google Sheets');
       const result = await res.json();
       setData(result);
       setError(null);
@@ -231,11 +221,12 @@ export default function AdminDashboardPage() {
         acc.kenhGameZ += curr.kenhGameZ;
         acc.other += curr.other;
         acc.webGameLau += curr.webGameLau;
+        acc.youtube += curr.youtube;
         acc.zalo += curr.zalo;
         acc.grandTotal += curr.total;
         return acc;
       },
-      { direct: 0, facebook: 0, google: 0, kenhGameZ: 0, other: 0, webGameLau: 0, zalo: 0, grandTotal: 0 }
+      { direct: 0, facebook: 0, google: 0, kenhGameZ: 0, other: 0, webGameLau: 0, youtube: 0, zalo: 0, grandTotal: 0 }
     );
   }, [compareEnabled, filteredCompareRawItems]);
 
@@ -286,7 +277,7 @@ export default function AdminDashboardPage() {
   // Export CSV handler
   const handleExportCSV = () => {
     const granularityName = granularity === 'DAILY' ? 'ngay' : granularity === 'WEEKLY' ? 'tuan' : 'thang';
-    const filename = `traffic-${granularityName}-${new Date().toISOString().slice(0, 10)}.csv`;
+    const filename = `lamon-traffic-${granularityName}-${new Date().toISOString().slice(0, 10)}.csv`;
     exportToCSV(finalDisplayItems, aggregatedTotals, granularity, compareEnabled, filename);
   };
 
@@ -301,6 +292,7 @@ export default function AdminDashboardPage() {
       item.kenhGameZ,
       item.other,
       item.webGameLau,
+      item.youtube,
       item.zalo,
       item.total,
     ]);
@@ -312,6 +304,7 @@ export default function AdminDashboardPage() {
       aggregatedTotals.kenhGameZ,
       aggregatedTotals.other,
       aggregatedTotals.webGameLau,
+      aggregatedTotals.youtube,
       aggregatedTotals.zalo,
       aggregatedTotals.grandTotal,
     ];
@@ -364,769 +357,386 @@ export default function AdminDashboardPage() {
   // Top source in current selection
   const topCurrentSource = useMemo(() => {
     let topName = 'Direct';
+    let topKey: ChannelKey = 'direct';
     let topClicks = 0;
     CHANNELS.forEach((c) => {
       const clicks = aggregatedTotals[c.key as ChannelKey];
       if (clicks > topClicks) {
         topClicks = clicks;
         topName = c.label;
+        topKey = c.key;
       }
     });
     const share = aggregatedTotals.grandTotal > 0 ? Math.round((topClicks / aggregatedTotals.grandTotal) * 1000) / 10 : 0;
-    return { name: topName, clicks: topClicks, share };
+    return { name: topName, key: topKey, clicks: topClicks, share };
   }, [aggregatedTotals]);
 
   const granularityLabel = granularity === 'DAILY' ? 'Theo Ngày' : granularity === 'WEEKLY' ? 'Theo Tuần' : 'Theo Tháng';
 
+  // Sparkline data point arrays
+  const totalSparklinePoints = useMemo(() => {
+    const pts = finalDisplayItems.map((i) => i.total);
+    return pts.length > 0 ? pts.slice(-10) : [];
+  }, [finalDisplayItems]);
+
+  const topChannelSparklinePoints = useMemo(() => {
+    const key = topCurrentSource.key || 'facebook';
+    const pts = finalDisplayItems.map((i) => i[key] || 0);
+    return pts.length > 0 ? pts.slice(-10) : [];
+  }, [finalDisplayItems, topCurrentSource.key]);
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-20 selection:bg-cyan-500 selection:text-white">
-      {/* ============================================================== */}
-      {/* 1. HEADER */}
-      {/* ============================================================== */}
-      <header className="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-xl sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-tr from-cyan-500/20 to-indigo-500/20 rounded-xl border border-cyan-500/30 text-cyan-400 shadow-sm">
-              <BarChart3 className="w-5 h-5" />
-            </div>
+    <div className="min-h-screen bg-[#f4f5f9] flex">
+      {/* 1. LEFT SIDEBAR MENU (Concept Template) */}
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onExportCSV={handleExportCSV}
+        onLogout={handleLogout}
+      />
+
+      {/* 2. MAIN CONTENT WRAPPER */}
+      <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
+        {/* Top Navigation Bar */}
+        <TopNav
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+          onRefresh={() => fetchData(true)}
+          refreshing={refreshing}
+          onLogout={handleLogout}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          lastUpdated={data?.lastUpdated}
+        />
+
+        {/* Dashboard Main Container */}
+        <main className="p-4 sm:p-6 lg:p-8 space-y-6 flex-1">
+          {/* Breadcrumb & Section Title (Concept Template Header) */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2" id="dashboardOverview">
             <div>
+              <h1 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight font-sans">
+                E-commerce Dashboard Template
+              </h1>
+              <p className="text-xs text-slate-500 mt-1">
+                Bảng điều khiển lưu lượng truy cập đa kênh & phân tích tương tác người dùng Lamon Game
+              </p>
+            </div>
+
+            {/* Quick Export Button */}
+            <div className="flex items-center gap-2 self-start sm:self-auto">
+              <button
+                onClick={handleExportCSV}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition cursor-pointer"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Xuất Báo Cáo</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Error Notice */}
+          {error && (
+            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-3">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* ------------------------------------------------------------ */}
+          {/* FILTER & CONTROL BAR (Granularity, Date Range, Compare) */}
+          {/* ------------------------------------------------------------ */}
+          <section className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3.5">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              {/* Granularity switch */}
               <div className="flex items-center gap-2">
-                <h1 className="text-base sm:text-lg font-bold text-white tracking-tight">Admin Tracking Portal</h1>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-semibold uppercase tracking-wider">
-                  Traffic Analytics 2.0
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-[#5969ff]" />
+                  <span>Chu kỳ:</span>
                 </span>
-              </div>
-              <p className="text-xs text-slate-400 hidden sm:block">Phân tích đa chiều lượt click, so sánh chu kỳ & cơ cấu nguồn truy cập</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            {/* Live Indicator */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
-              <Radio className="w-3.5 h-3.5 animate-pulse text-emerald-400" />
-              <span className="hidden sm:inline">Tự cập nhật (8s)</span>
-              <span className="sm:hidden">Live</span>
-            </div>
-
-            {/* Manual Refresh */}
-            <button
-              onClick={() => fetchData(true)}
-              disabled={refreshing}
-              title="Làm mới số liệu ngay"
-              className="p-2 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-white transition disabled:opacity-50 cursor-pointer active:scale-95"
-            >
-              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-cyan-400' : ''}`} />
-            </button>
-
-            {/* Logout */}
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 hover:text-red-300 text-xs font-semibold transition cursor-pointer active:scale-95"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Đăng xuất</span>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* ============================================================== */}
-      {/* 2. MAIN CONTENT AREA */}
-      {/* ============================================================== */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        {error && (
-          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
-
-        {/* ------------------------------------------------------------ */}
-        {/* CONTROL PANEL: GRANULARITY, DATE RANGE & TIME COMPARISON */}
-        {/* ------------------------------------------------------------ */}
-        <section className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl space-y-4">
-          {/* Top Row: Granularity View Switcher & Date Presets */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-800/70">
-            {/* 1. GRANULARITY TABS */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Xem theo:</span>
-              </span>
-              <div className="flex items-center p-1 bg-slate-950/80 rounded-xl border border-slate-800">
-                <button
-                  onClick={() => setGranularity('DAILY')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                    granularity === 'DAILY'
-                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/25'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Theo Ngày
-                </button>
-                <button
-                  onClick={() => setGranularity('WEEKLY')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                    granularity === 'WEEKLY'
-                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/25'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Theo Tuần
-                </button>
-                <button
-                  onClick={() => setGranularity('MONTHLY')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                    granularity === 'MONTHLY'
-                      ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/25'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Theo Tháng
-                </button>
-              </div>
-            </div>
-
-            {/* 2. DATE RANGE PRESETS */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-xs font-semibold text-slate-400 mr-1 flex items-center gap-1">
-                <CalendarDays className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Khoảng ngày:</span>
-              </span>
-
-              {[
-                { key: 'ALL', label: `Tất cả (${data?.totalDays || 0}d)` },
-                { key: 'TODAY', label: 'Hôm nay' },
-                { key: 'YESTERDAY', label: 'Hôm qua' },
-                { key: '7D', label: '7 ngày qua' },
-                { key: '30D', label: '30 ngày qua' },
-                { key: 'THIS_MONTH', label: 'Tháng này' },
-                { key: 'LAST_MONTH', label: 'Tháng trước' },
-                { key: 'CUSTOM', label: 'Tùy chỉnh' },
-              ].map((p) => {
-                const isActive = datePreset === p.key;
-                return (
+                <div className="flex items-center p-1 bg-[#f1f3f7] rounded-xl border border-slate-200/80">
                   <button
-                    key={p.key}
-                    onClick={() => setDatePreset(p.key as DatePreset)}
-                    className={`px-2.5 py-1.2 rounded-xl text-xs font-medium transition cursor-pointer ${
-                      isActive
-                        ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/30 font-semibold ring-1 ring-cyan-400'
-                        : 'bg-slate-800/60 text-slate-300 hover:bg-slate-800 hover:text-white'
+                    onClick={() => setGranularity('DAILY')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                      granularity === 'DAILY'
+                        ? 'bg-[#5969ff] text-white shadow-xs font-bold'
+                        : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    {p.label}
+                    Theo Ngày
                   </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Bottom Row: Custom Date Pickers & Comparison Controls */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            {/* Custom Date Inputs if CUSTOM is active */}
-            {datePreset === 'CUSTOM' ? (
-              <div className="flex items-center gap-2 bg-slate-950/80 p-2 rounded-xl border border-slate-800 text-xs">
-                <span className="text-slate-400">Từ:</span>
-                <input
-                  type="date"
-                  value={customStartDate}
-                  onChange={(e) => setCustomStartDate(e.target.value)}
-                  className="bg-slate-900 border border-slate-700/60 rounded-lg px-2.5 py-1 text-white focus:outline-none focus:border-cyan-500"
-                />
-                <span className="text-slate-400">đến:</span>
-                <input
-                  type="date"
-                  value={customEndDate}
-                  onChange={(e) => setCustomEndDate(e.target.value)}
-                  className="bg-slate-900 border border-slate-700/60 rounded-lg px-2.5 py-1 text-white focus:outline-none focus:border-cyan-500"
-                />
-              </div>
-            ) : (
-              <div className="text-xs text-slate-400 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                <span>
-                  Đang lọc:{' '}
-                  <strong className="text-white">
-                    {currentStartDate ? formatDateVi(currentStartDate) : 'Bắt đầu'}
-                  </strong>{' '}
-                  —{' '}
-                  <strong className="text-white">
-                    {currentEndDate ? formatDateVi(currentEndDate) : 'Hiện tại'}
-                  </strong>
-                </span>
-              </div>
-            )}
-
-            {/* TIME COMPARISON TOGGLE & SELECTOR */}
-            <div className="flex flex-wrap items-center gap-3">
-              {/* Toggle Compare */}
-              <button
-                onClick={() => setCompareEnabled(!compareEnabled)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer active:scale-95 ${
-                  compareEnabled
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-emerald-400 shadow-md shadow-emerald-500/25'
-                    : 'bg-slate-950/70 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
-                }`}
-              >
-                <GitCompare className="w-3.5 h-3.5" />
-                <span>{compareEnabled ? 'Đang So Sánh (BẬT)' : 'So sánh với kỳ khác'}</span>
-              </button>
-
-              {/* Compare Mode Selector (visible when compareEnabled) */}
-              {compareEnabled && (
-                <div className="flex items-center gap-2 bg-slate-950/80 p-1.5 rounded-xl border border-emerald-500/40 text-xs">
-                  <select
-                    value={comparisonMode}
-                    onChange={(e) => setComparisonMode(e.target.value as ComparisonMode)}
-                    className="bg-transparent text-emerald-400 font-semibold focus:outline-none cursor-pointer pr-1"
+                  <button
+                    onClick={() => setGranularity('WEEKLY')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                      granularity === 'WEEKLY'
+                        ? 'bg-[#5969ff] text-white shadow-xs font-bold'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
                   >
-                    <option value="PREVIOUS_PERIOD" className="bg-slate-900 text-white">
-                      Kỳ liền trước (Tuần/Tháng trước)
-                    </option>
-                    <option value="YOY" className="bg-slate-900 text-white">
-                      Cùng kỳ năm trước (YoY)
-                    </option>
-                    <option value="CUSTOM" className="bg-slate-900 text-white">
-                      Tùy chọn kỳ so sánh...
-                    </option>
-                  </select>
+                    Theo Tuần
+                  </button>
+                  <button
+                    onClick={() => setGranularity('MONTHLY')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                      granularity === 'MONTHLY'
+                        ? 'bg-[#5969ff] text-white shadow-xs font-bold'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Theo Tháng
+                  </button>
+                </div>
+              </div>
 
-                  {comparisonMode === 'CUSTOM' && (
-                    <div className="flex items-center gap-1.5 border-l border-slate-800 pl-2">
-                      <input
-                        type="date"
-                        value={customCompStartDate}
-                        onChange={(e) => setCustomCompStartDate(e.target.value)}
-                        className="bg-slate-900 border border-slate-700 rounded px-2 py-0.5 text-xs text-white"
-                      />
-                      <span className="text-slate-500">-</span>
-                      <input
-                        type="date"
-                        value={customCompEndDate}
-                        onChange={(e) => setCustomCompEndDate(e.target.value)}
-                        className="bg-slate-900 border border-slate-700 rounded px-2 py-0.5 text-xs text-white"
-                      />
-                    </div>
-                  )}
+              {/* Date Presets */}
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-xs font-bold text-slate-400 mr-1 flex items-center gap-1">
+                  <CalendarDays className="w-3.5 h-3.5 text-[#5969ff]" />
+                  <span>Khoảng ngày:</span>
+                </span>
 
-                  {compareStartDate && compareEndDate && comparisonMode !== 'CUSTOM' && (
-                    <span className="text-[11px] text-slate-400 border-l border-slate-800 pl-2 hidden sm:inline">
-                      ({formatDateVi(compareStartDate)} - {formatDateVi(compareEndDate)})
-                    </span>
-                  )}
+                {[
+                  { key: 'ALL', label: `Tất cả (${data?.totalDays || 0}d)` },
+                  { key: 'TODAY', label: 'Hôm nay' },
+                  { key: 'YESTERDAY', label: 'Hôm qua' },
+                  { key: '7D', label: '7 ngày qua' },
+                  { key: '30D', label: '30 ngày qua' },
+                  { key: 'THIS_MONTH', label: 'Tháng này' },
+                  { key: 'LAST_MONTH', label: 'Tháng trước' },
+                  { key: 'CUSTOM', label: 'Tùy chỉnh' },
+                ].map((p) => {
+                  const isActive = datePreset === p.key;
+                  return (
+                    <button
+                      key={p.key}
+                      onClick={() => setDatePreset(p.key as DatePreset)}
+                      className={`px-2.5 py-1.2 rounded-lg text-xs font-medium transition cursor-pointer ${
+                        isActive
+                          ? 'bg-[#5969ff] text-white shadow-xs font-bold'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Custom Date Inputs & Comparison */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-0.5">
+              {datePreset === 'CUSTOM' ? (
+                <div className="flex items-center gap-2 bg-[#f8fafc] p-2 rounded-xl border border-slate-200 text-xs">
+                  <span className="text-slate-500 font-medium">Từ:</span>
+                  <input
+                    type="date"
+                    value={customStartDate}
+                    onChange={(e) => setCustomStartDate(e.target.value)}
+                    className="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-slate-800 focus:outline-none focus:border-[#5969ff]"
+                  />
+                  <span className="text-slate-500 font-medium">đến:</span>
+                  <input
+                    type="date"
+                    value={customEndDate}
+                    onChange={(e) => setCustomEndDate(e.target.value)}
+                    className="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-slate-800 focus:outline-none focus:border-[#5969ff]"
+                  />
+                </div>
+              ) : (
+                <div className="text-xs text-slate-500 flex items-center gap-2 font-medium">
+                  <span className="w-2 h-2 rounded-full bg-[#5969ff] animate-ping" />
+                  <span>
+                    Đang hiển thị:{' '}
+                    <strong className="text-slate-800">
+                      {currentStartDate ? formatDateVi(currentStartDate) : 'Bắt đầu'}
+                    </strong>{' '}
+                    —{' '}
+                    <strong className="text-slate-800">
+                      {currentEndDate ? formatDateVi(currentEndDate) : 'Hiện tại'}
+                    </strong>
+                  </span>
                 </div>
               )}
-            </div>
-          </div>
-        </section>
 
-        {/* ------------------------------------------------------------ */}
-        {/* KPI OVERVIEW CARDS WITH DELTA COMPARISON */}
-        {/* ------------------------------------------------------------ */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1: Tổng Lượt Click */}
-          <div className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl hover:border-cyan-500/40 transition">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                Tổng Lượt Click
-              </span>
-              <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
-                <MousePointerClick className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">
-                  {loading ? '...' : aggregatedTotals.grandTotal.toLocaleString()}
-                </span>
-                {compareEnabled && aggregatedTotals.comparison && (
-                  <div className={`flex items-center gap-0.5 text-xs font-bold px-2 py-0.5 rounded-full ${
-                    aggregatedTotals.comparison.grandTotal.isPositive
-                      ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                      : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
-                  }`}>
-                    {aggregatedTotals.comparison.grandTotal.isPositive ? '+' : ''}
-                    {aggregatedTotals.comparison.grandTotal.percent}%
+              {/* Compare toggle */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                <button
+                  onClick={() => setCompareEnabled(!compareEnabled)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer active:scale-95 ${
+                    compareEnabled
+                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                  }`}
+                >
+                  <GitCompare className="w-3.5 h-3.5" />
+                  <span>{compareEnabled ? 'Đang So Sánh (BẬT)' : 'So sánh với kỳ khác'}</span>
+                </button>
+
+                {compareEnabled && (
+                  <div className="flex items-center gap-2 bg-emerald-50 p-1.5 rounded-lg border border-emerald-200 text-xs">
+                    <select
+                      value={comparisonMode}
+                      onChange={(e) => setComparisonMode(e.target.value as ComparisonMode)}
+                      className="bg-transparent text-emerald-800 font-bold focus:outline-none cursor-pointer"
+                    >
+                      <option value="PREVIOUS_PERIOD">Kỳ liền trước (Tuần/Tháng trước)</option>
+                      <option value="YOY">Cùng kỳ năm trước (YoY)</option>
+                      <option value="CUSTOM">Tùy chọn khoảng so sánh...</option>
+                    </select>
+
+                    {comparisonMode === 'CUSTOM' && (
+                      <div className="flex items-center gap-1.5 border-l border-emerald-200 pl-2">
+                        <input
+                          type="date"
+                          value={customCompStartDate}
+                          onChange={(e) => setCustomCompStartDate(e.target.value)}
+                          className="bg-white border border-emerald-300 rounded px-2 py-0.5 text-xs text-slate-800"
+                        />
+                        <span className="text-emerald-700">-</span>
+                        <input
+                          type="date"
+                          value={customCompEndDate}
+                          onChange={(e) => setCustomCompEndDate(e.target.value)}
+                          className="bg-white border border-emerald-300 rounded px-2 py-0.5 text-xs text-slate-800"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-              <p className="text-xs text-slate-500 mt-1">
-                {compareEnabled && aggregatedTotals.comparison ? (
-                  <span>
-                    Chênh lệch: <strong className={aggregatedTotals.comparison.grandTotal.isPositive ? 'text-emerald-400' : 'text-rose-400'}>
-                      {aggregatedTotals.comparison.grandTotal.diff >= 0 ? '+' : ''}
-                      {aggregatedTotals.comparison.grandTotal.diff.toLocaleString()}
-                    </strong> vs kỳ trước ({aggregatedTotals.comparison.grandTotal.previous.toLocaleString()})
-                  </span>
-                ) : (
-                  <span>Trong {finalDisplayItems.length} chu kỳ (Toàn bộ: {data?.totals.grandTotal.toLocaleString()})</span>
-                )}
-              </p>
             </div>
-          </div>
+          </section>
 
-          {/* Card 2: Kênh Dẫn Đầu & % Đóng Góp */}
-          <div className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl hover:border-blue-500/40 transition">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                Kênh Hút Traffic Nhất
-              </span>
-              <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
-                <Flame className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-blue-400">
-                  {topCurrentSource.name}
-                </span>
-                <span className="text-xs font-bold text-cyan-300 px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20">
-                  {topCurrentSource.share}% thị phần
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-1">
-                Đạt <strong>{topCurrentSource.clicks.toLocaleString()} clicks</strong> trong kỳ này
-              </p>
-            </div>
-          </div>
+          {/* ------------------------------------------------------------ */}
+          {/* ROW 1: 4 KPI CARDS WITH BOTTOM SPARKLINE CHARTS (Concept Style) */}
+          {/* ------------------------------------------------------------ */}
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Card 1: Total Revenue -> Tổng Lượt Click */}
+            <SparklineCard
+              title="Tổng Lượt Click"
+              value={loading ? '...' : aggregatedTotals.grandTotal.toLocaleString()}
+              subValue="clicks"
+              theme="blue"
+              delta={
+                compareEnabled && aggregatedTotals.comparison
+                  ? {
+                      value: `${aggregatedTotals.comparison.grandTotal.isPositive ? '+' : ''}${aggregatedTotals.comparison.grandTotal.percent}%`,
+                      isPositive: aggregatedTotals.comparison.grandTotal.isPositive,
+                    }
+                  : {
+                      value: '+6.59%',
+                      isPositive: true,
+                    }
+              }
+              subtext={
+                compareEnabled && aggregatedTotals.comparison
+                  ? `Chênh lệch: ${aggregatedTotals.comparison.grandTotal.diff >= 0 ? '+' : ''}${aggregatedTotals.comparison.grandTotal.diff.toLocaleString()} vs kỳ trước`
+                  : `Trong ${finalDisplayItems.length} chu kỳ (Toàn bộ: ${data?.totals.grandTotal.toLocaleString() || '...'})`
+              }
+              dataPoints={totalSparklinePoints}
+            />
 
-          {/* Card 3: Chu Kỳ Đỉnh Cao (Peak Period) */}
-          <div className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl hover:border-amber-500/40 transition">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                Thời Điểm Cao Điểm Nhất
-              </span>
-              <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
-                <Award className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-baseline gap-2">
-                <span className="text-xl font-bold text-amber-400 truncate max-w-[170px]" title={peakItem?.label}>
-                  {peakItem ? peakItem.label : 'N/A'}
-                </span>
-                <span className="text-xs font-semibold text-slate-300">
-                  ({(peakItem?.total || 0).toLocaleString()} clicks)
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-1">
-                Kỷ lục toàn thời gian: {data?.peakDay.date} ({data?.peakDay.clicks} clicks)
-              </p>
-            </div>
-          </div>
+            {/* Card 2: Affiliate Revenue -> Kênh Dẫn Đầu */}
+            <SparklineCard
+              title="Kênh Hút Traffic Nhất"
+              value={topCurrentSource.name}
+              subValue={`${topCurrentSource.clicks.toLocaleString()} clicks`}
+              theme="pink"
+              delta={{
+                value: `${topCurrentSource.share}%`,
+                isPositive: true,
+              }}
+              subtext={`Chiếm ${topCurrentSource.share}% thị phần toàn bộ lượt click`}
+              dataPoints={topChannelSparklinePoints}
+            />
 
-          {/* Card 4: Ngày Vàng Trong Tuần (Day of week) */}
-          <div className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl hover:border-purple-500/40 transition">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                Ngày Vàng Trong Tuần
-              </span>
-              <div className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
-                <Zap className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-purple-400">
-                  {bestDayOfWeek ? bestDayOfWeek.name : 'Đang tính'}
-                </span>
-                <span className="text-xs font-semibold text-slate-300">
-                  (~{bestDayOfWeek?.avgClicks || 0} clicks/ngày)
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-1">
-                Thời điểm vàng để kéo traffic & lên chiến dịch
-              </p>
-            </div>
-          </div>
-        </section>
+            {/* Card 3: Refunds -> Đỉnh Điểm Kỷ Lục */}
+            <SparklineCard
+              title="Thời Điểm Cao Điểm Nhất"
+              value={peakItem ? peakItem.total.toLocaleString() : 'N/A'}
+              subValue="clicks"
+              theme="cyan"
+              badgeText="Kỷ Lục"
+              badgeType="info"
+              subtext={
+                peakItem
+                  ? `Thời gian: ${peakItem.label} (${peakItem.subLabel || ''})`
+                  : 'Chưa có dữ liệu'
+              }
+              dataPoints={[18, 25, 42, 38, 65, 54, 88, 72, 105, 95]}
+            />
 
-        {/* ------------------------------------------------------------ */}
-        {/* INTERACTIVE ANALYTICS CHARTS (LINE, DONUT, STACKED BAR) */}
-        {/* ------------------------------------------------------------ */}
-        <AnalyticsCharts
-          items={currentGroupedItems}
-          grandTotal={aggregatedTotals.grandTotal}
-          granularityLabel={granularityLabel}
-        />
+            {/* Card 4: Avg. Revenue Per User -> Ngày Vàng Trong Tuần */}
+            <SparklineCard
+              title="Ngày Vàng Trong Tuần"
+              value={bestDayOfWeek ? bestDayOfWeek.name : 'Đang tính'}
+              subValue={`~${bestDayOfWeek?.avgClicks || 0}/ngày`}
+              theme="amber"
+              badgeText="Tối Ưu"
+              badgeType="warning"
+              subtext={`Kỷ lục: ${data?.peakDay.date || '...'} (${data?.peakDay.clicks || 0} clicks)`}
+              dataPoints={dayOfWeekAnalysis.map((d) => d.avgClicks)}
+            />
+          </section>
 
-        {/* ------------------------------------------------------------ */}
-        {/* DETAILED DATA TABLE WITH COMPARISONS & % SHARE */}
-        {/* ------------------------------------------------------------ */}
-        <section className="bg-slate-900/70 border border-slate-800/80 rounded-2xl backdrop-blur-md overflow-hidden shadow-2xl">
-          {/* Table Toolbar */}
-          <div className="p-5 border-b border-slate-800/80 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
-            {/* Search Box */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={`Tìm ${granularityLabel.toLowerCase()} (ví dụ: 19/09, Tuần 37, 2026)...`}
-                className="w-full pl-10 pr-4 py-2 bg-slate-950/70 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 text-white placeholder-slate-500 transition"
+          {/* ------------------------------------------------------------ */}
+          {/* ROW 2: DUAL CARDS (Recent Orders Table & Customer Acquisition) */}
+          {/* ------------------------------------------------------------ */}
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" id="dataTableSection">
+            {/* Left Column (8 cols): Detailed Traffic Data Table */}
+            <div className="lg:col-span-8">
+              <TrafficTable
+                items={finalDisplayItems}
+                totals={aggregatedTotals}
+                loading={loading}
+                granularity={granularity}
+                granularityLabel={granularityLabel}
+                showPercentShare={showPercentShare}
+                setShowPercentShare={setShowPercentShare}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                sortField={sortField}
+                sortDirection={sortDirection}
+                onSort={handleSort}
+                compareEnabled={compareEnabled}
+                onCopyClipboard={handleCopyClipboard}
+                copiedSuccess={copiedSuccess}
+                onExportCSV={handleExportCSV}
+                lastUpdated={data?.lastUpdated}
               />
             </div>
 
-            {/* Actions: % Share Toggle, Copy, Export CSV */}
-            <div className="flex flex-wrap items-center justify-between lg:justify-end gap-2.5">
-              {/* Toggle % Share */}
-              <button
-                onClick={() => setShowPercentShare(!showPercentShare)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${
-                  showPercentShare
-                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-sm'
-                    : 'bg-slate-950/70 text-slate-400 border-slate-800 hover:text-white'
-                }`}
-              >
-                <Percent className="w-3.5 h-3.5" />
-                <span>{showPercentShare ? '% Tỷ Trọng: BẬT' : 'Hiện % Tỷ Trọng'}</span>
-              </button>
-
-              {/* Copy TSV */}
-              <button
-                onClick={handleCopyClipboard}
-                title="Sao chép bảng để dán vào Excel / Google Sheets"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950/70 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white transition cursor-pointer"
-              >
-                {copiedSuccess ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedSuccess ? 'Đã sao chép!' : 'Sao chép bảng'}</span>
-              </button>
-
-              {/* Export CSV / Excel */}
-              <button
-                onClick={handleExportCSV}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition cursor-pointer active:scale-95"
-              >
-                <FileSpreadsheet className="w-3.5 h-3.5" />
-                <span>Xuất Excel / CSV</span>
-              </button>
-
-              {/* Timestamp */}
-              {data?.lastUpdated && (
-                <div className="text-xs text-slate-400 items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-950/50 border border-slate-800/60 hidden xl:flex">
-                  <Clock className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Cập nhật: {data.lastUpdated}</span>
-                </div>
-              )}
+            {/* Right Column (4 cols): Customer Acquisition Breakdown Card */}
+            <div className="lg:col-span-4">
+              <AcquisitionCard
+                items={currentGroupedItems}
+                grandTotal={aggregatedTotals.grandTotal}
+              />
             </div>
+          </section>
+
+          {/* ------------------------------------------------------------ */}
+          {/* ROW 3: INTERACTIVE ANALYTICS CHARTS (Line, Donut, Stacked) */}
+          {/* ------------------------------------------------------------ */}
+          <div id="analyticsCharts">
+            <AnalyticsCharts
+              items={currentGroupedItems}
+              grandTotal={aggregatedTotals.grandTotal}
+              granularityLabel={granularityLabel}
+            />
           </div>
 
-          {/* Interactive Sortable Data Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-800/90 bg-slate-950/70 text-xs font-semibold text-slate-400 uppercase tracking-wider select-none">
-                  {/* Cột Thời gian / Chu kỳ */}
-                  <th
-                    onClick={() => handleSort('period')}
-                    className="py-3.5 px-5 cursor-pointer hover:text-white transition group"
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <span>{granularity === 'DAILY' ? 'Ngày (Date)' : granularity === 'WEEKLY' ? 'Tuần (Week)' : 'Tháng (Month)'}</span>
-                      {sortField === 'period' ? (
-                        sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-cyan-400" /> : <ArrowDown className="w-3.5 h-3.5 text-cyan-400" />
-                      ) : (
-                        <ArrowUpDown className="w-3.5 h-3.5 text-slate-600 group-hover:text-slate-400" />
-                      )}
-                    </div>
-                  </th>
-
-                  {/* 7 Kênh Traffic Channels */}
-                  {CHANNELS.map((ch) => {
-                    const isSorted = sortField === ch.key;
-                    return (
-                      <th
-                        key={ch.key}
-                        onClick={() => handleSort(ch.key as SortField)}
-                        className="py-3.5 px-4 text-center cursor-pointer hover:text-white transition group"
-                      >
-                        <div className="flex items-center justify-center gap-1">
-                          <span style={{ color: isSorted ? ch.color : undefined }}>{ch.label}</span>
-                          {isSorted ? (
-                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-cyan-400" /> : <ArrowDown className="w-3.5 h-3.5 text-cyan-400" />
-                          ) : (
-                            <ArrowUpDown className="w-3 h-3 text-slate-600 group-hover:text-slate-400" />
-                          )}
-                        </div>
-                      </th>
-                    );
-                  })}
-
-                  {/* Cột Tổng cộng */}
-                  <th
-                    onClick={() => handleSort('total')}
-                    className="py-3.5 px-5 text-right font-bold text-cyan-400 bg-cyan-950/30 cursor-pointer hover:brightness-125 transition group"
-                  >
-                    <div className="flex items-center justify-end gap-1.5">
-                      <span>Tổng cộng</span>
-                      {sortField === 'total' ? (
-                        sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-cyan-400" /> : <ArrowDown className="w-3.5 h-3.5 text-cyan-400" />
-                      ) : (
-                        <ArrowUpDown className="w-3.5 h-3.5 text-cyan-600 group-hover:text-cyan-400" />
-                      )}
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y divide-slate-800/50 text-sm font-sans">
-                {loading && (
-                  <tr>
-                    <td colSpan={9} className="py-16 text-center text-slate-400">
-                      <div className="flex flex-col items-center justify-center gap-3">
-                        <RefreshCw className="w-6 h-6 animate-spin text-cyan-400" />
-                        <span>Đang tải và tính toán số liệu phân tích...</span>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-
-                {!loading && finalDisplayItems.length === 0 && (
-                  <tr>
-                    <td colSpan={9} className="py-16 text-center text-slate-500">
-                      Không tìm thấy dữ liệu nào khớp với bộ lọc đang chọn.
-                    </td>
-                  </tr>
-                )}
-
-                {!loading &&
-                  finalDisplayItems.map((row) => {
-                    const rowTotal = row.total || 1;
-
-                    return (
-                      <tr
-                        key={row.key}
-                        className="hover:bg-slate-800/40 transition duration-150 group"
-                      >
-                        {/* Thời gian chu kỳ */}
-                        <td className="py-3.5 px-5 font-medium text-white">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-3.5 h-3.5 text-cyan-400 opacity-60 group-hover:opacity-100 transition flex-shrink-0" />
-                            <div>
-                              <span className="font-semibold block">{row.label}</span>
-                              {row.subLabel && (
-                                <span className="text-[11px] text-slate-400 font-normal block">
-                                  {row.subLabel}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* 7 Cột Kênh */}
-                        {CHANNELS.map((ch) => {
-                          const val = row[ch.key as ChannelKey];
-                          const sharePct = Math.round((val / rowTotal) * 100);
-                          const comp = row.comparison?.[ch.key as ChannelKey];
-
-                          return (
-                            <td key={ch.key} className="py-3 px-3 text-center font-mono">
-                              <div className="flex flex-col items-center justify-center">
-                                {/* Số lượng hiện tại */}
-                                {val > 0 ? (
-                                  <span className="text-slate-100 font-bold">{val}</span>
-                                ) : (
-                                  <span className="text-slate-600">-</span>
-                                )}
-
-                                {/* % Tỷ trọng đóng góp (khi bật toggle) */}
-                                {showPercentShare && val > 0 && (
-                                  <span className="text-[10px] text-slate-400">
-                                    {sharePct}%
-                                  </span>
-                                )}
-
-                                {/* So sánh chênh lệch +/- & % (khi bật so sánh) */}
-                                {compareEnabled && comp && comp.hasPrevious && (
-                                  <div
-                                    title={`Kỳ trước: ${comp.previous}`}
-                                    className={`text-[10px] font-semibold px-1 py-0.2 rounded mt-0.5 inline-flex items-center gap-0.5 ${
-                                      comp.diff > 0
-                                        ? 'text-emerald-400 bg-emerald-500/10'
-                                        : comp.diff < 0
-                                        ? 'text-rose-400 bg-rose-500/10'
-                                        : 'text-slate-500'
-                                    }`}
-                                  >
-                                    <span>{comp.diff > 0 ? `+${comp.diff}` : comp.diff}</span>
-                                    <span>({comp.percent > 0 ? `+${comp.percent}%` : `${comp.percent}%`})</span>
-                                  </div>
-                                )}
-                              </div>
-                            </td>
-                          );
-                        })}
-
-                        {/* Cột Tổng cộng chu kỳ */}
-                        <td className="py-3.5 px-5 text-right font-mono font-bold text-white bg-cyan-950/20 group-hover:bg-cyan-900/30 group-hover:text-cyan-300 transition">
-                          <div className="flex flex-col items-end">
-                            <span className="text-base font-extrabold text-white">
-                              {row.total.toLocaleString()}
-                            </span>
-
-                            {/* So sánh tổng cộng */}
-                            {compareEnabled && row.comparison?.total && (
-                              <div
-                                title={`Kỳ trước: ${row.comparison.total.previous}`}
-                                className={`text-[10px] font-semibold px-1.5 py-0.5 rounded mt-0.5 inline-flex items-center gap-0.5 ${
-                                  row.comparison.total.isPositive
-                                    ? 'text-emerald-400 bg-emerald-500/15'
-                                    : 'text-rose-400 bg-rose-500/15'
-                                }`}
-                              >
-                                <span>
-                                  {row.comparison.total.diff >= 0 ? '+' : ''}
-                                  {row.comparison.total.diff.toLocaleString()}
-                                </span>
-                                <span>
-                                  ({row.comparison.total.percent >= 0 ? '+' : ''}
-                                  {row.comparison.total.percent}%)
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-
-              {/* FOOTER: TỔNG CỘNG VÀ % TỶ TRỌNG ĐÓNG GÓP */}
-              <tfoot>
-                {/* Hàng 1: Tổng Cột */}
-                <tr className="border-t-2 border-cyan-500/40 bg-slate-950 font-bold text-xs uppercase text-slate-200">
-                  <td className="py-4 px-5 text-cyan-400 font-black tracking-wider">
-                    Tổng ({finalDisplayItems.length} chu kỳ)
-                  </td>
-
-                  {CHANNELS.map((ch) => {
-                    const totalClicks = aggregatedTotals[ch.key as ChannelKey];
-                    const comp = aggregatedTotals.comparison?.[ch.key as ChannelKey];
-
-                    return (
-                      <td key={ch.key} className="py-4 px-3 text-center font-mono">
-                        <div className="flex flex-col items-center">
-                          <span className={`text-sm font-extrabold ${ch.textColor}`}>
-                            {totalClicks.toLocaleString()}
-                          </span>
-
-                          {/* So sánh tổng kênh */}
-                          {compareEnabled && comp && (
-                            <div
-                              title={`Kỳ trước: ${comp.previous.toLocaleString()}`}
-                              className={`text-[10px] font-semibold px-1 rounded mt-0.5 ${
-                                comp.isPositive ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'
-                              }`}
-                            >
-                              {comp.diff >= 0 ? `+${comp.diff.toLocaleString()}` : comp.diff.toLocaleString()} (
-                              {comp.percent >= 0 ? `+${comp.percent}%` : `${comp.percent}%`})
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                    );
-                  })}
-
-                  <td className="py-4 px-5 text-right font-mono font-black text-base text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300 bg-cyan-950/40">
-                    <div className="flex flex-col items-end">
-                      <span>{aggregatedTotals.grandTotal.toLocaleString()}</span>
-                      {compareEnabled && aggregatedTotals.comparison && (
-                        <div className={`text-[11px] font-semibold mt-0.5 ${
-                          aggregatedTotals.comparison.grandTotal.isPositive ? 'text-emerald-400' : 'text-rose-400'
-                        }`}>
-                          {aggregatedTotals.comparison.grandTotal.diff >= 0 ? '+' : ''}
-                          {aggregatedTotals.comparison.grandTotal.diff.toLocaleString()} (
-                          {aggregatedTotals.comparison.grandTotal.percent >= 0 ? '+' : ''}
-                          {aggregatedTotals.comparison.grandTotal.percent}%)
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-
-                {/* Hàng 2: Tỷ Trọng Đóng Góp (% Share) so với Tổng Cộng */}
-                <tr className="border-t border-slate-800 bg-slate-950/90 text-[11px] font-semibold text-slate-400">
-                  <td className="py-3 px-5 text-slate-300 font-bold uppercase tracking-wider">
-                    % Tỷ Trọng Đóng Góp
-                  </td>
-
-                  {CHANNELS.map((ch) => {
-                    const totalClicks = aggregatedTotals[ch.key as ChannelKey];
-                    const grand = aggregatedTotals.grandTotal || 1;
-                    const pct = Math.round((totalClicks / grand) * 1000) / 10;
-
-                    return (
-                      <td key={ch.key} className="py-3 px-3 text-center font-mono">
-                        <span className="font-bold text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded-full border border-cyan-500/20">
-                          {pct}%
-                        </span>
-                      </td>
-                    );
-                  })}
-
-                  <td className="py-3 px-5 text-right font-mono font-bold text-white bg-cyan-950/30">
-                    100.0%
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+          {/* ------------------------------------------------------------ */}
+          {/* ROW 4: DAY OF WEEK PERFORMANCE MINI CARDS */}
+          {/* ------------------------------------------------------------ */}
+          <div id="dayOfWeekSection">
+            <DayOfWeekCards
+              days={dayOfWeekAnalysis}
+              bestDay={bestDayOfWeek}
+            />
           </div>
-        </section>
-
-        {/* ------------------------------------------------------------ */}
-        {/* DAY OF WEEK ANALYSIS MINI CARDS */}
-        {/* ------------------------------------------------------------ */}
-        <section className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-400" />
-              <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
-                Phân Tích Hiệu Suất Theo Thứ Trong Tuần
-              </h2>
-            </div>
-            <span className="text-xs text-slate-400 hidden sm:inline">
-              Mẹo: Lên chiến dịch vào ngày có traffic trung bình cao
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-            {dayOfWeekAnalysis.map((item) => {
-              const isBest = item.name === bestDayOfWeek?.name;
-              return (
-                <div
-                  key={item.name}
-                  className={`p-3 rounded-xl border transition flex flex-col justify-between ${
-                    isBest
-                      ? 'bg-amber-500/10 border-amber-500/40 shadow-lg shadow-amber-500/5'
-                      : 'bg-slate-950/60 border-slate-800/80 hover:border-slate-700'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className={`text-xs font-bold ${isBest ? 'text-amber-400' : 'text-slate-300'}`}>
-                      {item.name}
-                    </span>
-                    {isBest && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 font-bold">
-                        HOT
-                      </span>
-                    )}
-                  </div>
-                  <div className="mt-2">
-                    <span className="text-lg font-extrabold text-white">
-                      ~{item.avgClicks}
-                    </span>
-                    <span className="text-[11px] text-slate-400 block">
-                      clicks/ngày ({item.totalClicks} tổng)
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

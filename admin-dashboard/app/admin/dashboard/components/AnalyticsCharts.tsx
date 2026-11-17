@@ -1,18 +1,13 @@
 'use client';
 
-import React, { useState, useMemo, useRef } from 'react';
-import { 
-  LineChart as LineChartIcon, 
-  PieChart as PieChartIcon, 
-  BarChart2, 
-  Layers, 
-  Check, 
-  Eye, 
-  EyeOff, 
-  Sparkles,
-  Info
+import React, { useState, useMemo } from 'react';
+import {
+  LineChart as LineChartIcon,
+  PieChart as PieChartIcon,
+  BarChart2,
+  Layers,
 } from 'lucide-react';
-import { GroupedTrackingItem, ChannelKey, CHANNELS, ChannelConfig } from '../types';
+import { GroupedTrackingItem, ChannelKey, CHANNELS } from '../types';
 
 interface AnalyticsChartsProps {
   items: GroupedTrackingItem[];
@@ -33,6 +28,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
     kenhGameZ: true,
     other: true,
     webGameLau: true,
+    youtube: true,
     zalo: true,
   });
 
@@ -66,6 +62,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
       kenhGameZ: 0,
       other: 0,
       webGameLau: 0,
+      youtube: 0,
       zalo: 0,
     };
 
@@ -76,6 +73,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
       sums.kenhGameZ += item.kenhGameZ;
       sums.other += item.other;
       sums.webGameLau += item.webGameLau;
+      sums.youtube += item.youtube;
       sums.zalo += item.zalo;
     });
 
@@ -94,8 +92,6 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
 
   // Max value calculation for Line Chart scaling
   const { maxVal, chartDataPoints } = useMemo(() => {
-    // Reverse or take chronological order for chart display
-    // Make sure we have chronological points (oldest to newest)
     const pts = [...items].sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     let highest = 0;
@@ -120,7 +116,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
     const innerRadius = 70;
     const effectiveTotal = channelTotals.reduce((s, c) => s + c.clicks, 0) || 1;
 
-    let currentAngle = -Math.PI / 2; // start from 12 o'clock
+    let currentAngle = -Math.PI / 2;
 
     return channelTotals.map((ch) => {
       const sliceAngle = (ch.clicks / effectiveTotal) * (2 * Math.PI);
@@ -128,7 +124,6 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
       const endAngle = currentAngle + sliceAngle;
       currentAngle = endAngle;
 
-      // Arc coordinates
       const x1 = center + outerRadius * Math.cos(startAngle);
       const y1 = center + outerRadius * Math.sin(startAngle);
       const x2 = center + outerRadius * Math.cos(endAngle);
@@ -141,9 +136,10 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
 
       const largeArcFlag = sliceAngle > Math.PI ? 1 : 0;
 
-      const pathData = ch.clicks === 0
-        ? ''
-        : `M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4} Z`;
+      const pathData =
+        ch.clicks === 0
+          ? ''
+          : `M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4} Z`;
 
       return {
         ...ch,
@@ -208,74 +204,73 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
 
   if (items.length === 0) {
     return (
-      <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center text-slate-500">
+      <div className="bg-white border border-slate-200/90 rounded-xl p-8 text-center text-slate-400">
         Không có dữ liệu trong khoảng thời gian này để vẽ biểu đồ.
       </div>
     );
   }
 
   return (
-    <section className="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 sm:p-6 backdrop-blur-md shadow-2xl relative overflow-hidden">
-      {/* Glow background accent */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
-
+    <section className="bg-white rounded-xl border border-slate-200/90 p-5 sm:p-6 shadow-sm relative overflow-hidden">
       {/* Header & Chart mode selector */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-800/80">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 text-cyan-400 shadow-sm">
+          <div className="p-2.5 rounded-xl bg-blue-50 text-[#5969ff] border border-blue-100 shadow-xs">
             {chartType === 'LINE' && <LineChartIcon className="w-5 h-5" />}
             {chartType === 'DONUT' && <PieChartIcon className="w-5 h-5" />}
             {chartType === 'STACKED_BAR' && <BarChart2 className="w-5 h-5" />}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-white tracking-tight">Trung Tâm Trực Quan Hóa Traffic</h2>
-              <span className="text-[11px] px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700/60 text-slate-300 font-medium">
+              <h2 className="text-base font-bold text-slate-800 tracking-tight">
+                Biểu Đồ Xu Hướng & Cơ Cấu Traffic
+              </h2>
+              <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-600 font-semibold">
                 {granularityLabel} ({items.length} chu kỳ)
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
-              So sánh đa chiều xu hướng thời gian & tỷ trọng đóng góp giữa các nguồn traffic
+              So sánh đa chiều xu hướng thời gian & cơ cấu tỷ trọng giữa các kênh
             </p>
           </div>
         </div>
 
-        {/* View Switcher Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-950/80 rounded-xl border border-slate-800 self-start lg:self-auto shadow-inner">
+        {/* View Switcher Tabs (Concept Style) */}
+        <div className="flex items-center gap-1 p-1 bg-[#f1f3f7] rounded-xl border border-slate-200/80 self-start lg:self-auto">
           <button
             onClick={() => setChartType('LINE')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
               chartType === 'LINE'
-                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+                ? 'bg-[#5969ff] text-white shadow-sm font-bold'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <LineChartIcon className="w-3.5 h-3.5" />
-            <span>Đường Xu Hướng (Multi-Line)</span>
+            <span>Đường Xu Hướng</span>
           </button>
 
           <button
             onClick={() => setChartType('DONUT')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
               chartType === 'DONUT'
-                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+                ? 'bg-[#5969ff] text-white shadow-sm font-bold'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <PieChartIcon className="w-3.5 h-3.5" />
-            <span>Tỷ Trọng (Pie / Donut)</span>
+            <span>Tỷ Trọng (Pie)</span>
           </button>
 
           <button
             onClick={() => setChartType('STACKED_BAR')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
               chartType === 'STACKED_BAR'
-                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+                ? 'bg-[#5969ff] text-white shadow-sm font-bold'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>Cột Xếp Chồng (Stacked)</span>
+            <span>Cột Chồng (Bar)</span>
           </button>
         </div>
       </div>
@@ -284,20 +279,20 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
       {/* 1. MULTI-LINE / AREA CHART WITH CHANNEL TOGGLES */}
       {/* ============================================================== */}
       {chartType === 'LINE' && (
-        <div className="mt-5 space-y-4">
+        <div className="mt-4 space-y-3.5">
           {/* Interactive Channel Filters */}
-          <div className="flex flex-wrap items-center justify-between gap-2.5 pb-2">
+          <div className="flex flex-wrap items-center justify-between gap-2.5 pb-1">
             <div className="flex flex-wrap items-center gap-1.5">
               {/* Total Toggle */}
               <button
                 onClick={() => toggleChannel('total')}
                 className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition cursor-pointer ${
                   activeChannels.total
-                    ? 'bg-white text-slate-950 border-white shadow-sm'
-                    : 'bg-slate-950/60 text-slate-500 border-slate-800 line-through opacity-60'
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                    : 'bg-slate-100 text-slate-400 border-slate-200 line-through opacity-60'
                 }`}
               >
-                <span className="w-2 h-2 rounded-full bg-slate-900" />
+                <span className="w-2 h-2 rounded-full bg-white" />
                 <span>Tổng Cộng</span>
               </button>
 
@@ -310,13 +305,13 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                     onClick={() => toggleChannel(ch.key)}
                     className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold border transition cursor-pointer ${
                       isActive
-                        ? `${ch.bgColor} ${ch.textColor} ${ch.borderColor} shadow-sm`
-                        : 'bg-slate-950/60 text-slate-500 border-slate-800 line-through opacity-60'
+                        ? 'bg-white text-slate-800 border-slate-200 shadow-xs'
+                        : 'bg-slate-100 text-slate-400 border-slate-200 line-through opacity-60'
                     }`}
                   >
                     <span
                       className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: isActive ? ch.color : '#64748b' }}
+                      style={{ backgroundColor: isActive ? ch.color : '#94a3b8' }}
                     />
                     <span>{ch.label}</span>
                   </button>
@@ -327,14 +322,14 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
             <div className="flex items-center gap-2">
               <button
                 onClick={() => toggleAll(true)}
-                className="text-[11px] text-cyan-400 hover:text-cyan-300 font-medium transition cursor-pointer"
+                className="text-[11px] text-[#5969ff] hover:underline font-semibold transition cursor-pointer"
               >
                 Bật tất cả
               </button>
-              <span className="text-slate-700">|</span>
+              <span className="text-slate-300">|</span>
               <button
                 onClick={() => toggleAll(false)}
-                className="text-[11px] text-slate-400 hover:text-slate-300 font-medium transition cursor-pointer"
+                className="text-[11px] text-slate-400 hover:text-slate-600 font-medium transition cursor-pointer"
               >
                 Tắt tất cả
               </button>
@@ -342,7 +337,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
           </div>
 
           {/* SVG Line Chart Canvas */}
-          <div className="relative w-full overflow-hidden select-none bg-slate-950/40 rounded-xl border border-slate-800/60 p-2 sm:p-4">
+          <div className="relative w-full overflow-hidden select-none bg-[#f8fafc] rounded-xl border border-slate-200/80 p-2 sm:p-4">
             <svg
               viewBox={`0 0 ${svgWidth} ${svgHeight}`}
               className="w-full h-64 sm:h-72 overflow-visible"
@@ -351,14 +346,14 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
               <defs>
                 {/* Gradient for Total */}
                 <linearGradient id="grad-total" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.18" />
-                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0.0" />
+                  <stop offset="0%" stopColor="#1e293b" stopOpacity="0.12" />
+                  <stop offset="100%" stopColor="#1e293b" stopOpacity="0.0" />
                 </linearGradient>
 
                 {/* Gradients for each channel */}
                 {CHANNELS.map((ch) => (
                   <linearGradient key={ch.key} id={`grad-${ch.key}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={ch.color} stopOpacity="0.22" />
+                    <stop offset="0%" stopColor={ch.color} stopOpacity="0.25" />
                     <stop offset="100%" stopColor={ch.color} stopOpacity="0.0" />
                   </linearGradient>
                 ))}
@@ -375,9 +370,8 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                       y1={y}
                       x2={svgWidth - paddingRight}
                       y2={y}
-                      stroke="#334155"
+                      stroke="#e2e8f0"
                       strokeDasharray="3 3"
-                      strokeOpacity="0.4"
                     />
                     <text
                       x={paddingLeft - 8}
@@ -414,14 +408,14 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                 );
               })}
 
-              {/* Area & Line for Total (white/cyan bold) */}
+              {/* Area & Line for Total (dark bold line) */}
               {activeChannels.total && (
                 <g>
                   <path d={generateAreaPath((pt) => pt.yTotal)} fill="url(#grad-total)" />
                   <path
                     d={generateLinePath((pt) => pt.yTotal)}
                     fill="none"
-                    stroke="#ffffff"
+                    stroke="#0f172a"
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -431,7 +425,6 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
 
               {/* Bottom X-Axis Date Labels */}
               {pointCoordinates.map((pt, idx) => {
-                // Show label for first, last, and every few intervals
                 const totalPoints = pointCoordinates.length;
                 const step = totalPoints > 15 ? Math.ceil(totalPoints / 8) : 1;
                 const showLabel = idx === 0 || idx === totalPoints - 1 || idx % step === 0;
@@ -449,7 +442,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                     x={pt.x}
                     y={svgHeight - 12}
                     textAnchor="middle"
-                    fill="#94a3b8"
+                    fill="#64748b"
                     fontSize="10"
                     fontFamily="monospace"
                   >
@@ -466,7 +459,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                     y1={paddingTop}
                     x2={pointCoordinates[hoverIndex].x}
                     y2={paddingTop + plotHeight}
-                    stroke="#38bdf8"
+                    stroke="#5969ff"
                     strokeWidth="1.5"
                     strokeDasharray="4 2"
                   />
@@ -477,9 +470,9 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                       cx={pointCoordinates[hoverIndex].x}
                       cy={pointCoordinates[hoverIndex].yTotal}
                       r="4.5"
-                      fill="#ffffff"
-                      stroke="#0284c7"
-                      strokeWidth="2.5"
+                      fill="#0f172a"
+                      stroke="#ffffff"
+                      strokeWidth="2"
                     />
                   )}
 
@@ -493,7 +486,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                         cy={pointCoordinates[hoverIndex].channelY[ch.key]}
                         r="3.5"
                         fill={ch.color}
-                        stroke="#0f172a"
+                        stroke="#ffffff"
                         strokeWidth="1.5"
                       />
                     );
@@ -533,9 +526,9 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                   )}%`,
                   top: '12px',
                 }}
-                className="absolute pointer-events-none -translate-x-1/2 z-20 bg-slate-900/95 border border-cyan-500/40 rounded-xl p-3 shadow-2xl backdrop-blur-md text-xs w-56"
+                className="absolute pointer-events-none -translate-x-1/2 z-20 bg-slate-900 text-white rounded-xl p-3 shadow-2xl border border-slate-700/80 text-xs w-56"
               >
-                <div className="border-b border-slate-800 pb-1.5 mb-2 flex items-center justify-between">
+                <div className="border-b border-slate-700 pb-1.5 mb-2 flex items-center justify-between">
                   <div>
                     <span className="font-bold text-white block">
                       {pointCoordinates[hoverIndex].item.label}
@@ -569,7 +562,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-white font-semibold">{val}</span>
-                          <span className="text-slate-500 text-[10px]">({pct}%)</span>
+                          <span className="text-slate-400 text-[10px]">({pct}%)</span>
                         </div>
                       </div>
                     );
@@ -590,7 +583,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
           <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
             <svg
               viewBox="0 0 260 260"
-              className="w-56 h-56 sm:w-64 sm:h-64 overflow-visible filter drop-shadow-xl"
+              className="w-56 h-56 sm:w-64 sm:h-64 overflow-visible filter drop-shadow-md"
             >
               {donutPaths.map((slice) => {
                 const isHovered = hoverDonutKey === slice.key;
@@ -612,14 +605,14 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
               })}
 
               {/* Donut Center Display */}
-              <circle cx="130" cy="130" r="66" fill="#020617" />
+              <circle cx="130" cy="130" r="66" fill="#ffffff" stroke="#e2e8f0" strokeWidth="2" />
               <text
                 x="130"
-                y="122"
+                y="120"
                 textAnchor="middle"
-                fill="#94a3b8"
+                fill="#64748b"
                 fontSize="11"
-                fontWeight="500"
+                fontWeight="600"
               >
                 {hoverDonutKey
                   ? CHANNELS.find((c) => c.key === hoverDonutKey)?.label
@@ -629,8 +622,8 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                 x="130"
                 y="146"
                 textAnchor="middle"
-                fill="#38bdf8"
-                fontSize="18"
+                fill="#0f172a"
+                fontSize="20"
                 fontWeight="800"
                 fontFamily="monospace"
               >
@@ -640,10 +633,11 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
               </text>
               <text
                 x="130"
-                y="164"
+                y="166"
                 textAnchor="middle"
-                fill="#64748b"
+                fill="#5969ff"
                 fontSize="10"
+                fontWeight="700"
                 fontFamily="monospace"
               >
                 {hoverDonutKey
@@ -655,7 +649,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
 
           {/* Channel Contribution Breakdown List */}
           <div className="lg:col-span-7 space-y-2.5">
-            <div className="flex items-center justify-between text-xs text-slate-400 pb-1 border-b border-slate-800">
+            <div className="flex items-center justify-between text-xs text-slate-500 pb-1 border-b border-slate-200">
               <span className="font-semibold uppercase tracking-wider">Cơ cấu đóng góp của từng kênh</span>
               <span className="font-mono">Chu kỳ hiện tại</span>
             </div>
@@ -670,8 +664,8 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                     onMouseLeave={() => setHoverDonutKey(null)}
                     className={`p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
                       isHovered
-                        ? 'bg-slate-800/90 border-cyan-500/60 shadow-lg scale-[1.02]'
-                        : 'bg-slate-950/60 border-slate-800/80 hover:border-slate-700'
+                        ? 'bg-blue-50/50 border-[#5969ff]/50 shadow-md scale-[1.02]'
+                        : 'bg-[#f8fafc] border-slate-200/80 hover:bg-white hover:border-slate-300'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -680,25 +674,25 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                           className="w-3 h-3 rounded-md flex-shrink-0"
                           style={{ backgroundColor: ch.color }}
                         />
-                        <span className="text-xs font-bold text-white">{ch.label}</span>
+                        <span className="text-xs font-bold text-slate-800">{ch.label}</span>
                       </div>
-                      <span className="font-mono font-bold text-xs text-cyan-400">
+                      <span className="font-mono font-bold text-xs text-[#5969ff]">
                         {ch.percent}%
                       </span>
                     </div>
 
                     <div className="mt-2 flex items-center justify-between">
                       {/* Mini progress bar */}
-                      <div className="w-2/3 h-1.5 bg-slate-800 rounded-full overflow-hidden mr-3">
+                      <div className="w-2/3 h-1.5 bg-slate-200 rounded-full overflow-hidden mr-3">
                         <div
                           style={{
                             width: `${Math.min(ch.percent, 100)}%`,
                             backgroundColor: ch.color,
                           }}
-                          className="h-full rounded-full transition-all duration-500"
+                          className="h-full rounded-full transition-all duration-300"
                         />
                       </div>
-                      <span className="font-mono text-xs text-slate-300 font-semibold">
+                      <span className="font-mono text-xs text-slate-700 font-bold">
                         {ch.clicks.toLocaleString()}
                       </span>
                     </div>
@@ -715,7 +709,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
       {/* ============================================================== */}
       {chartType === 'STACKED_BAR' && (
         <div className="mt-5 space-y-4">
-          <div className="flex items-center justify-between text-xs text-slate-400 pb-1">
+          <div className="flex items-center justify-between text-xs text-slate-500 pb-1">
             <span>Cơ cấu các nguồn traffic xếp chồng theo từng chu kỳ</span>
             <div className="flex items-center gap-2">
               {CHANNELS.map((ch) => (
@@ -728,7 +722,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
           </div>
 
           {/* Bar Chart Container */}
-          <div className="h-64 sm:h-72 flex items-end gap-1.5 sm:gap-2 pt-8 pb-3 px-2 border-b border-slate-800/80 overflow-x-auto bg-slate-950/40 rounded-xl p-3">
+          <div className="h-64 sm:h-72 flex items-end gap-1.5 sm:gap-2 pt-8 pb-3 px-2 border-b border-slate-200 overflow-x-auto bg-[#f8fafc] rounded-xl p-3">
             {chartDataPoints.map((item) => {
               const maxItemTotal = Math.max(...chartDataPoints.map((i) => i.total), 1);
               const barHeightPct = Math.max((item.total / maxItemTotal) * 100, 8);
@@ -741,8 +735,8 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                 >
                   {/* Tooltip Hover */}
                   <div className="absolute bottom-full mb-2 hidden group-hover:flex flex-col items-center z-30 pointer-events-none whitespace-nowrap">
-                    <div className="bg-slate-900/95 border border-cyan-500/40 rounded-xl p-2.5 shadow-2xl text-[11px] backdrop-blur-md">
-                      <span className="font-bold text-white block border-b border-slate-800 pb-1 mb-1">
+                    <div className="bg-slate-900 text-white border border-slate-700 rounded-xl p-2.5 shadow-xl text-[11px]">
+                      <span className="font-bold text-white block border-b border-slate-700 pb-1 mb-1">
                         {item.label}
                       </span>
                       <span className="text-cyan-400 font-extrabold text-xs block mb-1">
@@ -763,18 +757,18 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                         })}
                       </div>
                     </div>
-                    <div className="w-2 h-2 bg-slate-900 rotate-45 -mt-1 border-r border-b border-cyan-500/40" />
+                    <div className="w-2 h-2 bg-slate-900 rotate-45 -mt-1 border-r border-b border-slate-700" />
                   </div>
 
                   {/* Value on Top */}
-                  <span className="text-[10px] font-mono text-slate-400 group-hover:text-cyan-300 group-hover:font-bold mb-1 transition">
+                  <span className="text-[10px] font-mono text-slate-500 group-hover:text-[#5969ff] group-hover:font-bold mb-1 transition">
                     {item.total}
                   </span>
 
                   {/* Stacked Segments Column */}
                   <div
                     style={{ height: `${barHeightPct}%` }}
-                    className="w-full rounded-t-md overflow-hidden flex flex-col-reverse shadow-md transition-all duration-300 group-hover:brightness-125"
+                    className="w-full rounded-t-md overflow-hidden flex flex-col-reverse shadow-xs transition-all duration-300 group-hover:brightness-95"
                   >
                     {CHANNELS.map((ch) => {
                       const val = item[ch.key as ChannelKey];
@@ -794,7 +788,7 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
                   </div>
 
                   {/* Period label */}
-                  <span className="text-[10px] text-slate-400 mt-2 rotate-[-45px] sm:rotate-0 font-mono group-hover:text-white transition truncate max-w-full">
+                  <span className="text-[10px] text-slate-500 mt-2 rotate-[-45px] sm:rotate-0 font-mono group-hover:text-slate-900 transition truncate max-w-full">
                     {item.label.includes('Tuần')
                       ? 'W' + item.label.split(' ')[1]
                       : item.label.includes('Tháng')

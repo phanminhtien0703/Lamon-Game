@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Admin Tracking Portal',
+  title: 'Concept Admin Dashboard - Lamon Game',
   description: 'Internal Real-time Link Click Tracking System',
   robots: {
     index: false,
@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className="dark">
-      <body className="min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-white">
+    <html lang="vi">
+      <body className="min-h-screen bg-[#f4f5f9] text-slate-800 antialiased selection:bg-[#5969ff] selection:text-white font-sans">
         {children}
       </body>
     </html>
