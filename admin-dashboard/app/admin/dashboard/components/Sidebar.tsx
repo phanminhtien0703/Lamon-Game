@@ -365,10 +365,10 @@ export default function Sidebar({
 
                 <li>
                   <a
-                    href="/games/tan-binh-thuc-tinh/"
+                    href="/games/chien-binh-thuc-tinh/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    title="Game: Tân Binh Thức Tỉnh"
+                    title="Game: Chiến Binh Thức Tỉnh"
                     className={`flex items-center rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 transition group ${
                       isCollapsed
                         ? 'lg:justify-center lg:p-2.5 px-3.5 py-2 justify-between'
@@ -378,7 +378,7 @@ export default function Sidebar({
                     <div className="flex items-center gap-2.5 truncate">
                       <Zap className="w-4 h-4 flex-shrink-0 text-purple-400" />
                       <span className={`truncate ${isCollapsed ? 'lg:hidden' : 'inline'}`}>
-                        Tân Binh Thức Tỉnh
+                        Chiến Binh Thức Tỉnh
                       </span>
                     </div>
                     <ExternalLink

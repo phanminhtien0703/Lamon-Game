@@ -23,7 +23,7 @@
 3. **Sự kiện Đổi Điểm Thần Ma Giáng Thế** (`/games/than-ma-giang-the/doi-diem/` - `index.html`)
 4. **Sự kiện Đua Top Tính Năng** (`/games/than-ma-giang-the/dua-top-tinh-nang/` - `index.html`)
 5. **Landing Page Phù Sinh Mộng** (`/games/phu-sinh-mong/` - `index.html`)
-6. **Landing Page Tân Binh Thức Tỉnh** (`/games/tan-binh-thuc-tinh/` - `index.html`)
+6. **Landing Page Chiến Binh Thức Tỉnh** (`/games/chien-binh-thuc-tinh/` - `index.html`)
 
 ### 3. Giới hạn môi trường
 - Phép đo được thực hiện trên môi trường máy chủ cục bộ (local testbed). Số liệu TTFB phản ánh năng lực xử lý thuần túy của mã nguồn và máy chủ không bị nhiễu bởi mạng Internet, nhưng thời gian tải hình ảnh trên mạng thực tế (3G/4G/Cáp quang) được ước tính chính xác dựa trên dung lượng file thực tế qua mạng.
@@ -42,7 +42,7 @@
 | **Trang Chủ Cổng Game** (`/`) | **4.68 ms** | 5.50 ms | 17 ảnh | **11.34 MB** | 0 | ⚠️ Cần tối ưu ảnh (Logo & Banner quá nặng) |
 | **Thần Ma Giáng Thế** (`/games/than-ma-giang-the/`) | **4.84 ms** | 5.66 ms | 12 ảnh | **17.43 MB** | 0 | 🚨 Nguy cơ tải chậm cực cao trên 4G do ảnh ~17.4MB |
 | **Phù Sinh Mộng** (`/games/phu-sinh-mong/`) | **2.10 ms** | 2.59 ms | 13 ảnh | **10.27 MB** | 0 | ⚠️ Ảnh thư viện quá lớn (~10.3MB) |
-| **Tân Binh Thức Tỉnh** (`/games/tan-binh-thuc-tinh/`) | **2.48 ms** | 3.01 ms | 12 ảnh | **8.57 MB** | 0 | ⚠️ Ảnh chụp game chưa nén WebP (~8.6MB) |
+| **Chiến Binh Thức Tỉnh** (`/games/chien-binh-thuc-tinh/`) | **2.48 ms** | 3.01 ms | 12 ảnh | **8.57 MB** | 0 | ⚠️ Ảnh chụp game chưa nén WebP (~8.6MB) |
 | **Đổi Điểm Thần Ma** (`.../doi-diem/`) | **2.98 ms** | 4.08 ms | 2 ảnh | **0.29 MB** | 0 | ⚠️ Dùng Tailwind CDN runtime trong HTML |
 | **Đua Top Tính Năng** (`.../dua-top-tinh-nang/`) | **2.82 ms** | 3.53 ms | 1 ảnh | **0.76 MB** | 0 |  Tốt |
 
@@ -147,7 +147,7 @@ Kiểm thử tải an toàn cục bộ đã được thực hiện với 3 mức
 | **Phù Sinh Mộng** (`/games/phu-sinh-mong/`) | 1 | 2.64 ms | 7.10 ms | 8.19 ms | 8.80 ms | 300.3 req/s | **0%** |
 | | 3 | 3.82 ms | 8.90 ms | 9.66 ms | 10.10 ms | 656.4 req/s | **0%** |
 | | 5 | 6.84 ms | 10.45 ms | 11.26 ms | 12.00 ms | 647.0 req/s | **0%** |
-| **Tân Binh Thức Tỉnh** (`/games/tan-binh-thuc-tinh/`) | 1 | 2.54 ms | 4.80 ms | 5.04 ms | 5.20 ms | 310.8 req/s | **0%** |
+| **Chiến Binh Thức Tỉnh** (`/games/chien-binh-thuc-tinh/`) | 1 | 2.54 ms | 4.80 ms | 5.04 ms | 5.20 ms | 310.8 req/s | **0%** |
 | | 3 | 4.44 ms | 8.60 ms | 9.37 ms | 9.80 ms | 551.0 req/s | **0%** |
 | | 5 | 6.17 ms | 9.10 ms | 9.70 ms | 10.20 ms | 741.5 req/s | **0%** |
 
@@ -163,7 +163,7 @@ Kiểm thử tải an toàn cục bộ đã được thực hiện với 3 mức
 - **Tổng số liên kết nội bộ được rà soát:** **25 liên kết**
 - **Trạng thái:** **100% liên kết hoạt động tốt (HTTP 200)**.
   - Các đường dẫn quay về trang chủ (`/`) đều chính xác.
-  - Các liên kết chéo giữa các game (`/games/than-ma-giang-the/`, `/games/phu-sinh-mong/`, `/games/tan-binh-thuc-tinh/`) hoạt động mượt mà.
+  - Các liên kết chéo giữa các game (`/games/than-ma-giang-the/`, `/games/phu-sinh-mong/`, `/games/chien-binh-thuc-tinh/`) hoạt động mượt mà.
   - Liên kết giữa trang sự kiện Đổi Điểm và Đua Top Tính Năng hoạt động trơn tru.
 
 ### 2. Các thành phần tương tác trên giao diện
@@ -188,7 +188,7 @@ Kiểm thử tải an toàn cục bộ đã được thực hiện với 3 mức
    - **Trang Chủ Cổng Game (`/`):** Khai báo kích thước `width`, `height` và `loading="lazy"` cho 17 ảnh (Header logo 34x34, Hero slider banner 1672x941 với `fetchpriority="high"`, 4 App icons 180x180, 2 Promo cards 1672x941, 3 Giftcode avatars 56x56, 3 News cards 1672x941, Footer logo 34x34). Preload thẻ Hero banner chính.
    - **Landing Page Thần Ma Giáng Thế (`/games/than-ma-giang-the/`):** Khai báo Logo header (40x40), 4 Switcher thumbs (82x48), 6 Gallery cards (400x225). Preload ảnh Hero cảnh chính.
    - **Landing Page Phù Sinh Mộng (`/games/phu-sinh-mong/`):** Khai báo Logo header (40x40), 4 Switcher thumbs (110x62), 7 Gallery cards (400x225). Preload ảnh Hero `psm-hero-xianxia.jpg`.
-   - **Landing Page Tân Binh Thức Tỉnh (`/games/tan-binh-thuc-tinh/`):** Khai báo Logo header (40x40), 4 Switcher thumbs (82x48), 6 Gallery cards (400x225). Preload ảnh Hero `tbtt-1.jpg`.
+   - **Landing Page Chiến Binh Thức Tỉnh (`/games/chien-binh-thuc-tinh/`):** Khai báo Logo header (40x40), 4 Switcher thumbs (82x48), 6 Gallery cards (400x225). Preload ảnh Hero `tbtt-1.jpg`.
    - **Sự kiện Đua Top Tính Năng:** Khai báo Event Hero Banner 1200x400 với `fetchpriority="high"` và preload asset.
    - **Kết quả kiểm tra tự động:** **58/58 thẻ ảnh tĩnh trên toàn hệ thống 100% đạt chuẩn CLS = 0.**
 
@@ -198,7 +198,7 @@ Kiểm thử tải an toàn cục bộ đã được thực hiện với 3 mức
 |---|---:|---:|---:|:---:|
 | **Thần Ma Giáng Thế** (`/games/than-ma-giang-the/`) | **17.43 MB** | **5.17 MB** | **-12.26 MB** | **-70.3%** 🚀 |
 | **Phù Sinh Mộng** (`/games/phu-sinh-mong/`) | **10.27 MB** | **2.30 MB** | **-7.97 MB** | **-77.6%** 🚀 |
-| **Tân Binh Thức Tỉnh** (`/games/tan-binh-thuc-tinh/`) | **8.57 MB** | **2.91 MB** | **-5.66 MB** | **-66.0%** 🚀 |
+| **Chiến Binh Thức Tỉnh** (`/games/chien-binh-thuc-tinh/`) | **8.57 MB** | **2.91 MB** | **-5.66 MB** | **-66.0%** 🚀 |
 | **Trang Chủ Cổng Game** (`/`) | **11.34 MB** | **6.45 MB** | **-4.89 MB** | **-43.1%** 🚀 |
 | **Đua Top Tính Năng** (`.../dua-top-tinh-nang/`) | **0.76 MB** | **0.37 MB** | **-0.39 MB** | **-51.3%** 🚀 |
 | **Tổng kho ảnh Workspace** | **70.88 MB** | **30.85 MB** | **-40.03 MB** | **-56.5%** 🚀 |
