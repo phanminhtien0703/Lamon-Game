@@ -266,6 +266,7 @@ export function groupItemsByGranularity(
         direct: item.direct,
         facebook: item.facebook,
         google: item.google,
+        internal: item.internal,
         kenhGameZ: item.kenhGameZ,
         other: item.other,
         webGameLau: item.webGameLau,
@@ -287,6 +288,7 @@ export function groupItemsByGranularity(
         direct: number;
         facebook: number;
         google: number;
+        internal: number;
         kenhGameZ: number;
         other: number;
         webGameLau: number;
@@ -312,6 +314,7 @@ export function groupItemsByGranularity(
           direct: 0,
           facebook: 0,
           google: 0,
+          internal: 0,
           kenhGameZ: 0,
           other: 0,
           webGameLau: 0,
@@ -326,6 +329,7 @@ export function groupItemsByGranularity(
       w.direct += item.direct;
       w.facebook += item.facebook;
       w.google += item.google;
+      w.internal += item.internal;
       w.kenhGameZ += item.kenhGameZ;
       w.other += item.other;
       w.webGameLau += item.webGameLau;
@@ -348,6 +352,7 @@ export function groupItemsByGranularity(
         direct: w.direct,
         facebook: w.facebook,
         google: w.google,
+        internal: w.internal,
         kenhGameZ: w.kenhGameZ,
         other: w.other,
         webGameLau: w.webGameLau,
@@ -369,6 +374,7 @@ export function groupItemsByGranularity(
         direct: number;
         facebook: number;
         google: number;
+        internal: number;
         kenhGameZ: number;
         other: number;
         webGameLau: number;
@@ -393,6 +399,7 @@ export function groupItemsByGranularity(
           direct: 0,
           facebook: 0,
           google: 0,
+          internal: 0,
           kenhGameZ: 0,
           other: 0,
           webGameLau: 0,
@@ -407,6 +414,7 @@ export function groupItemsByGranularity(
       m.direct += item.direct;
       m.facebook += item.facebook;
       m.google += item.google;
+      m.internal += item.internal;
       m.kenhGameZ += item.kenhGameZ;
       m.other += item.other;
       m.webGameLau += item.webGameLau;
@@ -429,6 +437,7 @@ export function groupItemsByGranularity(
         direct: m.direct,
         facebook: m.facebook,
         google: m.google,
+        internal: m.internal,
         kenhGameZ: m.kenhGameZ,
         other: m.other,
         webGameLau: m.webGameLau,
@@ -469,6 +478,7 @@ export function attachComparisons(
         direct: calculateDiff(curr.direct, compItem.direct),
         facebook: calculateDiff(curr.facebook, compItem.facebook),
         google: calculateDiff(curr.google, compItem.google),
+        internal: calculateDiff(curr.internal, compItem.internal),
         kenhGameZ: calculateDiff(curr.kenhGameZ, compItem.kenhGameZ),
         other: calculateDiff(curr.other, compItem.other),
         webGameLau: calculateDiff(curr.webGameLau, compItem.webGameLau),
@@ -489,6 +499,7 @@ export function calculateTotals(
     direct: number;
     facebook: number;
     google: number;
+    internal: number;
     kenhGameZ: number;
     other: number;
     webGameLau: number;
@@ -502,6 +513,7 @@ export function calculateTotals(
       acc.direct += curr.direct;
       acc.facebook += curr.facebook;
       acc.google += curr.google;
+      acc.internal += curr.internal;
       acc.kenhGameZ += curr.kenhGameZ;
       acc.other += curr.other;
       acc.webGameLau += curr.webGameLau;
@@ -510,7 +522,7 @@ export function calculateTotals(
       acc.grandTotal += curr.total;
       return acc;
     },
-    { direct: 0, facebook: 0, google: 0, kenhGameZ: 0, other: 0, webGameLau: 0, youtube: 0, zalo: 0, grandTotal: 0 }
+    { direct: 0, facebook: 0, google: 0, internal: 0, kenhGameZ: 0, other: 0, webGameLau: 0, youtube: 0, zalo: 0, grandTotal: 0 }
   );
 
   if (!compareTotals) {
@@ -523,6 +535,7 @@ export function calculateTotals(
       direct: calculateDiff(current.direct, compareTotals.direct),
       facebook: calculateDiff(current.facebook, compareTotals.facebook),
       google: calculateDiff(current.google, compareTotals.google),
+      internal: calculateDiff(current.internal, compareTotals.internal),
       kenhGameZ: calculateDiff(current.kenhGameZ, compareTotals.kenhGameZ),
       other: calculateDiff(current.other, compareTotals.other),
       webGameLau: calculateDiff(current.webGameLau, compareTotals.webGameLau),
@@ -564,14 +577,7 @@ export function exportToCSV(
   items.forEach((item) => {
     const row = [
       `"${item.label}"`,
-      String(item.direct),
-      String(item.facebook),
-      String(item.google),
-      String(item.kenhGameZ),
-      String(item.other),
-      String(item.webGameLau),
-      String(item.youtube),
-      String(item.zalo),
+      ...CHANNELS.map((c) => String(item[c.key as ChannelKey] ?? 0)),
       String(item.total),
     ];
 
@@ -594,14 +600,7 @@ export function exportToCSV(
   // Footer Total row
   const totalRow = [
     `"TỔNG CỘNG (${items.length} chu kỳ)"`,
-    String(totals.direct),
-    String(totals.facebook),
-    String(totals.google),
-    String(totals.kenhGameZ),
-    String(totals.other),
-    String(totals.webGameLau),
-    String(totals.youtube),
-    String(totals.zalo),
+    ...CHANNELS.map((c) => String(totals[c.key as ChannelKey] ?? 0)),
     String(totals.grandTotal),
   ];
 
@@ -624,14 +623,9 @@ export function exportToCSV(
   const grandTotal = totals.grandTotal || 1;
   const percentRow = [
     `"TỶ TRỌNG (% SHARE)"`,
-    `${Math.round((totals.direct / grandTotal) * 1000) / 10}%`,
-    `${Math.round((totals.facebook / grandTotal) * 1000) / 10}%`,
-    `${Math.round((totals.google / grandTotal) * 1000) / 10}%`,
-    `${Math.round((totals.kenhGameZ / grandTotal) * 1000) / 10}%`,
-    `${Math.round((totals.other / grandTotal) * 1000) / 10}%`,
-    `${Math.round((totals.webGameLau / grandTotal) * 1000) / 10}%`,
-    `${Math.round((totals.youtube / grandTotal) * 1000) / 10}%`,
-    `${Math.round((totals.zalo / grandTotal) * 1000) / 10}%`,
+    ...CHANNELS.map(
+      (c) => `${Math.round(((totals[c.key as ChannelKey] ?? 0) / grandTotal) * 1000) / 10}%`
+    ),
     '100%',
   ];
   csvRows.push(percentRow);

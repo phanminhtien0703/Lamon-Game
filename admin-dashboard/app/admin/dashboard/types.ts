@@ -3,6 +3,7 @@ export interface DailyTrackingItem {
   direct: number;
   facebook: number;
   google: number;
+  internal: number;
   kenhGameZ: number;
   other: number;
   webGameLau: number;
@@ -11,7 +12,7 @@ export interface DailyTrackingItem {
   total: number;
 }
 
-export type ChannelKey = 'direct' | 'facebook' | 'google' | 'kenhGameZ' | 'other' | 'webGameLau' | 'youtube' | 'zalo';
+export type ChannelKey = 'direct' | 'facebook' | 'google' | 'internal' | 'kenhGameZ' | 'other' | 'webGameLau' | 'youtube' | 'zalo';
 
 export interface ChannelConfig {
   key: ChannelKey;
@@ -26,6 +27,7 @@ export const CHANNELS: ChannelConfig[] = [
   { key: 'direct', label: 'Direct', color: '#38bdf8', textColor: 'text-sky-500', bgColor: 'bg-sky-50', borderColor: 'border-sky-200' },
   { key: 'facebook', label: 'Facebook', color: '#3b82f6', textColor: 'text-blue-500', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' },
   { key: 'google', label: 'Google', color: '#ea4335', textColor: 'text-red-500', bgColor: 'bg-red-50', borderColor: 'border-red-200' },
+  { key: 'internal', label: 'Internal', color: '#6366f1', textColor: 'text-indigo-500', bgColor: 'bg-indigo-50', borderColor: 'border-indigo-200' },
   { key: 'kenhGameZ', label: 'KenhGameZ', color: '#f59e0b', textColor: 'text-amber-500', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
   { key: 'other', label: 'Other', color: '#a855f7', textColor: 'text-purple-500', bgColor: 'bg-purple-50', borderColor: 'border-purple-200' },
   { key: 'webGameLau', label: 'WebGameLau', color: '#10b981', textColor: 'text-emerald-500', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
@@ -57,6 +59,7 @@ export interface GroupedTrackingItem {
   direct: number;
   facebook: number;
   google: number;
+  internal: number;
   kenhGameZ: number;
   other: number;
   webGameLau: number;
@@ -67,6 +70,7 @@ export interface GroupedTrackingItem {
     direct: DiffMetric;
     facebook: DiffMetric;
     google: DiffMetric;
+    internal: DiffMetric;
     kenhGameZ: DiffMetric;
     other: DiffMetric;
     webGameLau: DiffMetric;
@@ -80,6 +84,7 @@ export interface AggregatedTotals {
   direct: number;
   facebook: number;
   google: number;
+  internal: number;
   kenhGameZ: number;
   other: number;
   webGameLau: number;
@@ -90,6 +95,7 @@ export interface AggregatedTotals {
     direct: DiffMetric;
     facebook: DiffMetric;
     google: DiffMetric;
+    internal: DiffMetric;
     kenhGameZ: DiffMetric;
     other: DiffMetric;
     webGameLau: DiffMetric;
@@ -99,5 +105,5 @@ export interface AggregatedTotals {
   };
 }
 
-export type SortField = 'period' | 'direct' | 'facebook' | 'google' | 'kenhGameZ' | 'other' | 'webGameLau' | 'youtube' | 'zalo' | 'total';
+export type SortField = 'period' | 'direct' | 'facebook' | 'google' | 'internal' | 'kenhGameZ' | 'other' | 'webGameLau' | 'youtube' | 'zalo' | 'total';
 export type SortDirection = 'asc' | 'desc';

@@ -53,6 +53,7 @@ interface DailyDashboardData {
     direct: number;
     facebook: number;
     google: number;
+    internal: number;
     kenhGameZ: number;
     other: number;
     webGameLau: number;
@@ -254,6 +255,7 @@ export default function AdminDashboardPage() {
         acc.direct += curr.direct;
         acc.facebook += curr.facebook;
         acc.google += curr.google;
+        acc.internal += curr.internal;
         acc.kenhGameZ += curr.kenhGameZ;
         acc.other += curr.other;
         acc.webGameLau += curr.webGameLau;
@@ -262,7 +264,7 @@ export default function AdminDashboardPage() {
         acc.grandTotal += curr.total;
         return acc;
       },
-      { direct: 0, facebook: 0, google: 0, kenhGameZ: 0, other: 0, webGameLau: 0, youtube: 0, zalo: 0, grandTotal: 0 }
+      { direct: 0, facebook: 0, google: 0, internal: 0, kenhGameZ: 0, other: 0, webGameLau: 0, youtube: 0, zalo: 0, grandTotal: 0 }
     );
   }, [compareEnabled, filteredCompareRawItems]);
 
@@ -322,26 +324,12 @@ export default function AdminDashboardPage() {
     const headers = ['Thời gian', ...CHANNELS.map((c) => c.label), 'Tổng cộng'];
     const rows = finalDisplayItems.map((item) => [
       item.label,
-      item.direct,
-      item.facebook,
-      item.google,
-      item.kenhGameZ,
-      item.other,
-      item.webGameLau,
-      item.youtube,
-      item.zalo,
+      ...CHANNELS.map((c) => item[c.key as ChannelKey] ?? 0),
       item.total,
     ]);
     const totalsRow = [
       'TỔNG CỘNG',
-      aggregatedTotals.direct,
-      aggregatedTotals.facebook,
-      aggregatedTotals.google,
-      aggregatedTotals.kenhGameZ,
-      aggregatedTotals.other,
-      aggregatedTotals.webGameLau,
-      aggregatedTotals.youtube,
-      aggregatedTotals.zalo,
+      ...CHANNELS.map((c) => aggregatedTotals[c.key as ChannelKey] ?? 0),
       aggregatedTotals.grandTotal,
     ];
 
