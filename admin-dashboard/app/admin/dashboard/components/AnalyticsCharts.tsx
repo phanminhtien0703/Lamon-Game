@@ -20,16 +20,12 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
   const [chartType, setChartType] = useState<'LINE' | 'DONUT' | 'STACKED_BAR'>('LINE');
 
   // Active channel toggles for Line Chart
-  const [activeChannels, setActiveChannels] = useState<Record<string, boolean>>({
-    total: true,
-    direct: true,
-    facebook: true,
-    google: true,
-    kenhGameZ: true,
-    other: true,
-    webGameLau: true,
-    youtube: true,
-    zalo: true,
+  const [activeChannels, setActiveChannels] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = { total: true };
+    CHANNELS.forEach((c) => {
+      initial[c.key] = true;
+    });
+    return initial;
   });
 
   // Hover state for interactive tooltips
@@ -55,26 +51,15 @@ export default function AnalyticsCharts({ items, grandTotal, granularityLabel }:
 
   // Channel summary for Donut / Pie Chart
   const channelTotals = useMemo(() => {
-    const sums: Record<ChannelKey, number> = {
-      direct: 0,
-      facebook: 0,
-      google: 0,
-      kenhGameZ: 0,
-      other: 0,
-      webGameLau: 0,
-      youtube: 0,
-      zalo: 0,
-    };
+    const sums = {} as Record<ChannelKey, number>;
+    CHANNELS.forEach((ch) => {
+      sums[ch.key] = 0;
+    });
 
     items.forEach((item) => {
-      sums.direct += item.direct;
-      sums.facebook += item.facebook;
-      sums.google += item.google;
-      sums.kenhGameZ += item.kenhGameZ;
-      sums.other += item.other;
-      sums.webGameLau += item.webGameLau;
-      sums.youtube += item.youtube;
-      sums.zalo += item.zalo;
+      CHANNELS.forEach((ch) => {
+        sums[ch.key] += item[ch.key] ?? 0;
+      });
     });
 
     const effectiveTotal = grandTotal || 1;
