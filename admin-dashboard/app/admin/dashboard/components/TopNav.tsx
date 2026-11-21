@@ -190,20 +190,13 @@ export default function TopNav({
 
               <div className="py-1">
                 <a
-                  href="/games/than-ma-giang-the/"
+                  href="/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 px-3.5 py-2 text-slate-600 hover:bg-slate-50 hover:text-[#5969ff] transition"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Landing Thần Ma Giáng Thế</span>
-                </a>
-                <a
-                  href="/games/era-of-warfare/"
-                  target="_blank"
-                  className="flex items-center gap-2 px-3.5 py-2 text-slate-600 hover:bg-slate-50 hover:text-[#5969ff] transition"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Landing Era of Warfare</span>
+                  <span>Trang chủ Cổng Game</span>
                 </a>
               </div>
 
