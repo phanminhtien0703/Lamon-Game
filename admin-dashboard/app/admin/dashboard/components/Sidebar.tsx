@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard,
@@ -8,16 +8,10 @@ import {
   Share2,
   Calendar,
   FileSpreadsheet,
-  Gamepad2,
-  Swords,
-  Flame,
-  Zap,
-  Globe,
-  Radio,
   LogOut,
   X,
   ChevronRight,
-  ExternalLink,
+  ChevronDown,
   ChevronsLeft,
   ChevronsRight,
 } from 'lucide-react';
@@ -43,6 +37,8 @@ export default function Sidebar({
   onExportCSV,
   onLogout,
 }: SidebarProps) {
+  const [isDashboardOpen, setIsDashboardOpen] = useState(true);
+
   const scrollToId = (id: string, tabName: string) => {
     setActiveTab(tabName);
     onClose();
@@ -51,6 +47,8 @@ export default function Sidebar({
       elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
+
+  const isSubTabActive = ['charts', 'table', 'dow'].includes(activeTab);
 
   return (
     <>
@@ -137,10 +135,17 @@ export default function Sidebar({
                 </div>
               )}
               <ul className="space-y-1">
-                {/* 1. Dashboard */}
+                {/* 1. Parent Tab: Dashboard */}
                 <li>
                   <button
-                    onClick={() => scrollToId('dashboardOverview', 'dashboard')}
+                    onClick={() => {
+                      if (isCollapsed) {
+                        onToggleCollapse();
+                      } else {
+                        setIsDashboardOpen((prev) => !prev);
+                      }
+                      scrollToId('dashboardOverview', 'dashboard');
+                    }}
                     title="Dashboard"
                     className={`w-full flex items-center rounded-lg text-xs font-semibold transition cursor-pointer ${
                       isCollapsed
@@ -149,275 +154,167 @@ export default function Sidebar({
                     } ${
                       activeTab === 'dashboard'
                         ? 'bg-[#5969ff] text-white shadow-md shadow-[#5969ff]/30 font-bold'
+                        : isSubTabActive
+                        ? 'bg-white/10 text-white font-bold'
                         : 'text-slate-300 hover:text-white hover:bg-white/5'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <LayoutDashboard className="w-4 h-4 flex-shrink-0" />
+                      <LayoutDashboard className="w-4 h-4 flex-shrink-0 text-[#38bdf8]" />
                       <span className={isCollapsed ? 'lg:hidden' : 'inline'}>Dashboard</span>
                     </div>
-                    <ChevronRight
-                      className={`w-3.5 h-3.5 opacity-70 ${isCollapsed ? 'lg:hidden' : 'inline'}`}
-                    />
+                    {!isCollapsed && (
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 opacity-80 transition-transform duration-200 ${
+                          isDashboardOpen ? 'rotate-0' : '-rotate-90'
+                        }`}
+                      />
+                    )}
                   </button>
-                </li>
 
-                {/* 2. Biểu Đồ Lưu Lượng */}
-                <li>
-                  <button
-                    onClick={() => scrollToId('analyticsCharts', 'charts')}
-                    title="Biểu Đồ Lưu Lượng"
-                    className={`w-full flex items-center rounded-lg text-xs font-semibold transition cursor-pointer ${
-                      isCollapsed
-                        ? 'lg:justify-center lg:p-2.5 px-3.5 py-2.5 justify-between'
-                        : 'justify-between px-3.5 py-2.5'
-                    } ${
-                      activeTab === 'charts'
-                        ? 'bg-[#5969ff] text-white shadow-md shadow-[#5969ff]/30 font-bold'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <BarChart3 className="w-4 h-4 flex-shrink-0" />
-                      <span className={isCollapsed ? 'lg:hidden' : 'inline'}>
-                        Biểu Đồ Lưu Lượng
-                      </span>
-                    </div>
-                    <ChevronRight
-                      className={`w-3.5 h-3.5 opacity-70 ${isCollapsed ? 'lg:hidden' : 'inline'}`}
-                    />
-                  </button>
-                </li>
+                  {/* Sub-tabs under Dashboard (Expanded state) */}
+                  {!isCollapsed && isDashboardOpen && (
+                    <ul className="mt-1 ml-3.5 pl-3 border-l border-[#222144] space-y-1">
+                      {/* Sub-tab 1: Biểu Đồ Lưu Lượng */}
+                      <li>
+                        <button
+                          onClick={() => scrollToId('analyticsCharts', 'charts')}
+                          title="Biểu Đồ Lưu Lượng"
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
+                            activeTab === 'charts'
+                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <BarChart3 className="w-4 h-4 flex-shrink-0" />
+                            <span className="truncate">Biểu Đồ Lưu Lượng</span>
+                          </div>
+                          <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
+                        </button>
+                      </li>
 
-                {/* 3. Bảng Dữ Liệu Chi Tiết */}
-                <li>
-                  <button
-                    onClick={() => scrollToId('dataTableSection', 'table')}
-                    title="Bảng Dữ Liệu Chi Tiết"
-                    className={`w-full flex items-center rounded-lg text-xs font-semibold transition cursor-pointer ${
-                      isCollapsed
-                        ? 'lg:justify-center lg:p-2.5 px-3.5 py-2.5 justify-between'
-                        : 'justify-between px-3.5 py-2.5'
-                    } ${
-                      activeTab === 'table'
-                        ? 'bg-[#5969ff] text-white shadow-md shadow-[#5969ff]/30 font-bold'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Share2 className="w-4 h-4 flex-shrink-0" />
-                      <span className={isCollapsed ? 'lg:hidden' : 'inline'}>
-                        Bảng Dữ Liệu Chi Tiết
-                      </span>
-                    </div>
-                    <ChevronRight
-                      className={`w-3.5 h-3.5 opacity-70 ${isCollapsed ? 'lg:hidden' : 'inline'}`}
-                    />
-                  </button>
-                </li>
+                      {/* Sub-tab 2: Bảng Dữ Liệu Chi Tiết */}
+                      <li>
+                        <button
+                          onClick={() => scrollToId('dataTableSection', 'table')}
+                          title="Bảng Dữ Liệu Chi Tiết"
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
+                            activeTab === 'table'
+                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <Share2 className="w-4 h-4 flex-shrink-0" />
+                            <span className="truncate">Bảng Dữ Liệu Chi Tiết</span>
+                          </div>
+                          <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
+                        </button>
+                      </li>
 
-                {/* 4. Ngày Vàng Trong Tuần */}
-                <li>
-                  <button
-                    onClick={() => scrollToId('dayOfWeekSection', 'dow')}
-                    title="Ngày Vàng Trong Tuần"
-                    className={`w-full flex items-center rounded-lg text-xs font-semibold transition cursor-pointer ${
-                      isCollapsed
-                        ? 'lg:justify-center lg:p-2.5 px-3.5 py-2.5 justify-between'
-                        : 'justify-between px-3.5 py-2.5'
-                    } ${
-                      activeTab === 'dow'
-                        ? 'bg-[#5969ff] text-white shadow-md shadow-[#5969ff]/30 font-bold'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Calendar className="w-4 h-4 flex-shrink-0" />
-                      <span className={isCollapsed ? 'lg:hidden' : 'inline'}>
-                        Ngày Vàng Trong Tuần
-                      </span>
-                    </div>
-                    <ChevronRight
-                      className={`w-3.5 h-3.5 opacity-70 ${isCollapsed ? 'lg:hidden' : 'inline'}`}
-                    />
-                  </button>
-                </li>
+                      {/* Sub-tab 3: Ngày Vàng Trong Tuần */}
+                      <li>
+                        <button
+                          onClick={() => scrollToId('dayOfWeekSection', 'dow')}
+                          title="Ngày Vàng Trong Tuần"
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
+                            activeTab === 'dow'
+                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <Calendar className="w-4 h-4 flex-shrink-0" />
+                            <span className="truncate">Ngày Vàng Trong Tuần</span>
+                          </div>
+                          <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
+                        </button>
+                      </li>
 
-                {/* 5. Xuất Excel */}
-                <li>
-                  <button
-                    onClick={() => {
-                      onExportCSV();
-                      onClose();
-                    }}
-                    title="Xuất Báo Cáo Excel (CSV)"
-                    className={`w-full flex items-center rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition cursor-pointer ${
-                      isCollapsed
-                        ? 'lg:justify-center lg:p-2.5 px-3.5 py-2.5 justify-between'
-                        : 'justify-between px-3.5 py-2.5'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <FileSpreadsheet className="w-4 h-4 flex-shrink-0 text-emerald-400" />
-                      <span className={isCollapsed ? 'lg:hidden' : 'inline'}>
-                        Xuất Báo Cáo Excel
-                      </span>
-                    </div>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold ${
-                        isCollapsed ? 'lg:hidden' : 'inline'
-                      }`}
-                    >
-                      CSV
-                    </span>
-                  </button>
+                      {/* Sub-tab 4: Xuất Báo Cáo Excel */}
+                      <li>
+                        <button
+                          onClick={() => {
+                            onExportCSV();
+                            onClose();
+                          }}
+                          title="Xuất Báo Cáo Excel (CSV)"
+                          className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 transition cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <FileSpreadsheet className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                            <span className="truncate">Xuất Báo Cáo Excel</span>
+                          </div>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold flex-shrink-0">
+                            CSV
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                  )}
+
+                  {/* Sub-tabs in Collapsed Icon Mode */}
+                  {isCollapsed && (
+                    <ul className="mt-1 space-y-1">
+                      <li>
+                        <button
+                          onClick={() => scrollToId('analyticsCharts', 'charts')}
+                          title="Biểu Đồ Lưu Lượng"
+                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
+                            activeTab === 'charts'
+                              ? 'bg-[#5969ff] text-white shadow-sm'
+                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <BarChart3 className="w-4 h-4" />
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => scrollToId('dataTableSection', 'table')}
+                          title="Bảng Dữ Liệu Chi Tiết"
+                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
+                            activeTab === 'table'
+                              ? 'bg-[#5969ff] text-white shadow-sm'
+                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <Share2 className="w-4 h-4" />
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => scrollToId('dayOfWeekSection', 'dow')}
+                          title="Ngày Vàng Trong Tuần"
+                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
+                            activeTab === 'dow'
+                              ? 'bg-[#5969ff] text-white shadow-sm'
+                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <Calendar className="w-4 h-4" />
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => {
+                            onExportCSV();
+                            onClose();
+                          }}
+                          title="Xuất Báo Cáo Excel (CSV)"
+                          className="w-full flex items-center justify-center p-2 rounded-lg text-xs text-emerald-400 hover:text-emerald-300 hover:bg-white/5 transition cursor-pointer"
+                        >
+                          <FileSpreadsheet className="w-4 h-4" />
+                        </button>
+                      </li>
+                    </ul>
+                  )}
                 </li>
               </ul>
             </div>
 
-            {/* Section 2: DANH MỤC GAME (Landing Pages) */}
-            <div>
-              {isCollapsed ? (
-                <div className="hidden lg:block w-8 h-[1px] bg-white/10 mx-auto my-2" />
-              ) : (
-                <div className="px-3 pb-2 text-[11px] font-bold text-slate-400/80 uppercase tracking-wider">
-                  Landing Pages
-                </div>
-              )}
-              <ul className="space-y-1">
-                <li>
-                  <a
-                    href="/games/than-ma-giang-the/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Game: Thần Ma Giáng Thế"
-                    className={`flex items-center rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 transition group ${
-                      isCollapsed
-                        ? 'lg:justify-center lg:p-2.5 px-3.5 py-2 justify-between'
-                        : 'justify-between px-3.5 py-2'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 truncate">
-                      <Gamepad2 className="w-4 h-4 flex-shrink-0 text-cyan-400" />
-                      <span className={`truncate ${isCollapsed ? 'lg:hidden' : 'inline'}`}>
-                        Thần Ma Giáng Thế
-                      </span>
-                    </div>
-                    <ExternalLink
-                      className={`w-3 h-3 opacity-0 group-hover:opacity-100 transition ${
-                        isCollapsed ? 'lg:hidden' : 'inline'
-                      }`}
-                    />
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="/games/era-of-warfare/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Game: Era of Warfare (EN)"
-                    className={`flex items-center rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 transition group ${
-                      isCollapsed
-                        ? 'lg:justify-center lg:p-2.5 px-3.5 py-2 justify-between'
-                        : 'justify-between px-3.5 py-2'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 truncate">
-                      <Swords className="w-4 h-4 flex-shrink-0 text-amber-400" />
-                      <span className={`truncate ${isCollapsed ? 'lg:hidden' : 'inline'}`}>
-                        Era of Warfare (EN)
-                      </span>
-                    </div>
-                    <ExternalLink
-                      className={`w-3 h-3 opacity-0 group-hover:opacity-100 transition ${
-                        isCollapsed ? 'lg:hidden' : 'inline'
-                      }`}
-                    />
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="/games/nhat-kiem-phu-sinh/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Game: Nhất Kiếm Phù Sinh"
-                    className={`flex items-center rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 transition group ${
-                      isCollapsed
-                        ? 'lg:justify-center lg:p-2.5 px-3.5 py-2 justify-between'
-                        : 'justify-between px-3.5 py-2'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 truncate">
-                      <Flame className="w-4 h-4 flex-shrink-0 text-rose-400" />
-                      <span className={`truncate ${isCollapsed ? 'lg:hidden' : 'inline'}`}>
-                        Nhất Kiếm Phù Sinh
-                      </span>
-                    </div>
-                    <ExternalLink
-                      className={`w-3 h-3 opacity-0 group-hover:opacity-100 transition ${
-                        isCollapsed ? 'lg:hidden' : 'inline'
-                      }`}
-                    />
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="/games/chien-binh-thuc-tinh/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Game: Chiến Binh Thức Tỉnh"
-                    className={`flex items-center rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 transition group ${
-                      isCollapsed
-                        ? 'lg:justify-center lg:p-2.5 px-3.5 py-2 justify-between'
-                        : 'justify-between px-3.5 py-2'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 truncate">
-                      <Zap className="w-4 h-4 flex-shrink-0 text-purple-400" />
-                      <span className={`truncate ${isCollapsed ? 'lg:hidden' : 'inline'}`}>
-                        Chiến Binh Thức Tỉnh
-                      </span>
-                    </div>
-                    <ExternalLink
-                      className={`w-3 h-3 opacity-0 group-hover:opacity-100 transition ${
-                        isCollapsed ? 'lg:hidden' : 'inline'
-                      }`}
-                    />
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Cổng Game Lamon (Trang chủ)"
-                    className={`flex items-center rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 transition group ${
-                      isCollapsed
-                        ? 'lg:justify-center lg:p-2.5 px-3.5 py-2 justify-between'
-                        : 'justify-between px-3.5 py-2'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 truncate">
-                      <Globe className="w-4 h-4 flex-shrink-0 text-blue-400" />
-                      <span className={`truncate ${isCollapsed ? 'lg:hidden' : 'inline'}`}>
-                        Cổng Game Lamon
-                      </span>
-                    </div>
-                    <ExternalLink
-                      className={`w-3 h-3 opacity-0 group-hover:opacity-100 transition ${
-                        isCollapsed ? 'lg:hidden' : 'inline'
-                      }`}
-                    />
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Section 3: TRẠNG THÁI HỆ THỐNG */}
+            {/* Section 2: TRẠNG THÁI HỆ THỐNG */}
             <div>
               {isCollapsed ? (
                 <div
