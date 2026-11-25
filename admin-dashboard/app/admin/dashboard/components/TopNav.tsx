@@ -104,7 +104,7 @@ export default function TopNav({
           </span>
           <span className="text-slate-300">/</span>
           <span className="font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md">
-            E-Commerce & Traffic Analytics
+            Lamon Game Analytics
           </span>
         </div>
       </div>

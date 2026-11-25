@@ -501,14 +501,14 @@ export default function AdminDashboardPage() {
 
         {/* Dashboard Main Container */}
         <main className="p-4 sm:p-6 lg:p-8 space-y-6 flex-1">
-          {/* Breadcrumb & Section Title (Concept Template Header) */}
+          {/* Breadcrumb & Section Title */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2" id="dashboardOverview">
             <div>
               <h1 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight font-sans">
-                E-commerce Dashboard Template
+                Thống Kê Lưu Lượng & Tải Game
               </h1>
               <p className="text-xs text-slate-500 mt-1">
-                Bảng điều khiển lưu lượng truy cập đa kênh & phân tích tương tác người dùng Lamon Game
+                Bảng điều khiển lưu lượng truy cập đa kênh & phân tích lượt tải game Lamon Game
               </p>
             </div>
 
