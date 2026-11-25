@@ -392,11 +392,13 @@
         }
         if (fanpageBtn) {
             fanpageBtn.addEventListener('click', function () {
+                recordDownloadEvent('fanpage', gameKey);
                 setTimeout(hideDownloadNotice, 350);
             });
         }
         if (messengerBtn) {
             messengerBtn.addEventListener('click', function () {
+                recordDownloadEvent('messenger', gameKey);
                 setTimeout(hideDownloadNotice, 350);
             });
         }
@@ -451,6 +453,28 @@
         }
     }
 
+    // Lưu sự kiện click tải game vào localStorage để Dashboard theo dõi
+    function recordDownloadEvent(eventType, gameKey) {
+        try {
+            var key = 'lamon_dl_events';
+            var list = [];
+            var raw = localStorage.getItem(key);
+            if (raw) {
+                list = JSON.parse(raw);
+                if (!Array.isArray(list)) list = [];
+            }
+            list.push({
+                type: eventType, // 'android' | 'ios' | 'pc' | 'messenger' | 'fanpage'
+                game: gameKey || getCurrentGameKey(),
+                timestamp: Date.now()
+            });
+            if (list.length > 500) {
+                list = list.slice(-500);
+            }
+            localStorage.setItem(key, JSON.stringify(list));
+        } catch (e) {}
+    }
+
     // Lắng nghe sự kiện click tải game (Android, Windows PC, iOS)
     function attachDownloadTriggers() {
         var pendingIosNotice = false;
@@ -483,12 +507,19 @@
             var isCtaAndroid = className.indexOf('cta-action-btn') !== -1 && className.indexOf('android') !== -1;
 
             if (isApkDownload || isPlatformAndroidOrPc || isTrackAndroidOrPc || isCtaAndroid) {
+                var detectedOs = (platform === 'windows' || platform === 'pc' || track.indexOf('pc') !== -1 || track.indexOf('windows') !== -1 || href.indexOf('.exe') !== -1 || href.indexOf('.zip') !== -1)
+                    ? 'pc'
+                    : 'android';
+                recordDownloadEvent(detectedOs);
+
                 // File bắt đầu tải qua hành vi tự nhiên của trình duyệt,
                 // Hiển thị popup sau 450ms để người chơi thấy rõ file đang được tải
                 setTimeout(function () {
                     showDownloadNotice();
                 }, 450);
             } else if (isIosDownload) {
+                recordDownloadEvent('ios');
+
                 // Đối với iOS: link mở sang tab mới tải game / App Store.
                 // Bật sẵn popup trên tab hiện tại sau 450ms
                 setTimeout(function () {

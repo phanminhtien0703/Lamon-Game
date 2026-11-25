@@ -37,7 +37,7 @@ export const CHANNELS: ChannelConfig[] = [
 
 export type Granularity = 'DAILY' | 'WEEKLY' | 'MONTHLY';
 
-export type DatePreset = 'ALL' | 'TODAY' | 'YESTERDAY' | '7D' | '30D' | 'THIS_MONTH' | 'LAST_MONTH' | 'CUSTOM';
+export type DatePreset = 'ALL' | 'TODAY' | 'YESTERDAY' | '7D' | '14D' | '30D' | 'THIS_MONTH' | 'LAST_MONTH' | 'CUSTOM';
 
 export type ComparisonMode = 'NONE' | 'PREVIOUS_PERIOD' | 'YOY' | 'CUSTOM';
 
@@ -107,3 +107,35 @@ export interface AggregatedTotals {
 
 export type SortField = 'period' | 'direct' | 'facebook' | 'google' | 'internal' | 'kenhGameZ' | 'other' | 'webGameLau' | 'youtube' | 'zalo' | 'total';
 export type SortDirection = 'asc' | 'desc';
+
+export interface PlatformStat {
+  key: 'android' | 'ios' | 'pc' | 'messenger';
+  label: string;
+  subLabel: string;
+  downloads: number;
+  percent: number;
+  color: string;
+  badgeBg: string;
+  badgeText: string;
+}
+
+export interface FunnelStage {
+  step: number;
+  name: string;
+  count: number;
+  rateOfTotal: number;
+  rateOfPrevious: number;
+  description: string;
+  color: string;
+}
+
+export interface ChannelConversionStat {
+  key: ChannelKey;
+  label: string;
+  color: string;
+  traffic: number;
+  downloads: number;
+  conversionRate: number;
+  messengerClicks: number;
+}
+

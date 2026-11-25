@@ -11,6 +11,9 @@ import {
   Layers,
   Sparkles,
   Info,
+  Check,
+  RotateCcw,
+  Calendar,
 } from 'lucide-react';
 
 import {
@@ -46,6 +49,7 @@ import TrafficTable from './components/TrafficTable';
 import AcquisitionCard from './components/AcquisitionCard';
 import AnalyticsCharts from './components/AnalyticsCharts';
 import DayOfWeekCards from './components/DayOfWeekCards';
+import ConversionFunnelCard from './components/ConversionFunnelCard';
 
 interface DailyDashboardData {
   items: DailyTrackingItem[];
@@ -190,6 +194,42 @@ export default function AdminDashboardPage() {
       return timeA - timeB;
     });
   }, [data?.items]);
+
+  // Auto pre-fill custom dates if empty when switching to CUSTOM
+  useEffect(() => {
+    if (datePreset === 'CUSTOM' && rawChronologicalItems.length > 0 && (!customStartDate || !customEndDate)) {
+      const latest = parseDate(rawChronologicalItems[rawChronologicalItems.length - 1].date) || new Date();
+      const start = new Date(latest);
+      start.setDate(start.getDate() - 6);
+      if (!customStartDate) setCustomStartDate(toInputDateFormat(start));
+      if (!customEndDate) setCustomEndDate(toInputDateFormat(latest));
+    }
+  }, [datePreset, rawChronologicalItems, customStartDate, customEndDate]);
+
+  // Quick preset helper for custom date range
+  const handleSetCustomPreset = useCallback(
+    (daysBack: number) => {
+      if (!rawChronologicalItems.length) return;
+      const latest = parseDate(rawChronologicalItems[rawChronologicalItems.length - 1].date) || new Date();
+      const start = new Date(latest);
+      start.setDate(start.getDate() - (daysBack - 1));
+      setCustomStartDate(toInputDateFormat(start));
+      setCustomEndDate(toInputDateFormat(latest));
+    },
+    [rawChronologicalItems]
+  );
+
+  // Validate custom date range
+  const customDateDiffDays = useMemo(() => {
+    if (!customStartDate || !customEndDate) return 0;
+    const s = new Date(`${customStartDate}T00:00:00`);
+    const e = new Date(`${customEndDate}T00:00:00`);
+    const diffTime = e.getTime() - s.getTime();
+    if (isNaN(diffTime) || diffTime < 0) return -1;
+    return Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+  }, [customStartDate, customEndDate]);
+
+  const isCustomDateInvalid = customDateDiffDays === -1;
 
   // Resolve current date range
   const { currentStartDate, currentEndDate } = useMemo(() => {
@@ -546,10 +586,11 @@ export default function AdminDashboardPage() {
                   { key: 'TODAY', label: 'Hôm nay' },
                   { key: 'YESTERDAY', label: 'Hôm qua' },
                   { key: '7D', label: '7 ngày qua' },
+                  { key: '14D', label: '14 ngày qua' },
                   { key: '30D', label: '30 ngày qua' },
                   { key: 'THIS_MONTH', label: 'Tháng này' },
                   { key: 'LAST_MONTH', label: 'Tháng trước' },
-                  { key: 'CUSTOM', label: 'Tùy chỉnh' },
+                  { key: 'CUSTOM', label: 'Tùy chỉnh...' },
                 ].map((p) => {
                   const isActive = datePreset === p.key;
                   return (
@@ -568,26 +609,94 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Custom Date Inputs & Comparison */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-0.5">
-              {datePreset === 'CUSTOM' ? (
-                <div className="flex items-center gap-2 bg-[#f8fafc] p-2 rounded-xl border border-slate-200 text-xs">
-                  <span className="text-slate-500 font-medium">Từ:</span>
-                  <input
-                    type="date"
-                    value={customStartDate}
-                    onChange={(e) => setCustomStartDate(e.target.value)}
-                    className="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-slate-800 focus:outline-none focus:border-[#5969ff]"
-                  />
-                  <span className="text-slate-500 font-medium">đến:</span>
-                  <input
-                    type="date"
-                    value={customEndDate}
-                    onChange={(e) => setCustomEndDate(e.target.value)}
-                    className="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-slate-800 focus:outline-none focus:border-[#5969ff]"
-                  />
+            {/* Custom Date Range Picker (Advanced Interactive Panel) */}
+            {datePreset === 'CUSTOM' ? (
+              <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-r from-sky-50/50 via-blue-50/30 to-indigo-50/40 border border-sky-200 shadow-2xs space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-sky-100/80">
+                  <div className="flex items-center gap-2">
+                    <CalendarDays className="w-4 h-4 text-[#0284c7]" />
+                    <span className="text-xs font-bold text-slate-800">
+                      Bộ Lọc Khoảng Ngày Tùy Chỉnh
+                    </span>
+                    {customDateDiffDays > 0 && (
+                      <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-[#0284c7] border border-sky-200">
+                        {customDateDiffDays} ngày được chọn
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Quick Fill Shortcuts */}
+                  <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                    <span className="text-[11px] text-slate-400 font-medium mr-1">Điền nhanh:</span>
+                    <button
+                      type="button"
+                      onClick={() => handleSetCustomPreset(7)}
+                      className="px-2.5 py-1 rounded-md bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 text-slate-700 hover:text-sky-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs"
+                    >
+                      7 ngày gần nhất
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSetCustomPreset(14)}
+                      className="px-2.5 py-1 rounded-md bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 text-slate-700 hover:text-sky-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs"
+                    >
+                      14 ngày gần nhất
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSetCustomPreset(30)}
+                      className="px-2.5 py-1 rounded-md bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 text-slate-700 hover:text-sky-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs"
+                    >
+                      30 ngày gần nhất
+                    </button>
+                  </div>
                 </div>
-              ) : (
+
+                {/* Date Inputs */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-300 shadow-2xs focus-within:border-[#5969ff] focus-within:ring-1 focus-within:ring-[#5969ff]">
+                      <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">Từ:</span>
+                      <input
+                        type="date"
+                        value={customStartDate}
+                        onChange={(e) => setCustomStartDate(e.target.value)}
+                        className="bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
+                      />
+                    </div>
+
+                    <span className="text-slate-400 text-xs font-bold">→</span>
+
+                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-300 shadow-2xs focus-within:border-[#5969ff] focus-within:ring-1 focus-within:ring-[#5969ff]">
+                      <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">Đến:</span>
+                      <input
+                        type="date"
+                        value={customEndDate}
+                        onChange={(e) => setCustomEndDate(e.target.value)}
+                        className="bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Status / Error display */}
+                  {isCustomDateInvalid ? (
+                    <div className="flex items-center gap-1.5 text-xs text-rose-600 font-bold bg-rose-50 px-2.5 py-1.5 rounded-lg border border-rose-200">
+                      <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span>Ngày bắt đầu không được lớn hơn ngày kết thúc!</span>
+                    </div>
+                  ) : (
+                    <div className="text-xs text-slate-500 flex items-center gap-1.5 font-medium">
+                      <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                      <span>
+                        Đang lọc: <strong>{currentStartDate ? formatDateVi(currentStartDate) : '...'}</strong> —{' '}
+                        <strong>{currentEndDate ? formatDateVi(currentEndDate) : '...'}</strong>
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-0.5">
                 <div className="text-xs text-slate-500 flex items-center gap-2 font-medium">
                   <span className="w-2 h-2 rounded-full bg-[#5969ff] animate-ping" />
                   <span>
@@ -601,9 +710,11 @@ export default function AdminDashboardPage() {
                     </strong>
                   </span>
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Compare toggle */}
+            {/* Comparison Controls */}
+            <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-2.5">
                 <button
                   onClick={() => setCompareEnabled(!compareEnabled)}
@@ -722,6 +833,16 @@ export default function AdminDashboardPage() {
               dataPoints={dayOfWeekAnalysis.map((d) => d.avgClicks)}
             />
           </section>
+
+          {/* ------------------------------------------------------------ */}
+          {/* ROW: CONVERSION RATE & DOWNLOAD PLATFORMS (Option 3 Upgrade) */}
+          {/* ------------------------------------------------------------ */}
+          <ConversionFunnelCard
+            items={currentGroupedItems}
+            grandTotal={aggregatedTotals.grandTotal}
+            granularityLabel={granularityLabel}
+            compareEnabled={compareEnabled}
+          />
 
           {/* ------------------------------------------------------------ */}
           {/* ROW 2: DUAL CARDS (Recent Orders Table & Customer Acquisition) */}

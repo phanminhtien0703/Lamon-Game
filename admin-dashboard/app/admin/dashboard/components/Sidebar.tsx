@@ -14,6 +14,7 @@ import {
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
+  Download,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -48,7 +49,7 @@ export default function Sidebar({
     }
   };
 
-  const isSubTabActive = ['charts', 'table', 'dow'].includes(activeTab);
+  const isSubTabActive = ['charts', 'conversion', 'table', 'dow'].includes(activeTab);
 
   return (
     <>
@@ -194,6 +195,27 @@ export default function Sidebar({
                         </button>
                       </li>
 
+                      {/* Sub-tab: Tỷ Lệ Tải & Thiết Bị */}
+                      <li>
+                        <button
+                          onClick={() => scrollToId('conversionSection', 'conversion')}
+                          title="Tỷ Lệ Tải & Thiết Bị"
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
+                            activeTab === 'conversion'
+                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <Download className="w-4 h-4 flex-shrink-0 text-sky-400" />
+                            <span className="truncate">Tỷ Lệ Tải & Thiết Bị</span>
+                          </div>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold flex-shrink-0">
+                            CR%
+                          </span>
+                        </button>
+                      </li>
+
                       {/* Sub-tab 2: Bảng Dữ Liệu Chi Tiết */}
                       <li>
                         <button
@@ -268,6 +290,19 @@ export default function Sidebar({
                           }`}
                         >
                           <BarChart3 className="w-4 h-4" />
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => scrollToId('conversionSection', 'conversion')}
+                          title="Tỷ Lệ Tải & Thiết Bị"
+                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
+                            activeTab === 'conversion'
+                              ? 'bg-[#5969ff] text-white shadow-sm'
+                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <Download className="w-4 h-4 text-sky-400" />
                         </button>
                       </li>
                       <li>
