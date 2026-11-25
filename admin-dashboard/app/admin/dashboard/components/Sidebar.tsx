@@ -15,6 +15,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Download,
+  Trophy,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -49,7 +50,7 @@ export default function Sidebar({
     }
   };
 
-  const isSubTabActive = ['charts', 'conversion', 'table', 'dow'].includes(activeTab);
+  const isSubTabActive = ['conversion', 'games', 'table'].includes(activeTab);
 
   return (
     <>
@@ -176,26 +177,7 @@ export default function Sidebar({
                   {/* Sub-tabs under Dashboard (Expanded state) */}
                   {!isCollapsed && isDashboardOpen && (
                     <ul className="mt-1 ml-3.5 pl-3 border-l border-[#222144] space-y-1">
-                      {/* Sub-tab 1: Biểu Đồ Lưu Lượng */}
-                      <li>
-                        <button
-                          onClick={() => scrollToId('analyticsCharts', 'charts')}
-                          title="Biểu Đồ Lưu Lượng"
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
-                            activeTab === 'charts'
-                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
-                              : 'text-slate-300 hover:text-white hover:bg-white/5'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5 truncate">
-                            <BarChart3 className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">Biểu Đồ Lưu Lượng</span>
-                          </div>
-                          <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
-                        </button>
-                      </li>
-
-                      {/* Sub-tab: Tỷ Lệ Tải & Thiết Bị */}
+                      {/* Sub-tab 1: Tỷ Lệ Tải & Thiết Bị */}
                       <li>
                         <button
                           onClick={() => scrollToId('conversionSection', 'conversion')}
@@ -216,7 +198,28 @@ export default function Sidebar({
                         </button>
                       </li>
 
-                      {/* Sub-tab 2: Bảng Dữ Liệu Chi Tiết */}
+                      {/* Sub-tab 2: Hiệu Quả 4 Game */}
+                      <li>
+                        <button
+                          onClick={() => scrollToId('gamePerformanceSection', 'games')}
+                          title="Hiệu Quả 4 Game"
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
+                            activeTab === 'games'
+                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <Trophy className="w-4 h-4 flex-shrink-0 text-amber-400" />
+                            <span className="truncate">Hiệu Quả 4 Game</span>
+                          </div>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold flex-shrink-0">
+                            TOP
+                          </span>
+                        </button>
+                      </li>
+
+                      {/* Sub-tab 3: Bảng Dữ Liệu Chi Tiết */}
                       <li>
                         <button
                           onClick={() => scrollToId('dataTableSection', 'table')}
@@ -230,25 +233,6 @@ export default function Sidebar({
                           <div className="flex items-center gap-2.5 truncate">
                             <Share2 className="w-4 h-4 flex-shrink-0" />
                             <span className="truncate">Bảng Dữ Liệu Chi Tiết</span>
-                          </div>
-                          <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
-                        </button>
-                      </li>
-
-                      {/* Sub-tab 3: Ngày Vàng Trong Tuần */}
-                      <li>
-                        <button
-                          onClick={() => scrollToId('dayOfWeekSection', 'dow')}
-                          title="Ngày Vàng Trong Tuần"
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
-                            activeTab === 'dow'
-                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
-                              : 'text-slate-300 hover:text-white hover:bg-white/5'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5 truncate">
-                            <Calendar className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">Ngày Vàng Trong Tuần</span>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
                         </button>
@@ -281,19 +265,6 @@ export default function Sidebar({
                     <ul className="mt-1 space-y-1">
                       <li>
                         <button
-                          onClick={() => scrollToId('analyticsCharts', 'charts')}
-                          title="Biểu Đồ Lưu Lượng"
-                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
-                            activeTab === 'charts'
-                              ? 'bg-[#5969ff] text-white shadow-sm'
-                              : 'text-slate-400 hover:text-white hover:bg-white/5'
-                          }`}
-                        >
-                          <BarChart3 className="w-4 h-4" />
-                        </button>
-                      </li>
-                      <li>
-                        <button
                           onClick={() => scrollToId('conversionSection', 'conversion')}
                           title="Tỷ Lệ Tải & Thiết Bị"
                           className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
@@ -307,6 +278,19 @@ export default function Sidebar({
                       </li>
                       <li>
                         <button
+                          onClick={() => scrollToId('gamePerformanceSection', 'games')}
+                          title="Hiệu Quả 4 Game"
+                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
+                            activeTab === 'games'
+                              ? 'bg-[#5969ff] text-white shadow-sm'
+                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <Trophy className="w-4 h-4 text-amber-400" />
+                        </button>
+                      </li>
+                      <li>
+                        <button
                           onClick={() => scrollToId('dataTableSection', 'table')}
                           title="Bảng Dữ Liệu Chi Tiết"
                           className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
@@ -316,19 +300,6 @@ export default function Sidebar({
                           }`}
                         >
                           <Share2 className="w-4 h-4" />
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          onClick={() => scrollToId('dayOfWeekSection', 'dow')}
-                          title="Ngày Vàng Trong Tuần"
-                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
-                            activeTab === 'dow'
-                              ? 'bg-[#5969ff] text-white shadow-sm'
-                              : 'text-slate-400 hover:text-white hover:bg-white/5'
-                          }`}
-                        >
-                          <Calendar className="w-4 h-4" />
                         </button>
                       </li>
                       <li>

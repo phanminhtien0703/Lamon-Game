@@ -47,9 +47,8 @@ import TopNav from './components/TopNav';
 import SparklineCard from './components/SparklineCard';
 import TrafficTable from './components/TrafficTable';
 import AcquisitionCard from './components/AcquisitionCard';
-import AnalyticsCharts from './components/AnalyticsCharts';
-import DayOfWeekCards from './components/DayOfWeekCards';
 import ConversionFunnelCard from './components/ConversionFunnelCard';
+import GamePerformanceCard from './components/GamePerformanceCard';
 
 interface DailyDashboardData {
   items: DailyTrackingItem[];
@@ -881,25 +880,12 @@ export default function AdminDashboardPage() {
           </section>
 
           {/* ------------------------------------------------------------ */}
-          {/* ROW 3: INTERACTIVE ANALYTICS CHARTS (Line, Donut, Stacked) */}
+          {/* ROW 3: BẢNG XẾP HẠNG & HIỆU QUẢ 4 GAME LAMON */}
           {/* ------------------------------------------------------------ */}
-          <div id="analyticsCharts">
-            <AnalyticsCharts
-              items={currentGroupedItems}
-              grandTotal={aggregatedTotals.grandTotal}
-              granularityLabel={granularityLabel}
-            />
-          </div>
-
-          {/* ------------------------------------------------------------ */}
-          {/* ROW 4: DAY OF WEEK PERFORMANCE MINI CARDS */}
-          {/* ------------------------------------------------------------ */}
-          <div id="dayOfWeekSection">
-            <DayOfWeekCards
-              days={dayOfWeekAnalysis}
-              bestDay={bestDayOfWeek}
-            />
-          </div>
+          <GamePerformanceCard
+            items={currentGroupedItems}
+            grandTotal={aggregatedTotals.grandTotal}
+          />
         </main>
       </div>
     </div>
