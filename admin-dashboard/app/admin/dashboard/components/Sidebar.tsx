@@ -14,6 +14,8 @@ import {
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
+  Download,
+  Trophy,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -48,7 +50,7 @@ export default function Sidebar({
     }
   };
 
-  const isSubTabActive = ['charts', 'table', 'dow'].includes(activeTab);
+  const isSubTabActive = ['conversion', 'games', 'table'].includes(activeTab);
 
   return (
     <>
@@ -79,17 +81,19 @@ export default function Sidebar({
             <Link
               href="/admin/dashboard"
               className="flex items-center gap-2.5 group"
-              title="Concept Admin Dashboard"
+              title="Lamon Game Admin Dashboard"
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-black text-base shadow-md shadow-blue-500/30 flex-shrink-0">
-                L
-              </div>
+              <img
+                src="/images/logo.png"
+                alt="Lamon Game"
+                className="w-8 h-8 rounded-lg object-contain bg-white/10 p-0.5 shadow-md flex-shrink-0"
+              />
               <div className={isCollapsed ? 'lg:hidden' : 'block'}>
-                <span className="text-xl font-black text-[#38bdf8] tracking-wider uppercase font-sans">
-                  CONCEPT
+                <span className="text-lg font-black text-[#38bdf8] tracking-wider uppercase font-sans">
+                  LAMON GAME
                 </span>
                 <span className="text-[10px] text-slate-400 font-semibold block -mt-1 tracking-widest uppercase">
-                  Lamon Analytics
+                  Admin Analytics
                 </span>
               </div>
             </Link>
@@ -175,26 +179,49 @@ export default function Sidebar({
                   {/* Sub-tabs under Dashboard (Expanded state) */}
                   {!isCollapsed && isDashboardOpen && (
                     <ul className="mt-1 ml-3.5 pl-3 border-l border-[#222144] space-y-1">
-                      {/* Sub-tab 1: Biểu Đồ Lưu Lượng */}
+                      {/* Sub-tab 1: Tỷ Lệ Tải & Thiết Bị */}
                       <li>
                         <button
-                          onClick={() => scrollToId('analyticsCharts', 'charts')}
-                          title="Biểu Đồ Lưu Lượng"
+                          onClick={() => scrollToId('conversionSection', 'conversion')}
+                          title="Tỷ Lệ Tải & Thiết Bị"
                           className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
-                            activeTab === 'charts'
+                            activeTab === 'conversion'
                               ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
                               : 'text-slate-300 hover:text-white hover:bg-white/5'
                           }`}
                         >
                           <div className="flex items-center gap-2.5 truncate">
-                            <BarChart3 className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">Biểu Đồ Lưu Lượng</span>
+                            <Download className="w-4 h-4 flex-shrink-0 text-sky-400" />
+                            <span className="truncate">Tỷ Lệ Tải & Thiết Bị</span>
                           </div>
-                          <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold flex-shrink-0">
+                            CR%
+                          </span>
                         </button>
                       </li>
 
-                      {/* Sub-tab 2: Bảng Dữ Liệu Chi Tiết */}
+                      {/* Sub-tab 2: Hiệu Quả 4 Game */}
+                      <li>
+                        <button
+                          onClick={() => scrollToId('gamePerformanceSection', 'games')}
+                          title="Hiệu Quả 4 Game"
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
+                            activeTab === 'games'
+                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <Trophy className="w-4 h-4 flex-shrink-0 text-amber-400" />
+                            <span className="truncate">Hiệu Quả 4 Game</span>
+                          </div>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold flex-shrink-0">
+                            TOP
+                          </span>
+                        </button>
+                      </li>
+
+                      {/* Sub-tab 3: Bảng Dữ Liệu Chi Tiết */}
                       <li>
                         <button
                           onClick={() => scrollToId('dataTableSection', 'table')}
@@ -208,25 +235,6 @@ export default function Sidebar({
                           <div className="flex items-center gap-2.5 truncate">
                             <Share2 className="w-4 h-4 flex-shrink-0" />
                             <span className="truncate">Bảng Dữ Liệu Chi Tiết</span>
-                          </div>
-                          <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
-                        </button>
-                      </li>
-
-                      {/* Sub-tab 3: Ngày Vàng Trong Tuần */}
-                      <li>
-                        <button
-                          onClick={() => scrollToId('dayOfWeekSection', 'dow')}
-                          title="Ngày Vàng Trong Tuần"
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
-                            activeTab === 'dow'
-                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
-                              : 'text-slate-300 hover:text-white hover:bg-white/5'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5 truncate">
-                            <Calendar className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">Ngày Vàng Trong Tuần</span>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
                         </button>
@@ -259,15 +267,28 @@ export default function Sidebar({
                     <ul className="mt-1 space-y-1">
                       <li>
                         <button
-                          onClick={() => scrollToId('analyticsCharts', 'charts')}
-                          title="Biểu Đồ Lưu Lượng"
+                          onClick={() => scrollToId('conversionSection', 'conversion')}
+                          title="Tỷ Lệ Tải & Thiết Bị"
                           className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
-                            activeTab === 'charts'
+                            activeTab === 'conversion'
                               ? 'bg-[#5969ff] text-white shadow-sm'
                               : 'text-slate-400 hover:text-white hover:bg-white/5'
                           }`}
                         >
-                          <BarChart3 className="w-4 h-4" />
+                          <Download className="w-4 h-4 text-sky-400" />
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => scrollToId('gamePerformanceSection', 'games')}
+                          title="Hiệu Quả 4 Game"
+                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
+                            activeTab === 'games'
+                              ? 'bg-[#5969ff] text-white shadow-sm'
+                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          <Trophy className="w-4 h-4 text-amber-400" />
                         </button>
                       </li>
                       <li>
@@ -281,19 +302,6 @@ export default function Sidebar({
                           }`}
                         >
                           <Share2 className="w-4 h-4" />
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          onClick={() => scrollToId('dayOfWeekSection', 'dow')}
-                          title="Ngày Vàng Trong Tuần"
-                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
-                            activeTab === 'dow'
-                              ? 'bg-[#5969ff] text-white shadow-sm'
-                              : 'text-slate-400 hover:text-white hover:bg-white/5'
-                          }`}
-                        >
-                          <Calendar className="w-4 h-4" />
                         </button>
                       </li>
                       <li>

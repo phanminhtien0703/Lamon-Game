@@ -83,26 +83,26 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
     : channelData[0];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-5 flex flex-col justify-between">
+    <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-3.5 sm:p-5 flex flex-col justify-between">
       {/* Header */}
       <div>
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-2.5 sm:pb-3 border-b border-slate-100">
           <div>
-            <h3 className="text-sm font-bold text-slate-800 tracking-tight">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-800 tracking-tight">
               Customer Acquisition
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
               Cơ cấu đóng góp giữa các nguồn traffic
             </p>
           </div>
-          <div className="p-2 rounded-lg bg-blue-50 text-[#5969ff]">
-            <PieChartIcon className="w-4 h-4" />
+          <div className="p-1.5 sm:p-2 rounded-lg bg-blue-50 text-[#5969ff]">
+            <PieChartIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </div>
         </div>
 
         {/* Donut Chart Visual & Active Highlight */}
-        <div className="flex items-center justify-center my-4 relative">
-          <svg width={180} height={180} className="overflow-visible">
+        <div className="flex items-center justify-center my-3 sm:my-4 relative">
+          <svg width={160} height={160} className="sm:w-[180px] sm:h-[180px] overflow-visible">
             {donutPaths.map((slice) => {
               if (!slice.pathData) return null;
               const isHovered = hoverKey === slice.key;
@@ -125,20 +125,20 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
 
           {/* Center Text in Donut */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+            <span className="text-[9px] sm:text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
               {activeChannel?.label || 'Tổng Clicks'}
             </span>
-            <span className="text-lg font-extrabold text-slate-800">
+            <span className="text-base sm:text-lg font-extrabold text-slate-800">
               {activeChannel?.clicks.toLocaleString() || grandTotal.toLocaleString()}
             </span>
-            <span className="text-[10px] font-bold text-[#5969ff] bg-blue-50 px-1.5 py-0.2 rounded-full">
+            <span className="text-[9px] sm:text-[10px] font-bold text-[#5969ff] bg-blue-50 px-1.5 py-0.2 rounded-full">
               {activeChannel ? `${activeChannel.percent}%` : '100%'}
             </span>
           </div>
         </div>
 
         {/* Channel Breakdown List with Progress Bars */}
-        <div className="space-y-2.5 mt-2">
+        <div className="space-y-1.5 sm:space-y-2.5 mt-1 sm:mt-2">
           {channelData.map((ch) => {
             const isHovered = hoverKey === ch.key;
 
@@ -147,30 +147,30 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
                 key={ch.key}
                 onMouseEnter={() => setHoverKey(ch.key)}
                 onMouseLeave={() => setHoverKey(null)}
-                className={`p-2 rounded-lg transition cursor-pointer ${
+                className={`p-1.5 sm:p-2 rounded-lg transition cursor-pointer ${
                   isHovered ? 'bg-slate-50 ring-1 ring-slate-200' : 'hover:bg-slate-50/70'
                 }`}
               >
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between text-[11px] sm:text-xs mb-1">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     <span
-                      className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                      className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full flex-shrink-0"
                       style={{ backgroundColor: ch.color }}
                     />
                     <span className="font-semibold text-slate-700">{ch.label}</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     <span className="font-bold text-slate-800">
                       {ch.clicks.toLocaleString()}
                     </span>
-                    <span className="text-[11px] font-semibold text-slate-500 w-11 text-right">
+                    <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 w-10 sm:w-11 text-right">
                       {ch.percent}%
                     </span>
                   </div>
                 </div>
 
                 {/* Mini Progress Bar */}
-                <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full h-1 sm:h-1.5 bg-slate-100 rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{
@@ -186,7 +186,7 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
       </div>
 
       {/* Footer Meta */}
-      <div className="pt-3 border-t border-slate-100 text-center text-xs text-slate-400 mt-3">
+      <div className="pt-2.5 sm:pt-3 border-t border-slate-100 text-center text-[11px] sm:text-xs text-slate-400 mt-2.5 sm:mt-3">
         Tổng cộng <strong className="text-slate-700">{grandTotal.toLocaleString()} clicks</strong> trong chu kỳ được chọn
       </div>
     </div>
