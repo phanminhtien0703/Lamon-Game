@@ -20,40 +20,40 @@
             name: 'Thần Ma Giáng Thế',
             lang: 'vi',
             title: 'Game Đang Được Tải Về!',
-            desc: 'Tệp cài đặt đang được tải về thiết bị của bạn.<br>Trong lúc chờ đợi, bạn có muốn <strong>nhận Giftcode tân thủ</strong> tại Fanpage không?',
-            claimText: 'Nhận Code Tại Fanpage',
-            dismissText: 'Đóng',
-            claimUrl: 'https://m.me/lamongame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Th%E1%BA%A7n%20Ma%20Gi%C3%A1ng%20Th%E1%BA%BF',
+            desc: 'Tệp cài đặt đang được tải về thiết bị của bạn.<br>Trong lúc chờ đợi, bạn có muốn <strong>nhận Giftcode tân thủ</strong> không?',
+            fanpageText: 'Fanpage',
+            messengerText: 'Messenger',
+            messengerUrl: 'https://m.me/lamongame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Th%E1%BA%A7n%20Ma%20Gi%C3%A1ng%20Th%E1%BA%BF',
             fanpageUrl: 'https://www.facebook.com/lamongame/'
         },
         'nhat-kiem-phu-sinh': {
             name: 'Nhất Kiếm Phù Sinh',
             lang: 'vi',
             title: 'Game Đang Được Tải Về!',
-            desc: 'Tệp cài đặt đang được tải về thiết bị của bạn.<br>Trong lúc chờ đợi, bạn có muốn <strong>nhận Giftcode tân thủ</strong> tại Fanpage không?',
-            claimText: 'Nhận Code Tại Fanpage',
-            dismissText: 'Đóng',
-            claimUrl: 'https://m.me/NhatKiemPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20Ki%E1%BA%BFm%20Ph%C3%B9%20Sinh',
+            desc: 'Tệp cài đặt đang được tải về thiết bị của bạn.<br>Trong lúc chờ đợi, bạn có muốn <strong>nhận Giftcode tân thủ</strong> không?',
+            fanpageText: 'Fanpage',
+            messengerText: 'Messenger',
+            messengerUrl: 'https://m.me/NhatKiemPhuSinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Nh%E1%BA%A5t%20Ki%E1%BA%BFm%20Ph%C3%B9%20Sinh',
             fanpageUrl: 'https://www.facebook.com/NhatKiemPhuSinh.LamonGame/'
         },
         'chien-binh-thuc-tinh': {
             name: 'Chiến Binh Thức Tỉnh',
             lang: 'vi',
             title: 'Game Đang Được Tải Về!',
-            desc: 'Tệp cài đặt đang được tải về thiết bị của bạn.<br>Trong lúc chờ đợi, bạn có muốn <strong>nhận Giftcode tân thủ</strong> tại Fanpage không?',
-            claimText: 'Nhận Code Tại Fanpage',
-            dismissText: 'Đóng',
-            claimUrl: 'https://m.me/ChienBinhThucTinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Chi%E1%BA%BFn%20Binh%20Th%E1%BB%A9c%20T%E1%BB%89nh',
+            desc: 'Tệp cài đặt đang được tải về thiết bị của bạn.<br>Trong lúc chờ đợi, bạn có muốn <strong>nhận Giftcode tân thủ</strong> không?',
+            fanpageText: 'Fanpage',
+            messengerText: 'Messenger',
+            messengerUrl: 'https://m.me/ChienBinhThucTinh.LamonGame?text=M%C3%ACnh%20mu%E1%BB%91n%20nh%E1%BA%ADn%20code%20game%20Chi%E1%BA%BFn%20Binh%20Th%E1%BB%A9c%20T%E1%BB%89nh',
             fanpageUrl: 'https://www.facebook.com/ChienBinhThucTinh.LamonGame/'
         },
         'era-of-warfare': {
             name: 'Era of Warfare',
             lang: 'en',
             title: 'Game is Downloading!',
-            desc: 'The game installer is downloading to your device.<br>While waiting, would you like to receive an exclusive <strong>Starter Giftcode</strong> on our Fanpage?',
-            claimText: 'Claim Code on Fanpage',
-            dismissText: 'Close',
-            claimUrl: 'https://m.me/Era.of.Warfare.Private?text=I%20want%20to%20receive%20code%20for%20Era%20of%20Warfare',
+            desc: 'The game installer is downloading to your device.<br>While waiting, would you like to receive an exclusive <strong>Starter Giftcode</strong>?',
+            fanpageText: 'Fanpage',
+            messengerText: 'Messenger',
+            messengerUrl: 'https://m.me/Era.of.Warfare.Private?text=I%20want%20to%20receive%20code%20for%20Era%20of%20Warfare',
             fanpageUrl: 'https://www.facebook.com/Era.of.Warfare.Private'
         }
     };
@@ -267,35 +267,37 @@
             transition: all 0.22s ease;
             box-sizing: border-box;
             line-height: 1.25;
+            flex: 1;
         }
 
-        .dl-notice-btn-claim {
-            flex: 1.35;
+        .dl-notice-btn-fanpage {
+            background: linear-gradient(135deg, rgba(24, 119, 242, 0.25) 0%, rgba(14, 165, 233, 0.18) 100%);
+            color: #ffffff !important;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }
+
+        .dl-notice-btn-fanpage:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(24, 119, 242, 0.4) 0%, rgba(14, 165, 233, 0.3) 100%);
+            border-color: #38bdf8;
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+            color: #ffffff !important;
+        }
+
+        .dl-notice-btn-messenger {
             background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
             color: #ffffff !important;
             box-shadow: 0 4px 18px rgba(56, 189, 248, 0.42);
             border: 1px solid rgba(186, 230, 253, 0.4);
         }
 
-        .dl-notice-btn-claim:hover {
+        .dl-notice-btn-messenger:hover {
             transform: translateY(-2px);
             background: linear-gradient(135deg, #7dd3fc 0%, #0369a1 100%);
             box-shadow: 0 8px 26px rgba(56, 189, 248, 0.6);
             filter: brightness(1.06);
             color: #ffffff !important;
-        }
-
-        .dl-notice-btn-dismiss {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.08);
-            color: #e2e8f0 !important;
-            border: 1px solid rgba(255, 255, 255, 0.16);
-        }
-
-        .dl-notice-btn-dismiss:hover {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffffff !important;
-            transform: translateY(-1px);
         }
 
         @media (max-width: 520px) {
@@ -311,13 +313,12 @@
                 margin-bottom: 20px;
             }
             .dl-notice-actions {
-                flex-direction: column-reverse;
+                flex-direction: row;
                 gap: 10px;
             }
             .dl-notice-btn {
-                width: 100%;
-                padding: 12px 16px;
-                font-size: 14px;
+                padding: 12px 14px;
+                font-size: 13.5px;
             }
         }
     `;
@@ -363,12 +364,17 @@
                 <p id="dlNoticeDesc" class="dl-notice-desc">${cfg.desc}</p>
 
                 <div class="dl-notice-actions">
-                    <button type="button" id="dlNoticeDismissBtn" class="dl-notice-btn dl-notice-btn-dismiss">
-                        ${cfg.dismissText}
-                    </button>
-                    <a id="dlNoticeClaimBtn" href="${cfg.claimUrl}" target="_blank" rel="noopener noreferrer" class="dl-notice-btn dl-notice-btn-claim" data-track="download-modal-claim-giftcode">
-                        <span>🎁</span>
-                        <span id="dlNoticeClaimText">${cfg.claimText}</span>
+                    <a id="dlNoticeFanpageBtn" href="${cfg.fanpageUrl}" target="_blank" rel="noopener noreferrer" class="dl-notice-btn dl-notice-btn-fanpage" data-track="download-modal-fanpage">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        <span id="dlNoticeFanpageText">${cfg.fanpageText}</span>
+                    </a>
+                    <a id="dlNoticeMessengerBtn" href="${cfg.messengerUrl}" target="_blank" rel="noopener noreferrer" class="dl-notice-btn dl-notice-btn-messenger" data-track="download-modal-messenger">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.093.303 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111C24 4.974 18.627 0 12 0zm1.191 14.963l-3.056-3.26-5.963 3.26 6.559-6.963 3.13 3.26 5.89-3.26-6.56 6.963z"/>
+                        </svg>
+                        <span id="dlNoticeMessengerText">${cfg.messengerText}</span>
                     </a>
                 </div>
             </div>
@@ -378,18 +384,20 @@
 
         // Gắn sự kiện đóng modal
         var closeBtn = document.getElementById('dlNoticeCloseBtn');
-        var dismissBtn = document.getElementById('dlNoticeDismissBtn');
-        var claimBtn = document.getElementById('dlNoticeClaimBtn');
+        var fanpageBtn = document.getElementById('dlNoticeFanpageBtn');
+        var messengerBtn = document.getElementById('dlNoticeMessengerBtn');
 
         if (closeBtn) {
             closeBtn.addEventListener('click', hideDownloadNotice);
         }
-        if (dismissBtn) {
-            dismissBtn.addEventListener('click', hideDownloadNotice);
+        if (fanpageBtn) {
+            fanpageBtn.addEventListener('click', function () {
+                setTimeout(hideDownloadNotice, 350);
+            });
         }
-        if (claimBtn) {
-            claimBtn.addEventListener('click', function () {
-                setTimeout(hideDownloadNotice, 400);
+        if (messengerBtn) {
+            messengerBtn.addEventListener('click', function () {
+                setTimeout(hideDownloadNotice, 350);
             });
         }
 
@@ -412,15 +420,17 @@
 
         var titleEl = document.getElementById('dlNoticeTitle');
         var descEl = document.getElementById('dlNoticeDesc');
-        var claimTextEl = document.getElementById('dlNoticeClaimText');
-        var claimBtn = document.getElementById('dlNoticeClaimBtn');
-        var dismissBtn = document.getElementById('dlNoticeDismissBtn');
+        var fanpageBtn = document.getElementById('dlNoticeFanpageBtn');
+        var messengerBtn = document.getElementById('dlNoticeMessengerBtn');
+        var fanpageTextEl = document.getElementById('dlNoticeFanpageText');
+        var messengerTextEl = document.getElementById('dlNoticeMessengerText');
 
         if (titleEl) titleEl.innerText = cfg.title;
         if (descEl) descEl.innerHTML = cfg.desc;
-        if (claimTextEl) claimTextEl.innerText = cfg.claimText;
-        if (dismissBtn) dismissBtn.innerText = cfg.dismissText;
-        if (claimBtn) claimBtn.href = cfg.claimUrl;
+        if (fanpageBtn) fanpageBtn.href = cfg.fanpageUrl;
+        if (messengerBtn) messengerBtn.href = cfg.messengerUrl;
+        if (fanpageTextEl) fanpageTextEl.innerText = cfg.fanpageText;
+        if (messengerTextEl) messengerTextEl.innerText = cfg.messengerText;
 
         // Đóng các modal tải nền tảng trước đó (nếu đang mở) để giao diện thoáng sạch
         var existingModals = document.querySelectorAll('#downloadModal, .tmgt-modal-backdrop.open, .psm-modal-backdrop.open, .tbtt-modal-backdrop.open');
@@ -453,8 +463,8 @@
             var track = (el.getAttribute('data-track') || '').toLowerCase();
             var className = (el.className || '').toString().toLowerCase();
 
-            // Bỏ qua nút nhận code trong chính modal này
-            if (el.id === 'dlNoticeClaimBtn' || el.id === 'dlNoticeDismissBtn' || el.id === 'dlNoticeCloseBtn') {
+            // Bỏ qua các nút trong chính modal này
+            if (el.id === 'dlNoticeFanpageBtn' || el.id === 'dlNoticeMessengerBtn' || el.id === 'dlNoticeCloseBtn') {
                 return;
             }
 
