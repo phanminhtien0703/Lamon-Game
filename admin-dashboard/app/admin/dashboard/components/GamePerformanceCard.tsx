@@ -6,9 +6,7 @@ import {
   ExternalLink,
   Smartphone,
   Apple,
-  Eye,
   Gamepad2,
-  Download,
 } from 'lucide-react';
 import { GroupedTrackingItem } from '../types';
 import { calculateConversionAnalysis } from '../utils/analytics';
@@ -22,9 +20,6 @@ interface GameItem {
   id: string;
   name: string;
   genre: string;
-  badge: string;
-  badgeBg: string;
-  badgeText: string;
   logo: string;
   fallbackLogo: string;
   webUrl: string;
@@ -43,9 +38,6 @@ const GAME_DEFINITIONS: GameItem[] = [
     id: 'than-ma-giang-the',
     name: 'Thần Ma Giáng Thế',
     genre: 'Tiên Hiệp MMORPG',
-    badge: 'HOT NHẤT 🔥',
-    badgeBg: 'bg-rose-50 border-rose-200',
-    badgeText: 'text-rose-600',
     logo: '/images/games/tmgt-logo.jpg',
     fallbackLogo: 'https://lamongame.com/images/tmgt/tmgt-logo.jpg',
     webUrl: 'https://lamongame.com/games/than-ma-giang-the/',
@@ -62,9 +54,6 @@ const GAME_DEFINITIONS: GameItem[] = [
     id: 'nhat-kiem-phu-sinh',
     name: 'Nhất Kiếm Phù Sinh',
     genre: 'Kiếm Hiệp Tình Duyên 3D',
-    badge: 'ĐUA TOP ⚡',
-    badgeBg: 'bg-indigo-50 border-indigo-200',
-    badgeText: 'text-indigo-600',
     logo: '/images/games/psm-logo.jpg',
     fallbackLogo: 'https://lamongame.com/images/psm/psm-logo.jpg',
     webUrl: 'https://lamongame.com/games/nhat-kiem-phu-sinh/',
@@ -81,9 +70,6 @@ const GAME_DEFINITIONS: GameItem[] = [
     id: 'chien-binh-thuc-tinh',
     name: 'Chiến Binh Thức Tỉnh',
     genre: 'Đấu Tướng Chiến Thuật',
-    badge: 'TĂNG TRƯỞNG 🚀',
-    badgeBg: 'bg-emerald-50 border-emerald-200',
-    badgeText: 'text-emerald-700',
     logo: '/images/games/tbtt-logo.jpg',
     fallbackLogo: 'https://lamongame.com/images/tbtt/tbtt-logo.jpg',
     webUrl: 'https://lamongame.com/games/chien-binh-thuc-tinh/',
@@ -100,9 +86,6 @@ const GAME_DEFINITIONS: GameItem[] = [
     id: 'era-of-warfare',
     name: 'Era of Warfare',
     genre: 'Chiến Lược Quốc Tế SLG',
-    badge: 'GLOBAL 🌍',
-    badgeBg: 'bg-sky-50 border-sky-200',
-    badgeText: 'text-[#0284c7]',
     logo: '/images/games/era-logo.jpg',
     fallbackLogo: 'https://lamongame.com/images/upcoming/upcoming-logo.jpg',
     webUrl: 'https://lamongame.com/games/era-of-warfare/',
@@ -186,27 +169,27 @@ export default function GamePerformanceCard({
   const maxTraffic = Math.max(...gamesData.map((g) => g.traffic), 1);
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs" id="gamePerformanceSection">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+    <div className="bg-white rounded-xl border border-slate-200/90 shadow-xs overflow-hidden" id="gamePerformanceSection">
+      {/* Header Toolbar */}
+      <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">
             <Trophy className="w-4 h-4 text-[#5969ff]" />
           </div>
           <div>
             <h3 className="text-sm sm:text-base font-bold text-slate-800 tracking-tight flex items-center gap-2">
-              <span>Bảng Xếp Hạng & Hiệu Quả 4 Game Lamon</span>
+              <span>Hiệu Quả 4 Game Lamon</span>
               <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#5969ff] border border-blue-200">
-                4 Game Hoạt Động
+                4 Game
               </span>
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              So sánh lượng truy cập, số lượt tải game và tương tác nhận Giftcode giữa các tựa game
+              So sánh lượng truy cập, số lượt tải game và tương tác nhận Giftcode
             </p>
           </div>
         </div>
 
-        {/* Sort Filter Buttons */}
+        {/* Sort Controls */}
         <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200 self-start sm:self-auto text-xs">
           <span className="text-[11px] text-slate-400 font-semibold px-2 hidden md:inline">Xếp theo:</span>
           <button
@@ -252,180 +235,184 @@ export default function GamePerformanceCard({
         </div>
       </div>
 
-      {/* Game Cards List */}
-      <div className="divide-y divide-slate-100 mt-2">
-        {gamesData.map((game, idx) => {
-          const rank = idx + 1;
-          const trafficPct = Math.round((game.traffic / maxTraffic) * 100);
+      {/* Modern Tabular Table for Perfect Alignment */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse min-w-[760px]">
+          <thead>
+            <tr className="bg-[#f8fafc] border-b border-slate-200/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <th className="py-3 px-4 sm:px-5 w-[300px]">Thứ Hạng & Game</th>
+              <th className="py-3 px-4 w-[200px]">Lưu Lượng (Traffic)</th>
+              <th className="py-3 px-4 w-[140px]">Lượt Tải (CR%)</th>
+              <th className="py-3 px-4 w-[160px]">Thiết Bị (APK / iOS)</th>
+              <th className="py-3 px-4 w-[140px]">Nhận Code</th>
+              <th className="py-3 px-4 sm:px-5 w-[160px] text-right">Liên Kết Trực Tiếp</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 text-sm">
+            {gamesData.map((game, idx) => {
+              const rank = idx + 1;
+              const trafficPct = Math.round((game.traffic / maxTraffic) * 100);
 
-          return (
-            <div
-              key={game.id}
-              className="py-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 hover:bg-slate-50/60 p-2.5 sm:p-3.5 rounded-xl transition"
-            >
-              {/* Left Column: Game Identity & Real Logo */}
-              <div className="flex items-center gap-3 min-w-[280px] lg:w-[35%]">
-                {/* Rank Badge */}
-                <div
-                  className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black flex-shrink-0 shadow-2xs ${
-                    rank === 1
-                      ? 'bg-amber-400 text-slate-950 font-black'
-                      : rank === 2
-                      ? 'bg-slate-300 text-slate-800'
-                      : rank === 3
-                      ? 'bg-amber-700/80 text-white'
-                      : 'bg-slate-100 text-slate-500'
-                  }`}
+              return (
+                <tr
+                  key={game.id}
+                  className="hover:bg-slate-50/70 transition-colors"
                 >
-                  #{rank}
-                </div>
+                  {/* Column 1: Rank & Game Identity */}
+                  <td className="py-3.5 px-4 sm:px-5">
+                    <div className="flex items-center gap-3">
+                      {/* Rank Number */}
+                      <span
+                        className={`w-6 h-6 rounded-md flex items-center justify-center text-xs font-black flex-shrink-0 ${
+                          rank === 1
+                            ? 'bg-amber-400 text-slate-950 font-black shadow-2xs'
+                            : rank === 2
+                            ? 'bg-slate-200 text-slate-700'
+                            : rank === 3
+                            ? 'bg-amber-700/80 text-white'
+                            : 'bg-slate-100 text-slate-400'
+                        }`}
+                      >
+                        #{rank}
+                      </span>
 
-                {/* Game Real Logo Image */}
-                <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200/90 shadow-2xs flex-shrink-0 bg-slate-100">
-                  <img
-                    src={game.logo}
-                    alt={game.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = game.fallbackLogo;
-                    }}
-                  />
-                </div>
+                      {/* Game Real Logo */}
+                      <div className="w-10 h-10 rounded-lg overflow-hidden border border-slate-200 shadow-2xs flex-shrink-0 bg-slate-100">
+                        <img
+                          src={game.logo}
+                          alt={game.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = game.fallbackLogo;
+                          }}
+                        />
+                      </div>
 
-                {/* Name & Genre & Direct Action Buttons */}
-                <div className="truncate">
-                  <div className="flex items-center gap-2">
-                    <h4 className="text-sm font-black text-slate-900 truncate tracking-tight">
-                      {game.name}
-                    </h4>
-                    <span
-                      className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded border ${game.badgeBg} ${game.badgeText} flex-shrink-0`}
-                    >
-                      {game.badge}
-                    </span>
-                  </div>
-
-                  {/* Direct Action Links (Web, APK, iOS) */}
-                  <div className="flex flex-wrap items-center gap-1.5 mt-1 text-xs">
-                    <span className="text-slate-400 font-medium hidden sm:inline mr-1">{game.genre}</span>
-
-                    {/* Direct Web link */}
-                    <a
-                      href={game.webUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0284c7] hover:text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200/70 hover:bg-sky-100 transition cursor-pointer"
-                      title="Mở Landing Page game trực tiếp trên web"
-                    >
-                      <span>Web</span>
-                      <ExternalLink className="w-2.5 h-2.5" />
-                    </a>
-
-                    {/* Direct APK Download link */}
-                    <a
-                      href={game.apkUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/70 hover:bg-emerald-100 transition cursor-pointer"
-                      title="Tải trực tiếp file APK cho Android"
-                    >
-                      <Smartphone className="w-2.5 h-2.5" />
-                      <span>Tải APK</span>
-                    </a>
-
-                    {/* Direct iOS Download link */}
-                    <a
-                      href={game.iosUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-700 hover:text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200/70 hover:bg-indigo-100 transition cursor-pointer"
-                      title="Tải trực tiếp bản iOS"
-                    >
-                      <Apple className="w-2.5 h-2.5" />
-                      <span>iOS</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* Middle Column: Traffic & Download Progress */}
-              <div className="flex-1 min-w-[180px] lg:px-4">
-                <div className="flex items-center justify-between text-xs mb-1.5">
-                  <span className="text-slate-500 font-semibold flex items-center gap-1.5">
-                    <Eye className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Lượt vào web: <strong className="text-slate-800">{game.traffic.toLocaleString()}</strong></span>
-                  </span>
-                  <span className="text-[11px] font-bold text-slate-400">
-                    Chiếm {Math.round(game.trafficShare * 100)}% traffic
-                  </span>
-                </div>
-                {/* Horizontal Progress */}
-                <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-500"
-                    style={{ width: `${trafficPct}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Right Column: 3 Key Metrics (Downloads, Device split, Messenger) */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:w-[38%] text-right sm:text-left bg-white p-2.5 rounded-xl border border-slate-100 shadow-2xs">
-                {/* Downloads */}
-                <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
-                    Lượt Tải
-                  </span>
-                  <div className="text-base sm:text-lg font-black text-emerald-600 tracking-tight">
-                    {game.downloads.toLocaleString()}
-                  </div>
-                  <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
-                    {game.cr}% CR
-                  </span>
-                </div>
-
-                {/* Device Split (Android vs iOS) */}
-                <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
-                    Thiết Bị
-                  </span>
-                  <div className="text-xs font-semibold text-slate-700 space-y-0.5 mt-1">
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-slate-400">APK:</span>
-                      <strong className="text-emerald-700">{game.androidDl.toLocaleString()}</strong>
+                      {/* Name & Genre (Clean without clutter badges) */}
+                      <div className="truncate">
+                        <div className="font-bold text-slate-900 text-sm tracking-tight truncate">
+                          {game.name}
+                        </div>
+                        <div className="text-xs text-slate-400 mt-0.5 font-normal">
+                          {game.genre}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-slate-400">iOS:</span>
-                      <strong className="text-indigo-700">{game.iosDl.toLocaleString()}</strong>
-                    </div>
-                  </div>
-                </div>
+                  </td>
 
-                {/* Messenger Code Claim */}
-                <div>
-                  <span className="text-[10px] uppercase font-bold text-[#0284c7] block tracking-wider">
-                    Nhận Code
-                  </span>
-                  <div className="text-base sm:text-lg font-black text-[#0284c7] tracking-tight">
-                    {game.messengerClicks.toLocaleString()}
-                  </div>
-                  <span className="text-[10px] text-slate-400">
-                    qua Messenger
-                  </span>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+                  {/* Column 2: Traffic with Progress Bar */}
+                  <td className="py-3.5 px-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <strong className="text-slate-800 font-bold text-sm">
+                          {game.traffic.toLocaleString()}
+                        </strong>
+                        <span className="text-slate-400 text-[11px]">
+                          ({Math.round(game.trafficShare * 100)}%)
+                        </span>
+                      </div>
+                      <div className="w-28 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+                          style={{ width: `${trafficPct}%` }}
+                        />
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Column 3: Downloads & CR */}
+                  <td className="py-3.5 px-4">
+                    <div>
+                      <div className="text-sm font-black text-emerald-600">
+                        {game.downloads.toLocaleString()}
+                      </div>
+                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block mt-0.5">
+                        {game.cr}% CR
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Column 4: Platform Split */}
+                  <td className="py-3.5 px-4 text-xs font-semibold text-slate-600">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1 text-[11px]">
+                        <span className="text-slate-400 w-8">APK:</span>
+                        <strong className="text-emerald-700 font-bold">{game.androidDl.toLocaleString()}</strong>
+                      </div>
+                      <div className="flex items-center gap-1 text-[11px]">
+                        <span className="text-slate-400 w-8">iOS:</span>
+                        <strong className="text-indigo-700 font-bold">{game.iosDl.toLocaleString()}</strong>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Column 5: Messenger Code Claims */}
+                  <td className="py-3.5 px-4">
+                    <div>
+                      <div className="text-sm font-black text-[#0284c7]">
+                        {game.messengerClicks.toLocaleString()}
+                      </div>
+                      <span className="text-[11px] text-slate-400 block mt-0.5">
+                        qua Messenger
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Column 6: Direct Action Links (Clean Pill Buttons) */}
+                  <td className="py-3.5 px-4 sm:px-5 text-right">
+                    <div className="inline-flex items-center gap-1.5 justify-end">
+                      {/* Web Link */}
+                      <a
+                        href={game.webUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2 py-1 rounded-md text-[11px] font-bold text-slate-700 hover:text-sky-700 bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 transition shadow-2xs inline-flex items-center gap-1 cursor-pointer"
+                        title="Mở Landing Page game trực tiếp trên web"
+                      >
+                        <span>Web</span>
+                        <ExternalLink className="w-2.5 h-2.5" />
+                      </a>
+
+                      {/* APK Link */}
+                      <a
+                        href={game.apkUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2 py-1 rounded-md text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50/70 hover:bg-emerald-100 border border-emerald-200 transition shadow-2xs inline-flex items-center gap-1 cursor-pointer"
+                        title="Tải trực tiếp file APK cho Android"
+                      >
+                        <Smartphone className="w-2.5 h-2.5" />
+                        <span>APK</span>
+                      </a>
+
+                      {/* iOS Link */}
+                      <a
+                        href={game.iosUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2 py-1 rounded-md text-[11px] font-bold text-indigo-700 hover:text-indigo-800 bg-indigo-50/70 hover:bg-indigo-100 border border-indigo-200 transition shadow-2xs inline-flex items-center gap-1 cursor-pointer"
+                        title="Tải trực tiếp bản iOS"
+                      >
+                        <Apple className="w-2.5 h-2.5" />
+                        <span>iOS</span>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
 
       {/* Footer Info */}
-      <div className="mt-4 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400">
+      <div className="px-4 sm:px-5 py-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400 bg-[#f8fafc]/50">
         <div className="flex items-center gap-1.5">
-          <Gamepad2 className="w-3.5 h-3.5 text-slate-500" />
-          <span>Bấm các nút Web, Tải APK hoặc iOS để mở hoặc tải trực tiếp game tương ứng.</span>
+          <Gamepad2 className="w-3.5 h-3.5 text-slate-400" />
+          <span>Số liệu phân bổ tự động theo khoảng ngày được lọc. Bấm các nút Web, APK hoặc iOS để tải hoặc mở trang game trực tiếp.</span>
         </div>
         <div className="text-slate-500 font-medium text-[11px]">
-          Top game đóng góp nhiều nhất: <strong className="text-slate-800">{gamesData[0]?.name}</strong>
+          Game dẫn đầu: <strong className="text-slate-800 font-bold">{gamesData[0]?.name}</strong>
         </div>
       </div>
     </div>
