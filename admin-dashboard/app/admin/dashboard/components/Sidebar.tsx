@@ -81,17 +81,19 @@ export default function Sidebar({
             <Link
               href="/admin/dashboard"
               className="flex items-center gap-2.5 group"
-              title="Concept Admin Dashboard"
+              title="Lamon Game Admin Dashboard"
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-black text-base shadow-md shadow-blue-500/30 flex-shrink-0">
-                L
-              </div>
+              <img
+                src="/images/logo.png"
+                alt="Lamon Game"
+                className="w-8 h-8 rounded-lg object-contain bg-white/10 p-0.5 shadow-md flex-shrink-0"
+              />
               <div className={isCollapsed ? 'lg:hidden' : 'block'}>
-                <span className="text-xl font-black text-[#38bdf8] tracking-wider uppercase font-sans">
-                  CONCEPT
+                <span className="text-lg font-black text-[#38bdf8] tracking-wider uppercase font-sans">
+                  LAMON GAME
                 </span>
                 <span className="text-[10px] text-slate-400 font-semibold block -mt-1 tracking-widest uppercase">
-                  Lamon Analytics
+                  Admin Analytics
                 </span>
               </div>
             </Link>

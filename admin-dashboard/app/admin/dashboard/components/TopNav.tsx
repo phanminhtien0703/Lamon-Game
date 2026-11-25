@@ -88,12 +88,14 @@ export default function TopNav({
         )}
 
         {/* Mobile Brand Title */}
-        <div className="lg:hidden flex items-center gap-1.5">
+        <div className="lg:hidden flex items-center gap-2">
+          <img
+            src="/images/logo.png"
+            alt="Lamon Game"
+            className="w-7 h-7 rounded-md object-contain"
+          />
           <span className="text-base font-black text-[#38bdf8] uppercase tracking-wider font-sans">
-            CONCEPT
-          </span>
-          <span className="text-[10px] text-slate-400 font-bold uppercase">
-            Admin
+            LAMON GAME
           </span>
         </div>
 
