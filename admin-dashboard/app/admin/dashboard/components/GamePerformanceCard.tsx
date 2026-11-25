@@ -6,17 +6,9 @@ import {
   ExternalLink,
   Smartphone,
   Apple,
-  Monitor,
-  MessageCircle,
   Eye,
-  Download,
-  Flame,
-  ArrowUpDown,
-  Sparkles,
-  Shield,
-  Swords,
-  Globe,
   Gamepad2,
+  Download,
 } from 'lucide-react';
 import { GroupedTrackingItem } from '../types';
 import { calculateConversionAnalysis } from '../utils/analytics';
@@ -33,15 +25,17 @@ interface GameItem {
   badge: string;
   badgeBg: string;
   badgeText: string;
-  url: string;
-  iconBg: string;
-  iconColor: string;
-  trafficShare: number; // e.g. 0.425
-  downloadCR: number; // e.g. 39.5
-  androidRatio: number; // e.g. 0.58
-  iosRatio: number; // e.g. 0.26
-  pcRatio: number; // e.g. 0.16
-  messengerRatio: number; // e.g. 0.36
+  logo: string;
+  fallbackLogo: string;
+  webUrl: string;
+  apkUrl: string;
+  iosUrl: string;
+  trafficShare: number;
+  downloadCR: number;
+  androidRatio: number;
+  iosRatio: number;
+  pcRatio: number;
+  messengerRatio: number;
 }
 
 const GAME_DEFINITIONS: GameItem[] = [
@@ -52,9 +46,11 @@ const GAME_DEFINITIONS: GameItem[] = [
     badge: 'HOT NHẤT 🔥',
     badgeBg: 'bg-rose-50 border-rose-200',
     badgeText: 'text-rose-600',
-    url: '/games/than-ma-giang-the/',
-    iconBg: 'bg-gradient-to-br from-rose-500 to-amber-500',
-    iconColor: 'text-white',
+    logo: '/images/games/tmgt-logo.jpg',
+    fallbackLogo: 'https://lamongame.com/images/tmgt/tmgt-logo.jpg',
+    webUrl: 'https://lamongame.com/games/than-ma-giang-the/',
+    apkUrl: 'https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4/THANMAGIANGTHEYL784Z4_EdIf1XkalZCqknYO0sCRwA.apk',
+    iosUrl: 'https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/C0mv.html',
     trafficShare: 0.425,
     downloadCR: 39.5,
     androidRatio: 0.58,
@@ -69,9 +65,11 @@ const GAME_DEFINITIONS: GameItem[] = [
     badge: 'ĐUA TOP ⚡',
     badgeBg: 'bg-indigo-50 border-indigo-200',
     badgeText: 'text-indigo-600',
-    url: '/games/nhat-kiem-phu-sinh/',
-    iconBg: 'bg-gradient-to-br from-indigo-500 to-sky-500',
-    iconColor: 'text-white',
+    logo: '/images/games/psm-logo.jpg',
+    fallbackLogo: 'https://lamongame.com/images/psm/psm-logo.jpg',
+    webUrl: 'https://lamongame.com/games/nhat-kiem-phu-sinh/',
+    apkUrl: 'https://down.skeideng.com/apk/mnghoalc/93e8aaac362ce4345501c09f8ecd5853.apk',
+    iosUrl: 'https://apps.apple.com/vn/app/lăng-tiêu-chí/id6752824409',
     trafficShare: 0.278,
     downloadCR: 38.2,
     androidRatio: 0.55,
@@ -86,9 +84,11 @@ const GAME_DEFINITIONS: GameItem[] = [
     badge: 'TĂNG TRƯỞNG 🚀',
     badgeBg: 'bg-emerald-50 border-emerald-200',
     badgeText: 'text-emerald-700',
-    url: '/games/chien-binh-thuc-tinh/',
-    iconBg: 'bg-gradient-to-br from-emerald-500 to-teal-500',
-    iconColor: 'text-white',
+    logo: '/images/games/tbtt-logo.jpg',
+    fallbackLogo: 'https://lamongame.com/images/tbtt/tbtt-logo.jpg',
+    webUrl: 'https://lamongame.com/games/chien-binh-thuc-tinh/',
+    apkUrl: 'https://down.skeideng.com/apk/huynolca/97c84d9070b5f295866f7221600800f4.apk',
+    iosUrl: 'https://apps.apple.com/vn/app/chiến-địa-hư-vô/id6805303103',
     trafficShare: 0.182,
     downloadCR: 37.6,
     androidRatio: 0.62,
@@ -103,9 +103,11 @@ const GAME_DEFINITIONS: GameItem[] = [
     badge: 'GLOBAL 🌍',
     badgeBg: 'bg-sky-50 border-sky-200',
     badgeText: 'text-[#0284c7]',
-    url: '/games/era-of-warfare/',
-    iconBg: 'bg-gradient-to-br from-sky-500 to-blue-600',
-    iconColor: 'text-white',
+    logo: '/images/games/era-logo.jpg',
+    fallbackLogo: 'https://lamongame.com/images/upcoming/upcoming-logo.jpg',
+    webUrl: 'https://lamongame.com/games/era-of-warfare/',
+    apkUrl: 'https://cos.lejunwl.com/youlong/lejunwl/784yx/THANMAGIANGTHEYL784Z4/THANMAGIANGTHEYL784Z4_EdIf1XkalZCqknYO0sCRwA.apk',
+    iosUrl: 'https://new.yxtgym.com/y92.0l110/EdIf1XkalZCqknYO0sCRwA/C0mv.html',
     trafficShare: 0.115,
     downloadCR: 33.2,
     androidRatio: 0.48,
@@ -261,8 +263,8 @@ export default function GamePerformanceCard({
               key={game.id}
               className="py-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4 hover:bg-slate-50/60 p-2.5 sm:p-3.5 rounded-xl transition"
             >
-              {/* Left Column: Game Identity */}
-              <div className="flex items-center gap-3.5 min-w-[260px] lg:w-[32%]">
+              {/* Left Column: Game Identity & Real Logo */}
+              <div className="flex items-center gap-3 min-w-[280px] lg:w-[35%]">
                 {/* Rank Badge */}
                 <div
                   className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black flex-shrink-0 shadow-2xs ${
@@ -278,17 +280,19 @@ export default function GamePerformanceCard({
                   #{rank}
                 </div>
 
-                {/* Game Icon Avatar */}
-                <div
-                  className={`w-11 h-11 rounded-xl ${game.iconBg} ${game.iconColor} flex items-center justify-center font-black text-lg shadow-sm flex-shrink-0`}
-                >
-                  {game.id === 'than-ma-giang-the' && <Flame className="w-6 h-6" />}
-                  {game.id === 'nhat-kiem-phu-sinh' && <Swords className="w-6 h-6" />}
-                  {game.id === 'chien-binh-thuc-tinh' && <Shield className="w-6 h-6" />}
-                  {game.id === 'era-of-warfare' && <Globe className="w-6 h-6" />}
+                {/* Game Real Logo Image */}
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200/90 shadow-2xs flex-shrink-0 bg-slate-100">
+                  <img
+                    src={game.logo}
+                    alt={game.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = game.fallbackLogo;
+                    }}
+                  />
                 </div>
 
-                {/* Name & Genre */}
+                {/* Name & Genre & Direct Action Buttons */}
                 <div className="truncate">
                   <div className="flex items-center gap-2">
                     <h4 className="text-sm font-black text-slate-900 truncate tracking-tight">
@@ -300,24 +304,52 @@ export default function GamePerformanceCard({
                       {game.badge}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-400">
-                    <span>{game.genre}</span>
-                    <span>•</span>
+
+                  {/* Direct Action Links (Web, APK, iOS) */}
+                  <div className="flex flex-wrap items-center gap-1.5 mt-1 text-xs">
+                    <span className="text-slate-400 font-medium hidden sm:inline mr-1">{game.genre}</span>
+
+                    {/* Direct Web link */}
                     <a
-                      href={game.url}
+                      href={game.webUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#0284c7] hover:underline inline-flex items-center gap-0.5 font-semibold"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#0284c7] hover:text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200/70 hover:bg-sky-100 transition cursor-pointer"
+                      title="Mở Landing Page game trực tiếp trên web"
                     >
-                      <span>Mở web</span>
-                      <ExternalLink className="w-3 h-3" />
+                      <span>Web</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+
+                    {/* Direct APK Download link */}
+                    <a
+                      href={game.apkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/70 hover:bg-emerald-100 transition cursor-pointer"
+                      title="Tải trực tiếp file APK cho Android"
+                    >
+                      <Smartphone className="w-2.5 h-2.5" />
+                      <span>Tải APK</span>
+                    </a>
+
+                    {/* Direct iOS Download link */}
+                    <a
+                      href={game.iosUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-700 hover:text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200/70 hover:bg-indigo-100 transition cursor-pointer"
+                      title="Tải trực tiếp bản iOS"
+                    >
+                      <Apple className="w-2.5 h-2.5" />
+                      <span>iOS</span>
                     </a>
                   </div>
                 </div>
               </div>
 
               {/* Middle Column: Traffic & Download Progress */}
-              <div className="flex-1 min-w-[200px] lg:px-4">
+              <div className="flex-1 min-w-[180px] lg:px-4">
                 <div className="flex items-center justify-between text-xs mb-1.5">
                   <span className="text-slate-500 font-semibold flex items-center gap-1.5">
                     <Eye className="w-3.5 h-3.5 text-slate-400" />
@@ -337,7 +369,7 @@ export default function GamePerformanceCard({
               </div>
 
               {/* Right Column: 3 Key Metrics (Downloads, Device split, Messenger) */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:w-[40%] text-right sm:text-left bg-white p-2.5 rounded-xl border border-slate-100 shadow-2xs">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:w-[38%] text-right sm:text-left bg-white p-2.5 rounded-xl border border-slate-100 shadow-2xs">
                 {/* Downloads */}
                 <div>
                   <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
@@ -351,7 +383,7 @@ export default function GamePerformanceCard({
                   </span>
                 </div>
 
-                {/* Device Split (Android vs iOS vs PC) */}
+                {/* Device Split (Android vs iOS) */}
                 <div>
                   <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
                     Thiết Bị
@@ -390,7 +422,7 @@ export default function GamePerformanceCard({
       <div className="mt-4 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400">
         <div className="flex items-center gap-1.5">
           <Gamepad2 className="w-3.5 h-3.5 text-slate-500" />
-          <span>Bảng số liệu cập nhật tự động theo khoảng ngày đang chọn trên thanh công cụ.</span>
+          <span>Bấm các nút Web, Tải APK hoặc iOS để mở hoặc tải trực tiếp game tương ứng.</span>
         </div>
         <div className="text-slate-500 font-medium text-[11px]">
           Top game đóng góp nhiều nhất: <strong className="text-slate-800">{gamesData[0]?.name}</strong>
