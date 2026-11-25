@@ -499,33 +499,34 @@ export default function AdminDashboardPage() {
         />
 
         {/* Dashboard Main Container */}
-        <main className="p-4 sm:p-6 lg:p-8 space-y-6 flex-1">
+        <main className="p-3 sm:p-5 lg:p-8 space-y-3.5 sm:space-y-4 md:space-y-6 flex-1">
           {/* Breadcrumb & Section Title */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2" id="dashboardOverview">
+          <div className="flex items-center justify-between gap-2" id="dashboardOverview">
             <div>
-              <h1 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight font-sans">
+              <h1 className="text-base sm:text-2xl font-black text-slate-800 tracking-tight font-sans">
                 Thống Kê Lưu Lượng & Tải Game
               </h1>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
                 Bảng điều khiển lưu lượng truy cập đa kênh & phân tích lượt tải game Lamon Game
               </p>
             </div>
 
             {/* Quick Export Button */}
-            <div className="flex items-center gap-2 self-start sm:self-auto">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <button
                 onClick={handleExportCSV}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition cursor-pointer"
+                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-[11px] sm:text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition cursor-pointer"
               >
                 <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Xuất Báo Cáo</span>
+                <span className="hidden xs:inline">Xuất Báo Cáo</span>
+                <span className="xs:hidden">Xuất File</span>
               </button>
             </div>
           </div>
 
           {/* Error Notice */}
           {error && (
-            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-3">
+            <div className="p-3 sm:p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-3">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -534,18 +535,18 @@ export default function AdminDashboardPage() {
           {/* ------------------------------------------------------------ */}
           {/* FILTER & CONTROL BAR (Granularity, Date Range, Compare) */}
           {/* ------------------------------------------------------------ */}
-          <section className="bg-white rounded-xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3.5">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <section className="bg-white rounded-xl border border-slate-200/90 p-3 sm:p-5 shadow-xs space-y-3 sm:space-y-3.5">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 sm:gap-3 pb-2.5 sm:pb-3 border-b border-slate-100">
               {/* Granularity switch */}
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 flex-shrink-0">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-[#5969ff]" />
                   <span>Chu kỳ:</span>
                 </span>
-                <div className="flex items-center p-1 bg-[#f1f3f7] rounded-xl border border-slate-200/80">
+                <div className="flex items-center p-0.5 sm:p-1 bg-[#f1f3f7] rounded-xl border border-slate-200/80">
                   <button
                     onClick={() => setGranularity('DAILY')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${granularity === 'DAILY'
+                    className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition cursor-pointer ${granularity === 'DAILY'
                       ? 'bg-[#5969ff] text-white shadow-xs font-bold'
                       : 'text-slate-600 hover:text-slate-900'
                       }`}
@@ -554,7 +555,7 @@ export default function AdminDashboardPage() {
                   </button>
                   <button
                     onClick={() => setGranularity('WEEKLY')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${granularity === 'WEEKLY'
+                    className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition cursor-pointer ${granularity === 'WEEKLY'
                       ? 'bg-[#5969ff] text-white shadow-xs font-bold'
                       : 'text-slate-600 hover:text-slate-900'
                       }`}
@@ -563,7 +564,7 @@ export default function AdminDashboardPage() {
                   </button>
                   <button
                     onClick={() => setGranularity('MONTHLY')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${granularity === 'MONTHLY'
+                    className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition cursor-pointer ${granularity === 'MONTHLY'
                       ? 'bg-[#5969ff] text-white shadow-xs font-bold'
                       : 'text-slate-600 hover:text-slate-900'
                       }`}
@@ -573,9 +574,9 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              {/* Date Presets */}
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-xs font-bold text-slate-400 mr-1 flex items-center gap-1">
+              {/* Date Presets (Smooth horizontal slider on mobile, wrap on tablet/desktop) */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap no-scrollbar">
+                <span className="text-[11px] sm:text-xs font-bold text-slate-400 mr-1 flex items-center gap-1 flex-shrink-0">
                   <CalendarDays className="w-3.5 h-3.5 text-[#5969ff]" />
                   <span>Khoảng ngày:</span>
                 </span>
@@ -596,7 +597,7 @@ export default function AdminDashboardPage() {
                     <button
                       key={p.key}
                       onClick={() => setDatePreset(p.key as DatePreset)}
-                      className={`px-2.5 py-1.2 rounded-lg text-xs font-medium transition cursor-pointer ${isActive
+                      className={`px-2.5 py-1 sm:py-1.2 rounded-lg text-[11px] sm:text-xs font-medium transition cursor-pointer flex-shrink-0 ${isActive
                         ? 'bg-[#5969ff] text-white shadow-xs font-bold'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
                         }`}
@@ -764,7 +765,7 @@ export default function AdminDashboardPage() {
           {/* ------------------------------------------------------------ */}
           {/* ROW 1: 4 KPI CARDS WITH BOTTOM SPARKLINE CHARTS (Concept Style) */}
           {/* ------------------------------------------------------------ */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <section className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
             {/* Card 1: Total Revenue -> Tổng Lượt Click */}
             <SparklineCard
               title="Tổng Lượt Click"
@@ -846,7 +847,7 @@ export default function AdminDashboardPage() {
           {/* ------------------------------------------------------------ */}
           {/* ROW 2: DUAL CARDS (Recent Orders Table & Customer Acquisition) */}
           {/* ------------------------------------------------------------ */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" id="dataTableSection">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start" id="dataTableSection">
             {/* Left Column (8 cols): Detailed Traffic Data Table */}
             <div className="lg:col-span-8">
               <TrafficTable

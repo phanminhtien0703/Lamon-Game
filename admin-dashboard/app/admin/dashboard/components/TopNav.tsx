@@ -59,13 +59,13 @@ export default function TopNav({
   }, [profileDropdownOpen]);
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200/90 px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm transition-all duration-300">
+    <header className="h-14 sm:h-16 bg-white border-b border-slate-200/90 px-3 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm transition-all duration-300">
       {/* Left: Sidebar Toggles & Breadcrumb */}
-      <div className="flex items-center gap-2.5 sm:gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         {/* Mobile Sidebar Toggle Button */}
         <button
           onClick={onToggleSidebar}
-          className="lg:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer"
+          className="lg:hidden p-1.5 sm:p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer"
           aria-label="Mở menu"
         >
           <Menu className="w-5 h-5" />
@@ -88,13 +88,13 @@ export default function TopNav({
         )}
 
         {/* Mobile Brand Title */}
-        <div className="lg:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-1.5 sm:gap-2">
           <img
             src="/images/logo.png"
             alt="Lamon Game"
-            className="w-7 h-7 rounded-md object-contain"
+            className="w-6 h-6 sm:w-7 sm:h-7 rounded-md object-contain"
           />
-          <span className="text-base font-black text-[#38bdf8] uppercase tracking-wider font-sans">
+          <span className="text-sm sm:text-base font-black text-[#38bdf8] uppercase tracking-wider font-sans">
             LAMON GAME
           </span>
         </div>
@@ -112,7 +112,7 @@ export default function TopNav({
       </div>
 
       {/* Right: Search, Live Status, Refresh, Notifications, Profile */}
-      <div className="flex items-center gap-2.5 sm:gap-4">
+      <div className="flex items-center gap-1.5 sm:gap-4">
         {/* Search Bar (Concept Template Style) */}
         <div className="relative hidden md:block w-48 lg:w-64">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -126,8 +126,8 @@ export default function TopNav({
         </div>
 
         {/* Live Indicator Pill */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-600 text-xs font-semibold">
-          <Radio className="w-3.5 h-3.5 animate-pulse text-emerald-500" />
+        <div className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-600 text-[11px] sm:text-xs font-semibold">
+          <Radio className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-pulse text-emerald-500" />
           <span className="hidden sm:inline">Live Sync (8s)</span>
         </div>
 
@@ -136,10 +136,10 @@ export default function TopNav({
           onClick={onRefresh}
           disabled={refreshing}
           title="Đồng bộ số liệu mới nhất"
-          className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition disabled:opacity-50 cursor-pointer active:scale-95"
+          className="p-1.5 sm:p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition disabled:opacity-50 cursor-pointer active:scale-95"
         >
           <RefreshCw
-            className={`w-4 h-4 ${refreshing ? 'animate-spin text-[#5969ff]' : ''}`}
+            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${refreshing ? 'animate-spin text-[#5969ff]' : ''}`}
           />
         </button>
 

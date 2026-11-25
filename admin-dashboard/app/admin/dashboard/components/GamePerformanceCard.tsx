@@ -190,11 +190,11 @@ export default function GamePerformanceCard({
         </div>
 
         {/* Sort Controls */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200 self-start sm:self-auto text-xs">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200 self-stretch sm:self-auto text-xs overflow-x-auto no-scrollbar">
           <span className="text-[11px] text-slate-400 font-semibold px-2 hidden md:inline">Xếp theo:</span>
           <button
             onClick={() => setSortMetric('downloads')}
-            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer flex-shrink-0 ${
               sortMetric === 'downloads'
                 ? 'bg-[#5969ff] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -204,7 +204,7 @@ export default function GamePerformanceCard({
           </button>
           <button
             onClick={() => setSortMetric('traffic')}
-            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer flex-shrink-0 ${
               sortMetric === 'traffic'
                 ? 'bg-[#5969ff] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -214,7 +214,7 @@ export default function GamePerformanceCard({
           </button>
           <button
             onClick={() => setSortMetric('cr')}
-            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer flex-shrink-0 ${
               sortMetric === 'cr'
                 ? 'bg-[#5969ff] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -224,7 +224,7 @@ export default function GamePerformanceCard({
           </button>
           <button
             onClick={() => setSortMetric('messenger')}
-            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer flex-shrink-0 ${
               sortMetric === 'messenger'
                 ? 'bg-[#5969ff] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -235,8 +235,118 @@ export default function GamePerformanceCard({
         </div>
       </div>
 
-      {/* Modern Tabular Table for Perfect Alignment */}
-      <div className="overflow-x-auto">
+      {/* Mobile Optimized View: Compact Cards (Zero horizontal scroll needed) */}
+      <div className="block md:hidden divide-y divide-slate-100">
+        {gamesData.map((game, idx) => {
+          const rank = idx + 1;
+
+          return (
+            <div key={game.id} className="p-3 space-y-2">
+              {/* Row 1: Rank, Logo, Name & Direct Download Links */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span
+                    className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-black flex-shrink-0 ${
+                      rank === 1
+                        ? 'bg-amber-400 text-slate-950 font-black'
+                        : rank === 2
+                        ? 'bg-slate-200 text-slate-700'
+                        : rank === 3
+                        ? 'bg-amber-700/80 text-white'
+                        : 'bg-slate-100 text-slate-400'
+                    }`}
+                  >
+                    #{rank}
+                  </span>
+                  <div className="w-8 h-8 rounded-lg overflow-hidden border border-slate-200 shadow-2xs flex-shrink-0 bg-slate-100">
+                    <img
+                      src={game.logo}
+                      alt={game.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = game.fallbackLogo;
+                      }}
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-bold text-slate-900 text-xs tracking-tight truncate">
+                      {game.name}
+                    </div>
+                    <div className="text-[10px] text-slate-400 truncate">
+                      {game.genre}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Direct Action Links (Pill Buttons) */}
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  <a
+                    href={game.webUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-1.5 py-0.5 rounded text-[10px] font-bold text-slate-700 bg-white border border-slate-200"
+                    title="Mở web"
+                  >
+                    Web
+                  </a>
+                  <a
+                    href={game.apkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-1.5 py-0.5 rounded text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 flex items-center gap-0.5"
+                    title="Tải APK"
+                  >
+                    <Smartphone className="w-2.5 h-2.5" />
+                    <span>APK</span>
+                  </a>
+                  <a
+                    href={game.iosUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-1.5 py-0.5 rounded text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 flex items-center gap-0.5"
+                    title="Tải iOS"
+                  >
+                    <Apple className="w-2.5 h-2.5" />
+                    <span>iOS</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Row 2: Compact Metrics Grid (3 cols) */}
+              <div className="grid grid-cols-3 gap-1.5 p-2 rounded-lg bg-slate-50 text-center">
+                <div>
+                  <div className="text-[10px] text-slate-400">Truy cập</div>
+                  <div className="text-xs font-bold text-slate-800">
+                    {game.traffic.toLocaleString()}
+                  </div>
+                  <div className="text-[9px] text-slate-400">
+                    {Math.round(game.trafficShare * 100)}% traffic
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400">Lượt tải</div>
+                  <div className="text-xs font-black text-emerald-600">
+                    {game.downloads.toLocaleString()}
+                  </div>
+                  <div className="text-[9px] font-semibold text-emerald-700">
+                    {game.cr}% CR
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-slate-400">Nhận Code</div>
+                  <div className="text-xs font-black text-[#0284c7]">
+                    {game.messengerClicks.toLocaleString()}
+                  </div>
+                  <div className="text-[9px] text-slate-400">qua Msg</div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Modern Tabular Table for Perfect Alignment (Desktop / Tablet) */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left border-collapse min-w-[760px]">
           <thead>
             <tr className="bg-[#f8fafc] border-b border-slate-200/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
