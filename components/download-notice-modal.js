@@ -161,7 +161,7 @@
             position: absolute;
             inset: -4px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, rgba(245, 158, 11, 0) 70%);
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(56, 189, 248, 0) 70%);
             animation: dlNoticePulseAnim 2.2s ease-in-out infinite;
         }
 
@@ -203,13 +203,13 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
             border: 2px solid #0d121e;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.45);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.5);
             animation: dlNoticeGiftWiggle 2.5s ease-in-out infinite;
         }
 
@@ -238,7 +238,7 @@
         }
 
         .dl-notice-desc strong {
-            color: #fbbf24;
+            color: #38bdf8;
             font-weight: 700;
         }
 
@@ -271,16 +271,17 @@
 
         .dl-notice-btn-claim {
             flex: 1.35;
-            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
             color: #ffffff !important;
-            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
-            border: 1px solid rgba(254, 215, 170, 0.3);
+            box-shadow: 0 4px 18px rgba(56, 189, 248, 0.42);
+            border: 1px solid rgba(186, 230, 253, 0.4);
         }
 
         .dl-notice-btn-claim:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.55);
-            filter: brightness(1.08);
+            background: linear-gradient(135deg, #7dd3fc 0%, #0369a1 100%);
+            box-shadow: 0 8px 26px rgba(56, 189, 248, 0.6);
+            filter: brightness(1.06);
             color: #ffffff !important;
         }
 
