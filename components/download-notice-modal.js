@@ -451,29 +451,32 @@
         }
     }
 
-    // Lắng nghe sự kiện click tải game (Android / Windows APK)
+    // Lắng nghe sự kiện click tải game (Android, Windows PC, iOS)
     function attachDownloadTriggers() {
+        var pendingIosNotice = false;
+
         document.addEventListener('click', function (e) {
             var el = e.target.closest('a, button');
             if (!el) return;
-
-            // Kiểm tra xem link có phải tải game Android hoặc PC/Windows hay không
-            var href = (el.getAttribute('href') || '').toLowerCase();
-            var platform = (el.getAttribute('data-platform') || '').toLowerCase();
-            var track = (el.getAttribute('data-track') || '').toLowerCase();
-            var className = (el.className || '').toString().toLowerCase();
 
             // Bỏ qua các nút trong chính modal này
             if (el.id === 'dlNoticeFanpageBtn' || el.id === 'dlNoticeMessengerBtn' || el.id === 'dlNoticeCloseBtn') {
                 return;
             }
 
-            // Bỏ qua nền tảng iOS (vì iOS mở App Store hoặc trang cấu hình, không phải tệp APK tải về máy)
-            if (platform === 'ios' || track.indexOf('ios') !== -1 || href.indexOf('apps.apple.com') !== -1 || href.indexOf('yxtgym.com') !== -1) {
-                return;
-            }
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            var platform = (el.getAttribute('data-platform') || '').toLowerCase();
+            var track = (el.getAttribute('data-track') || '').toLowerCase();
+            var className = (el.className || '').toString().toLowerCase();
 
-            // Điều kiện nhận diện nút tải Android hoặc PC/Windows
+            // 1. Nhận diện nút tải iOS
+            var isIosDownload = platform === 'ios' ||
+                track.indexOf('ios') !== -1 ||
+                href.indexOf('apps.apple.com') !== -1 ||
+                href.indexOf('yxtgym.com') !== -1 ||
+                (className.indexOf('ios') !== -1 && (className.indexOf('cta-action-btn') !== -1 || className.indexOf('plat-btn') !== -1 || className.indexOf('dl-card') !== -1));
+
+            // 2. Nhận diện nút tải Android hoặc PC/Windows
             var isApkDownload = href.indexOf('.apk') !== -1;
             var isPlatformAndroidOrPc = platform === 'android' || platform === 'windows' || platform === 'pc';
             var isTrackAndroidOrPc = track.indexOf('android') !== -1 || track.indexOf('windows') !== -1 || track.indexOf('pc') !== -1;
@@ -485,7 +488,36 @@
                 setTimeout(function () {
                     showDownloadNotice();
                 }, 450);
+            } else if (isIosDownload) {
+                // Đối với iOS: link mở sang tab mới tải game / App Store.
+                // Bật sẵn popup trên tab hiện tại sau 450ms
+                setTimeout(function () {
+                    showDownloadNotice();
+                }, 450);
+
+                // Đặt cờ để khi người dùng chuyển tab quay lại web, popup chắc chắn hiển thị đón sẵn
+                pendingIosNotice = true;
             }
+        });
+
+        // Khi người dùng chuyển tab đi tải game rồi quay lại tab web
+        function handleTabReturn() {
+            if (pendingIosNotice) {
+                pendingIosNotice = false;
+                setTimeout(function () {
+                    showDownloadNotice();
+                }, 200);
+            }
+        }
+
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible') {
+                handleTabReturn();
+            }
+        });
+
+        window.addEventListener('focus', function () {
+            handleTabReturn();
         });
 
         // Đóng bằng phím ESC
