@@ -85,16 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
             platBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             activePlatform = plat;
-
-            if (downloadCta && downloadPlatforms[plat]) {
-                const conf = downloadPlatforms[plat];
-                downloadCta.href = conf.url;
-                if (conf.target) {
-                    downloadCta.target = conf.target;
-                } else {
-                    downloadCta.removeAttribute('target');
-                }
-            }
         });
     });
 
@@ -112,15 +102,6 @@ document.addEventListener('DOMContentLoaded', function () {
             platBtns.forEach(b => b.classList.remove('active'));
             targetBtn.classList.add('active');
             activePlatform = detected;
-            if (downloadCta && downloadPlatforms[detected]) {
-                const conf = downloadPlatforms[detected];
-                downloadCta.href = conf.url;
-                if (conf.target) {
-                    downloadCta.target = conf.target;
-                } else {
-                    downloadCta.removeAttribute('target');
-                }
-            }
         }
     })();
 

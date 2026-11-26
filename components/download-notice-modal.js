@@ -483,48 +483,79 @@
             var el = e.target.closest('a, button');
             if (!el) return;
 
-            // Bỏ qua các nút trong chính modal này
-            if (el.id === 'dlNoticeFanpageBtn' || el.id === 'dlNoticeMessengerBtn' || el.id === 'dlNoticeCloseBtn') {
+            // Bỏ qua các nút trong chính modal thông báo này
+            if (el.id === 'dlNoticeFanpageBtn' || el.id === 'dlNoticeMessengerBtn' || el.id === 'dlNoticeCloseBtn' || el.closest('#downloadNoticeModal')) {
                 return;
             }
 
-            var href = (el.getAttribute('href') || '').toLowerCase();
+            // 1. Tuyệt đối bỏ qua các nút MỞ modal chọn thiết bị hoặc ĐÓNG modal
+            // (để người dùng mở popup chọn thiết bị Windows / Android / iOS bình thường)
+            var isModalTrigger = el.id === 'downloadCta' ||
+                el.classList.contains('open-download-modal') ||
+                el.closest('.open-download-modal') ||
+                el.closest('#downloadCta') ||
+                el.id === 'closeDownloadModalBtn' ||
+                el.closest('#closeDownloadModalBtn');
+
+            if (isModalTrigger) {
+                return;
+            }
+
+            var href = (el.getAttribute('href') || '').trim();
+            var hrefLower = href.toLowerCase();
             var platform = (el.getAttribute('data-platform') || '').toLowerCase();
             var track = (el.getAttribute('data-track') || '').toLowerCase();
             var className = (el.className || '').toString().toLowerCase();
 
+            // Bỏ qua nếu href là javascript, # hoặc rỗng (không phải link tải file/store)
+            if (!href || href === '#' || hrefLower === 'javascript:void(0)' || hrefLower.indexOf('javascript:') === 0 || (href.charAt(0) === '#' && href.length > 1)) {
+                return;
+            }
+
+            // Bỏ qua các tab switcher ở hero (đây là nút chuyển tab nền tảng để xem thông tin, không phải nút tải thực sự)
+            if (el.classList.contains('tmgt-plat-btn') || el.classList.contains('psm-plat-btn') || el.classList.contains('tbtt-plat-btn') || el.closest('.tmgt-platforms') || el.closest('.psm-platforms') || el.closest('.tbtt-platforms')) {
+                return;
+            }
+
+            // Nhận diện xem click có xuất phát từ bên trong modal chọn thiết bị (#downloadModal) không
+            var isInsideDownloadModal = !!el.closest('#downloadModal');
+            var isDownloadCard = className.indexOf('dl-card') !== -1;
+
             // 1. Nhận diện nút tải iOS
             var isIosDownload = platform === 'ios' ||
                 track.indexOf('ios') !== -1 ||
-                href.indexOf('apps.apple.com') !== -1 ||
-                href.indexOf('yxtgym.com') !== -1 ||
-                (className.indexOf('ios') !== -1 && (className.indexOf('cta-action-btn') !== -1 || className.indexOf('plat-btn') !== -1 || className.indexOf('dl-card') !== -1));
+                hrefLower.indexOf('apps.apple.com') !== -1 ||
+                hrefLower.indexOf('yxtgym.com') !== -1 ||
+                (className.indexOf('ios') !== -1 && (className.indexOf('cta-action-btn') !== -1 || isDownloadCard));
 
             // 2. Nhận diện nút tải Android hoặc PC/Windows
-            var isApkDownload = href.indexOf('.apk') !== -1;
+            var isApkDownload = hrefLower.indexOf('.apk') !== -1;
+            var isExeOrZip = hrefLower.indexOf('.exe') !== -1 || hrefLower.indexOf('.zip') !== -1;
             var isPlatformAndroidOrPc = platform === 'android' || platform === 'windows' || platform === 'pc';
             var isTrackAndroidOrPc = track.indexOf('android') !== -1 || track.indexOf('windows') !== -1 || track.indexOf('pc') !== -1;
-            var isCtaAndroid = className.indexOf('cta-action-btn') !== -1 && className.indexOf('android') !== -1;
 
-            if (isApkDownload || isPlatformAndroidOrPc || isTrackAndroidOrPc || isCtaAndroid) {
-                var detectedOs = (platform === 'windows' || platform === 'pc' || track.indexOf('pc') !== -1 || track.indexOf('windows') !== -1 || href.indexOf('.exe') !== -1 || href.indexOf('.zip') !== -1)
+            var isAndroidOrPcDownload = isApkDownload || isExeOrZip || (isInsideDownloadModal && isPlatformAndroidOrPc) || (isDownloadCard && isPlatformAndroidOrPc);
+
+            if (isAndroidOrPcDownload) {
+                var detectedOs = (platform === 'windows' || platform === 'pc' || track.indexOf('pc') !== -1 || track.indexOf('windows') !== -1 || isExeOrZip)
                     ? 'pc'
                     : 'android';
                 recordDownloadEvent(detectedOs);
 
-                // File bắt đầu tải qua hành vi tự nhiên của trình duyệt,
-                // Hiển thị popup sau 450ms để người chơi thấy rõ file đang được tải
+                // File bắt đầu tải qua hành vi tự nhiên của trình duyệt.
+                // Nếu click từ trong modal chọn nền tảng, đợi modal đóng trước (400ms) rồi mới hiển thị popup sau 600ms
+                var delay = isInsideDownloadModal ? 600 : 450;
                 setTimeout(function () {
                     showDownloadNotice();
-                }, 450);
+                }, delay);
             } else if (isIosDownload) {
                 recordDownloadEvent('ios');
 
                 // Đối với iOS: link mở sang tab mới tải game / App Store.
-                // Bật sẵn popup trên tab hiện tại sau 450ms
+                var delayIos = isInsideDownloadModal ? 600 : 450;
                 setTimeout(function () {
                     showDownloadNotice();
-                }, 450);
+                }, delayIos);
 
                 // Đặt cờ để khi người dùng chuyển tab quay lại web, popup chắc chắn hiển thị đón sẵn
                 pendingIosNotice = true;
