@@ -73,13 +73,13 @@
 
     <!-- Dark Theme Lock (Anti-FOUC) -->
     <script>
-        (function () {
-            try {
-                localStorage.setItem('lamon_game_theme', 'dark');
-            } catch (e) { }
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.documentElement.classList.add('dark');
-        })();
+            (function () {
+                try {
+                    localStorage.setItem('lamon_game_theme', 'dark');
+                } catch (e) { }
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.documentElement.classList.add('dark');
+            })();
     </script>
 
     <!-- PapaParse CDN for parsing published Google Sheet CSV (Deferred for non-blocking render) -->
@@ -88,10 +88,13 @@
     <style>
         /* Subtle pulse for floating cart button */
         @keyframes subtlePulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
                 opacity: 1;
             }
+
             50% {
                 transform: scale(1.03);
                 opacity: 0.95;
@@ -114,7 +117,8 @@
 
         <!-- Hero Header Section -->
         <section class="dd-hero-panel glass-panel rounded-2xl p-4 sm:p-6 mb-6 relative overflow-hidden">
-            <div class="absolute -top-12 -right-12 w-48 h-48 bg-sky-400/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -top-12 -right-12 w-48 h-48 bg-sky-400/10 rounded-full blur-3xl pointer-events-none">
+            </div>
 
             <!-- Top Action Row: Back to TMGT & Event Link -->
             <div class="flex items-center justify-between gap-3 pb-3 mb-4 border-b border-white/10">
@@ -143,13 +147,9 @@
                             <h1 class="dd-hero-title text-lg sm:text-2xl font-black tracking-wide">
                                 ĐỔI ĐIỂM
                             </h1>
-                            <span class="dd-badge-live px-2.5 py-0.5 rounded-full text-[10px] font-extrabold flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
-                                Live Google Sheets
-                            </span>
                         </div>
                         <p class="text-xs sm:text-sm text-slate-400 mt-1">
-                            Thần Ma Giáng Thế &bull; Tra cứu hệ số &amp; tính điểm quy đổi tức thì
+                            360.000 VNĐ = 1.800 điểm &bull; Hỗ trợ đến 20:30 mỗi ngày
                         </p>
                     </div>
                 </div>
@@ -224,7 +224,8 @@
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     <!-- Search Input with Instant Clear -->
                     <div class="relative flex-1">
-                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <div
+                            class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -268,9 +269,7 @@
                     <!-- Pills container with horizontal scroll on mobile -->
                     <div id="categoryPillsContainer"
                         class="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-thin">
-                        <button type="button"
-                            class="category-pill active shrink-0"
-                            data-category="ALL">
+                        <button type="button" class="category-pill active shrink-0" data-category="ALL">
                             Tất cả
                         </button>
                         <!-- Injected dynamically by JS -->
@@ -348,7 +347,8 @@
         <!-- Footer -->
         <footer class="glass-panel border-t border-white/10 mt-10 py-5 text-center text-xs text-slate-500 rounded-2xl">
             <div class="px-4">
-                <p>© 2026 Thần Ma Giáng Thế — Lamon Game Portal. Bảng quy đổi vật phẩm kết nối Google Sheets trực tiếp.
+                <p>© 2026 Thần Ma Giáng Thế — Lamon Game. Bảng quy đổi vật phẩm. Liên hệ Fanpage Lamon Game để đổi vật
+                    phẩm.
                 </p>
             </div>
         </footer>
