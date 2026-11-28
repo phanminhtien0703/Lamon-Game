@@ -1,13 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import {
-  Trophy,
-  ExternalLink,
-  Smartphone,
-  Apple,
-  Gamepad2,
-} from 'lucide-react';
+import { Trophy, ExternalLink, Smartphone, Apple, Gamepad2 } from 'lucide-react';
 import { GroupedTrackingItem } from '../types';
 import { calculateConversionAnalysis } from '../utils/analytics';
 
@@ -102,14 +96,10 @@ const GAME_DEFINITIONS: GameItem[] = [
 
 type SortMetric = 'traffic' | 'downloads' | 'cr' | 'messenger';
 
-export default function GamePerformanceCard({
-  items,
-  grandTotal,
-}: GamePerformanceCardProps) {
+export default function GamePerformanceCard({ items, grandTotal }: GamePerformanceCardProps) {
   const [sortMetric, setSortMetric] = useState<SortMetric>('downloads');
   const [realEventsCount, setRealEventsCount] = useState<Record<string, number>>({});
 
-  // Sync real events from localStorage
   useEffect(() => {
     try {
       const raw = localStorage.getItem('lamon_dl_events');
@@ -127,7 +117,6 @@ export default function GamePerformanceCard({
     } catch {}
   }, []);
 
-  // Compute aggregated stats
   const analysis = useMemo(() => {
     return calculateConversionAnalysis(items, grandTotal);
   }, [items, grandTotal]);
@@ -169,96 +158,75 @@ export default function GamePerformanceCard({
   const maxTraffic = Math.max(...gamesData.map((g) => g.traffic), 1);
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200/90 shadow-xs overflow-hidden" id="gamePerformanceSection">
+    <div className="hud-panel hud-corners rounded-xl overflow-hidden" id="gamePerformanceSection">
       {/* Header Toolbar */}
-      <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white">
+      <div className="p-3.5 sm:p-5 border-b border-cyan-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">
-            <Trophy className="w-4 h-4 text-[#5969ff]" />
+          <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-400/35 text-amber-300 flex items-center justify-center flex-shrink-0">
+            <Trophy className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm sm:text-base font-bold text-slate-800 tracking-tight flex items-center gap-2">
+            <h3 className="text-sm sm:text-[15px] font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
               <span>Hiệu Quả 4 Game Lamon</span>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#5969ff] border border-blue-200">
-                4 Game
+              <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-200 border border-cyan-400/35">
+                4 ACTIVE
               </span>
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-300 mt-0.5">
               So sánh lượng truy cập, số lượt tải game và tương tác nhận Giftcode
             </p>
           </div>
         </div>
 
         {/* Sort Controls */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200 self-stretch sm:self-auto text-xs overflow-x-auto no-scrollbar">
-          <span className="text-[11px] text-slate-400 font-semibold px-2 hidden md:inline">Xếp theo:</span>
-          <button
-            onClick={() => setSortMetric('downloads')}
-            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer flex-shrink-0 ${
-              sortMetric === 'downloads'
-                ? 'bg-[#5969ff] text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Lượt Tải
-          </button>
-          <button
-            onClick={() => setSortMetric('traffic')}
-            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer flex-shrink-0 ${
-              sortMetric === 'traffic'
-                ? 'bg-[#5969ff] text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Truy Cập
-          </button>
-          <button
-            onClick={() => setSortMetric('cr')}
-            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer flex-shrink-0 ${
-              sortMetric === 'cr'
-                ? 'bg-[#5969ff] text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Tỷ Lệ Tải (%)
-          </button>
-          <button
-            onClick={() => setSortMetric('messenger')}
-            className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer flex-shrink-0 ${
-              sortMetric === 'messenger'
-                ? 'bg-[#5969ff] text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Nhận Code
-          </button>
+        <div className="flex items-center gap-1 p-1 bg-[#040c1f]/90 rounded-xl border border-cyan-500/25 self-stretch sm:self-auto text-xs overflow-x-auto no-scrollbar">
+          <span className="text-[11px] font-mono text-slate-300 font-semibold px-2 hidden md:inline uppercase">
+            Xếp theo:
+          </span>
+          {[
+            { key: 'downloads', label: 'Lượt Tải' },
+            { key: 'traffic', label: 'Truy Cập' },
+            { key: 'cr', label: 'Tỷ Lệ Tải (%)' },
+            { key: 'messenger', label: 'Nhận Code' },
+          ].map((btn) => (
+            <button
+              key={btn.key}
+              onClick={() => setSortMetric(btn.key as SortMetric)}
+              className={`px-2.5 py-1 rounded-lg font-bold transition cursor-pointer flex-shrink-0 text-xs ${
+                sortMetric === btn.key
+                  ? 'bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(34,211,238,0.4)]'
+                  : 'text-slate-200 hover:text-white hover:bg-cyan-500/10'
+              }`}
+            >
+              {btn.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Mobile Optimized View: Compact Cards (Zero horizontal scroll needed) */}
-      <div className="block md:hidden divide-y divide-slate-100">
+      {/* Mobile Cards */}
+      <div className="block md:hidden divide-y divide-cyan-500/15">
         {gamesData.map((game, idx) => {
           const rank = idx + 1;
 
           return (
-            <div key={game.id} className="p-3 space-y-2">
-              {/* Row 1: Rank, Logo, Name & Direct Download Links */}
+            <div key={game.id} className="p-3.5 space-y-2.5">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 min-w-0">
+                <div className="flex items-center gap-2.5 min-w-0">
                   <span
-                    className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-black flex-shrink-0 ${
+                    className={`w-6 h-6 rounded flex items-center justify-center text-[11px] font-mono font-black flex-shrink-0 ${
                       rank === 1
-                        ? 'bg-amber-400 text-slate-950 font-black'
+                        ? 'bg-amber-400 text-slate-950'
                         : rank === 2
-                        ? 'bg-slate-200 text-slate-700'
+                        ? 'bg-cyan-300 text-slate-950'
                         : rank === 3
-                        ? 'bg-amber-700/80 text-white'
-                        : 'bg-slate-100 text-slate-400'
+                        ? 'bg-indigo-400 text-slate-950'
+                        : 'bg-slate-800 text-slate-200'
                     }`}
                   >
                     #{rank}
                   </span>
-                  <div className="w-8 h-8 rounded-lg overflow-hidden border border-slate-200 shadow-2xs flex-shrink-0 bg-slate-100">
+                  <div className="w-9 h-9 rounded-lg overflow-hidden border border-cyan-500/30 flex-shrink-0 bg-slate-900">
                     <img
                       src={game.logo}
                       alt={game.name}
@@ -269,23 +237,17 @@ export default function GamePerformanceCard({
                     />
                   </div>
                   <div className="min-w-0">
-                    <div className="font-bold text-slate-900 text-xs tracking-tight truncate">
-                      {game.name}
-                    </div>
-                    <div className="text-[10px] text-slate-400 truncate">
-                      {game.genre}
-                    </div>
+                    <div className="font-bold text-white text-sm truncate">{game.name}</div>
+                    <div className="text-[11px] text-slate-300 truncate">{game.genre}</div>
                   </div>
                 </div>
 
-                {/* Direct Action Links (Pill Buttons) */}
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <a
                     href={game.webUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-1.5 py-0.5 rounded text-[10px] font-bold text-slate-700 bg-white border border-slate-200"
-                    title="Mở web"
+                    className="px-2 py-1 rounded text-[11px] font-bold text-cyan-200 bg-cyan-500/10 border border-cyan-400/30"
                   >
                     Web
                   </a>
@@ -293,51 +255,38 @@ export default function GamePerformanceCard({
                     href={game.apkUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-1.5 py-0.5 rounded text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 flex items-center gap-0.5"
-                    title="Tải APK"
+                    className="px-2 py-1 rounded text-[11px] font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-400/30 flex items-center gap-0.5"
                   >
-                    <Smartphone className="w-2.5 h-2.5" />
+                    <Smartphone className="w-3 h-3" />
                     <span>APK</span>
                   </a>
                   <a
                     href={game.iosUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-1.5 py-0.5 rounded text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 flex items-center gap-0.5"
-                    title="Tải iOS"
+                    className="px-2 py-1 rounded text-[11px] font-bold text-indigo-300 bg-indigo-500/10 border border-indigo-400/30 flex items-center gap-0.5"
                   >
-                    <Apple className="w-2.5 h-2.5" />
+                    <Apple className="w-3 h-3" />
                     <span>iOS</span>
                   </a>
                 </div>
               </div>
 
-              {/* Row 2: Compact Metrics Grid (3 cols) */}
-              <div className="grid grid-cols-3 gap-1.5 p-2 rounded-lg bg-slate-50 text-center">
+              <div className="grid grid-cols-3 gap-2 p-2.5 rounded-lg bg-[#040c1f]/90 border border-cyan-500/15 text-center font-mono">
                 <div>
-                  <div className="text-[10px] text-slate-400">Truy cập</div>
-                  <div className="text-xs font-bold text-slate-800">
-                    {game.traffic.toLocaleString()}
-                  </div>
-                  <div className="text-[9px] text-slate-400">
-                    {Math.round(game.trafficShare * 100)}% traffic
-                  </div>
+                  <div className="text-[10px] text-slate-300 uppercase">Truy cập</div>
+                  <div className="text-sm font-bold text-white">{game.traffic.toLocaleString()}</div>
+                  <div className="text-[10px] text-cyan-300">{Math.round(game.trafficShare * 100)}%</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-slate-400">Lượt tải</div>
-                  <div className="text-xs font-black text-emerald-600">
-                    {game.downloads.toLocaleString()}
-                  </div>
-                  <div className="text-[9px] font-semibold text-emerald-700">
-                    {game.cr}% CR
-                  </div>
+                  <div className="text-[10px] text-slate-300 uppercase">Lượt tải</div>
+                  <div className="text-sm font-black text-emerald-300">{game.downloads.toLocaleString()}</div>
+                  <div className="text-[10px] text-emerald-300">{game.cr}% CR</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-slate-400">Nhận Code</div>
-                  <div className="text-xs font-black text-[#0284c7]">
-                    {game.messengerClicks.toLocaleString()}
-                  </div>
-                  <div className="text-[9px] text-slate-400">qua Msg</div>
+                  <div className="text-[10px] text-slate-300 uppercase">Nhận Code</div>
+                  <div className="text-sm font-black text-cyan-300">{game.messengerClicks.toLocaleString()}</div>
+                  <div className="text-[10px] text-slate-300">Messenger</div>
                 </div>
               </div>
             </div>
@@ -345,12 +294,12 @@ export default function GamePerformanceCard({
         })}
       </div>
 
-      {/* Modern Tabular Table for Perfect Alignment (Desktop / Tablet) */}
+      {/* Desktop Table */}
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left border-collapse min-w-[760px]">
           <thead>
-            <tr className="bg-[#f8fafc] border-b border-slate-200/80 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-              <th className="py-3 px-4 sm:px-5 w-[300px]">Thứ Hạng & Game</th>
+            <tr className="bg-[#040c1f]/90 border-b border-cyan-500/20 text-[11px] sm:text-xs font-mono font-bold text-cyan-200 uppercase tracking-wider">
+              <th className="py-3 px-4 sm:px-5 w-[300px]">Thứ Hạng &amp; Game</th>
               <th className="py-3 px-4 w-[200px]">Lưu Lượng (Traffic)</th>
               <th className="py-3 px-4 w-[140px]">Lượt Tải (CR%)</th>
               <th className="py-3 px-4 w-[160px]">Thiết Bị (APK / iOS)</th>
@@ -358,36 +307,30 @@ export default function GamePerformanceCard({
               <th className="py-3 px-4 sm:px-5 w-[160px] text-right">Liên Kết Trực Tiếp</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 text-sm">
+          <tbody className="divide-y divide-cyan-500/10 text-sm">
             {gamesData.map((game, idx) => {
               const rank = idx + 1;
               const trafficPct = Math.round((game.traffic / maxTraffic) * 100);
 
               return (
-                <tr
-                  key={game.id}
-                  className="hover:bg-slate-50/70 transition-colors"
-                >
-                  {/* Column 1: Rank & Game Identity */}
+                <tr key={game.id} className="hover:bg-cyan-500/10 transition-colors">
                   <td className="py-3.5 px-4 sm:px-5">
                     <div className="flex items-center gap-3">
-                      {/* Rank Number */}
                       <span
-                        className={`w-6 h-6 rounded-md flex items-center justify-center text-xs font-black flex-shrink-0 ${
+                        className={`w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono font-black flex-shrink-0 ${
                           rank === 1
-                            ? 'bg-amber-400 text-slate-950 font-black shadow-2xs'
+                            ? 'bg-amber-400 text-slate-950 shadow-[0_0_10px_rgba(251,191,36,0.45)]'
                             : rank === 2
-                            ? 'bg-slate-200 text-slate-700'
+                            ? 'bg-cyan-300 text-slate-950'
                             : rank === 3
-                            ? 'bg-amber-700/80 text-white'
-                            : 'bg-slate-100 text-slate-400'
+                            ? 'bg-indigo-400 text-slate-950'
+                            : 'bg-slate-800 text-slate-200'
                         }`}
                       >
                         #{rank}
                       </span>
 
-                      {/* Game Real Logo */}
-                      <div className="w-10 h-10 rounded-lg overflow-hidden border border-slate-200 shadow-2xs flex-shrink-0 bg-slate-100">
+                      <div className="w-10 h-10 rounded-lg overflow-hidden border border-cyan-500/30 flex-shrink-0 bg-slate-900">
                         <img
                           src={game.logo}
                           alt={game.name}
@@ -398,112 +341,97 @@ export default function GamePerformanceCard({
                         />
                       </div>
 
-                      {/* Name & Genre (Clean without clutter badges) */}
                       <div className="truncate">
-                        <div className="font-bold text-slate-900 text-sm tracking-tight truncate">
-                          {game.name}
-                        </div>
-                        <div className="text-xs text-slate-400 mt-0.5 font-normal">
-                          {game.genre}
-                        </div>
+                        <div className="font-bold text-white text-sm tracking-tight truncate">{game.name}</div>
+                        <div className="text-xs text-slate-300 mt-0.5">{game.genre}</div>
                       </div>
                     </div>
                   </td>
 
-                  {/* Column 2: Traffic with Progress Bar */}
                   <td className="py-3.5 px-4">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5 text-xs">
-                        <strong className="text-slate-800 font-bold text-sm">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-xs font-mono">
+                        <strong className="text-white font-bold text-sm">
                           {game.traffic.toLocaleString()}
                         </strong>
-                        <span className="text-slate-400 text-[11px]">
+                        <span className="text-cyan-200 text-xs">
                           ({Math.round(game.trafficShare * 100)}%)
                         </span>
                       </div>
-                      <div className="w-28 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div className="w-28 bg-[#030816] rounded-full h-1.5 overflow-hidden border border-cyan-500/20">
                         <div
-                          className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+                          className="h-full bg-gradient-to-r from-cyan-400 to-indigo-400 rounded-full"
                           style={{ width: `${trafficPct}%` }}
                         />
                       </div>
                     </div>
                   </td>
 
-                  {/* Column 3: Downloads & CR */}
-                  <td className="py-3.5 px-4">
+                  <td className="py-3.5 px-4 font-mono">
                     <div>
-                      <div className="text-sm font-black text-emerald-600">
+                      <div className="text-sm font-black text-emerald-300">
                         {game.downloads.toLocaleString()}
                       </div>
-                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block mt-0.5">
+                      <span className="text-[11px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 inline-block mt-0.5">
                         {game.cr}% CR
                       </span>
                     </div>
                   </td>
 
-                  {/* Column 4: Platform Split */}
-                  <td className="py-3.5 px-4 text-xs font-semibold text-slate-600">
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-1 text-[11px]">
-                        <span className="text-slate-400 w-8">APK:</span>
-                        <strong className="text-emerald-700 font-bold">{game.androidDl.toLocaleString()}</strong>
+                  <td className="py-3.5 px-4 text-xs font-mono">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <span className="text-slate-300 w-9">APK:</span>
+                        <strong className="text-emerald-300 font-bold">{game.androidDl.toLocaleString()}</strong>
                       </div>
-                      <div className="flex items-center gap-1 text-[11px]">
-                        <span className="text-slate-400 w-8">iOS:</span>
-                        <strong className="text-indigo-700 font-bold">{game.iosDl.toLocaleString()}</strong>
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <span className="text-slate-300 w-9">iOS:</span>
+                        <strong className="text-indigo-300 font-bold">{game.iosDl.toLocaleString()}</strong>
                       </div>
                     </div>
                   </td>
 
-                  {/* Column 5: Messenger Code Claims */}
-                  <td className="py-3.5 px-4">
+                  <td className="py-3.5 px-4 font-mono">
                     <div>
-                      <div className="text-sm font-black text-[#0284c7]">
+                      <div className="text-sm font-black text-cyan-300">
                         {game.messengerClicks.toLocaleString()}
                       </div>
-                      <span className="text-[11px] text-slate-400 block mt-0.5">
-                        qua Messenger
-                      </span>
+                      <span className="text-[11px] text-slate-300 block mt-0.5 font-sans">qua Messenger</span>
                     </div>
                   </td>
 
-                  {/* Column 6: Direct Action Links (Clean Pill Buttons) */}
                   <td className="py-3.5 px-4 sm:px-5 text-right">
                     <div className="inline-flex items-center gap-1.5 justify-end">
-                      {/* Web Link */}
                       <a
                         href={game.webUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-2 py-1 rounded-md text-[11px] font-bold text-slate-700 hover:text-sky-700 bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 transition shadow-2xs inline-flex items-center gap-1 cursor-pointer"
+                        className="px-2.5 py-1 rounded-md text-xs font-bold text-cyan-200 hover:text-white bg-cyan-500/10 hover:bg-cyan-500/25 border border-cyan-400/30 transition inline-flex items-center gap-1"
                         title="Mở Landing Page game trực tiếp trên web"
                       >
                         <span>Web</span>
-                        <ExternalLink className="w-2.5 h-2.5" />
+                        <ExternalLink className="w-3 h-3" />
                       </a>
 
-                      {/* APK Link */}
                       <a
                         href={game.apkUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-2 py-1 rounded-md text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50/70 hover:bg-emerald-100 border border-emerald-200 transition shadow-2xs inline-flex items-center gap-1 cursor-pointer"
+                        className="px-2.5 py-1 rounded-md text-xs font-bold text-emerald-300 hover:text-white bg-emerald-500/10 hover:bg-emerald-500/25 border border-emerald-400/30 transition inline-flex items-center gap-1"
                         title="Tải trực tiếp file APK cho Android"
                       >
-                        <Smartphone className="w-2.5 h-2.5" />
+                        <Smartphone className="w-3 h-3" />
                         <span>APK</span>
                       </a>
 
-                      {/* iOS Link */}
                       <a
                         href={game.iosUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-2 py-1 rounded-md text-[11px] font-bold text-indigo-700 hover:text-indigo-800 bg-indigo-50/70 hover:bg-indigo-100 border border-indigo-200 transition shadow-2xs inline-flex items-center gap-1 cursor-pointer"
+                        className="px-2.5 py-1 rounded-md text-xs font-bold text-indigo-300 hover:text-white bg-indigo-500/10 hover:bg-indigo-500/25 border border-indigo-400/30 transition inline-flex items-center gap-1"
                         title="Tải trực tiếp bản iOS"
                       >
-                        <Apple className="w-2.5 h-2.5" />
+                        <Apple className="w-3 h-3" />
                         <span>iOS</span>
                       </a>
                     </div>
@@ -516,13 +444,13 @@ export default function GamePerformanceCard({
       </div>
 
       {/* Footer Info */}
-      <div className="px-4 sm:px-5 py-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400 bg-[#f8fafc]/50">
+      <div className="px-4 sm:px-5 py-3 border-t border-cyan-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-300 bg-[#040c1f]/75">
         <div className="flex items-center gap-1.5">
-          <Gamepad2 className="w-3.5 h-3.5 text-slate-400" />
-          <span>Số liệu phân bổ tự động theo khoảng ngày được lọc. Bấm các nút Web, APK hoặc iOS để tải hoặc mở trang game trực tiếp.</span>
+          <Gamepad2 className="w-4 h-4 text-cyan-400" />
+          <span>Số liệu phân bổ theo khoảng ngày được lọc. Bấm Web, APK hoặc iOS để mở trực tiếp.</span>
         </div>
-        <div className="text-slate-500 font-medium text-[11px]">
-          Game dẫn đầu: <strong className="text-slate-800 font-bold">{gamesData[0]?.name}</strong>
+        <div className="text-slate-200 font-mono text-xs">
+          TOP GAME: <strong className="text-cyan-300 font-bold">{gamesData[0]?.name}</strong>
         </div>
       </div>
     </div>

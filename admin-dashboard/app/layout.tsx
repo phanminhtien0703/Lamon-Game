@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Lamon Game | Admin Dashboard',
+  title: 'Lamon Game | Orbital Analytics HUD',
   description: 'Bảng điều khiển lưu lượng truy cập và thống kê tải game Lamon Game',
   icons: {
     icon: [
@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi">
-      <body className="min-h-screen bg-[#f4f5f9] text-slate-800 antialiased selection:bg-[#5969ff] selection:text-white font-sans">
+    <html lang="vi" className="dark">
+      <body className="min-h-screen bg-[#030814] text-slate-100 antialiased selection:bg-cyan-500 selection:text-slate-950 font-sans">
         {children}
       </body>
     </html>

@@ -8,17 +8,11 @@ import {
   CalendarDays,
   GitCompare,
   FileSpreadsheet,
-  Layers,
-  Sparkles,
-  Info,
   Check,
-  RotateCcw,
-  Calendar,
 } from 'lucide-react';
 
 import {
   DailyTrackingItem,
-  GroupedTrackingItem,
   Granularity,
   DatePreset,
   ComparisonMode,
@@ -48,6 +42,7 @@ import SparklineCard from './components/SparklineCard';
 import TrafficTable from './components/TrafficTable';
 import AcquisitionCard from './components/AcquisitionCard';
 import ConversionFunnelCard from './components/ConversionFunnelCard';
+import OrbitalTrafficHub from './components/OrbitalTrafficHub';
 import GamePerformanceCard from './components/GamePerformanceCard';
 
 interface DailyDashboardData {
@@ -82,12 +77,19 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [copiedSuccess, setCopiedSuccess] = useState(false);
 
-  // Layout states
+  // Layout states (default collapsed to slim Orbital Command Rail like reference HUD)
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [mobileCockpitTab, setMobileCockpitTab] = useState<'orbital' | 'conversion' | 'acquisition'>('orbital');
 
-  // Load persisted collapse state & register Ctrl+B shortcut
+  // Sync mobile cockpit tab when navigating from mobile Sidebar drawer
+  useEffect(() => {
+    if (activeTab === 'orbital') setMobileCockpitTab('orbital');
+    else if (activeTab === 'conversion') setMobileCockpitTab('conversion');
+  }, [activeTab]);
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem('concept_sidebar_collapsed');
@@ -122,54 +124,46 @@ export default function AdminDashboardPage() {
     });
   }, []);
 
-  // 1. GRANULARITY (Chu kỳ xem)
   const [granularity, setGranularity] = useState<Granularity>('DAILY');
-
-  // 2. DATE RANGE PRESETS & PICKER
   const [datePreset, setDatePreset] = useState<DatePreset>('ALL');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
-
-  // 3. COMPARISON CONTROLS
   const [compareEnabled, setCompareEnabled] = useState(false);
   const [comparisonMode, setComparisonMode] = useState<ComparisonMode>('PREVIOUS_PERIOD');
   const [customCompStartDate, setCustomCompStartDate] = useState('');
   const [customCompEndDate, setCustomCompEndDate] = useState('');
-
-  // 4. DISPLAY OPTIONS: % SHARE & SEARCH
   const [showPercentShare, setShowPercentShare] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-
-  // 5. SORTING
   const [sortField, setSortField] = useState<SortField>('period');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
 
-  // Fetch API
-  const fetchData = useCallback(async (isManual = false) => {
-    if (isManual) setRefreshing(true);
-    try {
-      const res = await fetch('/api/admin/stats');
-      if (res.status === 401) {
-        router.push('/admin/login');
-        return;
+  const fetchData = useCallback(
+    async (isManual = false) => {
+      if (isManual) setRefreshing(true);
+      try {
+        const res = await fetch('/api/admin/stats');
+        if (res.status === 401) {
+          router.push('/admin/login');
+          return;
+        }
+        if (!res.ok) throw new Error('Không thể đồng bộ số liệu Google Sheets');
+        const result = await res.json();
+        setData(result);
+        setError(null);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('Mất kết nối tới máy chủ');
+        }
+      } finally {
+        setLoading(false);
+        if (isManual) setRefreshing(false);
       }
-      if (!res.ok) throw new Error('Không thể đồng bộ số liệu Google Sheets');
-      const result = await res.json();
-      setData(result);
-      setError(null);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Mất kết nối tới máy chủ');
-      }
-    } finally {
-      setLoading(false);
-      if (isManual) setRefreshing(false);
-    }
-  }, [router]);
+    },
+    [router]
+  );
 
-  // Polling every 8 seconds
   useEffect(() => {
     fetchData();
     const interval = setInterval(() => {
@@ -184,7 +178,6 @@ export default function AdminDashboardPage() {
     router.refresh();
   };
 
-  // Chronologically sorted raw data
   const rawChronologicalItems = useMemo(() => {
     if (!data?.items) return [];
     return [...data.items].sort((a, b) => {
@@ -194,7 +187,6 @@ export default function AdminDashboardPage() {
     });
   }, [data?.items]);
 
-  // Auto pre-fill custom dates if empty when switching to CUSTOM
   useEffect(() => {
     if (datePreset === 'CUSTOM' && rawChronologicalItems.length > 0 && (!customStartDate || !customEndDate)) {
       const latest = parseDate(rawChronologicalItems[rawChronologicalItems.length - 1].date) || new Date();
@@ -205,7 +197,6 @@ export default function AdminDashboardPage() {
     }
   }, [datePreset, rawChronologicalItems, customStartDate, customEndDate]);
 
-  // Quick preset helper for custom date range
   const handleSetCustomPreset = useCallback(
     (daysBack: number) => {
       if (!rawChronologicalItems.length) return;
@@ -218,7 +209,6 @@ export default function AdminDashboardPage() {
     [rawChronologicalItems]
   );
 
-  // Validate custom date range
   const customDateDiffDays = useMemo(() => {
     if (!customStartDate || !customEndDate) return 0;
     const s = new Date(`${customStartDate}T00:00:00`);
@@ -230,7 +220,6 @@ export default function AdminDashboardPage() {
 
   const isCustomDateInvalid = customDateDiffDays === -1;
 
-  // Resolve current date range
   const { currentStartDate, currentEndDate } = useMemo(() => {
     const { startDate, endDate } = resolvePresetDateRange(
       datePreset,
@@ -241,12 +230,10 @@ export default function AdminDashboardPage() {
     return { currentStartDate: startDate, currentEndDate: endDate };
   }, [datePreset, rawChronologicalItems, customStartDate, customEndDate]);
 
-  // Filter items in current date range
   const filteredRawItems = useMemo(() => {
     return filterItemsByDateRange(rawChronologicalItems, currentStartDate, currentEndDate);
   }, [rawChronologicalItems, currentStartDate, currentEndDate]);
 
-  // Resolve comparison date range
   const { compareStartDate, compareEndDate } = useMemo(() => {
     if (!compareEnabled) {
       return { compareStartDate: null, compareEndDate: null };
@@ -262,13 +249,11 @@ export default function AdminDashboardPage() {
     return { compareStartDate: compareStart, compareEndDate: compareEnd };
   }, [compareEnabled, comparisonMode, currentStartDate, currentEndDate, rawChronologicalItems, customCompStartDate, customCompEndDate]);
 
-  // Filter raw items in comparison date range
   const filteredCompareRawItems = useMemo(() => {
     if (!compareEnabled || !compareStartDate || !compareEndDate) return [];
     return filterItemsByDateRange(rawChronologicalItems, compareStartDate, compareEndDate);
   }, [compareEnabled, compareStartDate, compareEndDate, rawChronologicalItems]);
 
-  // Group items by Granularity
   const currentGroupedItems = useMemo(() => {
     return groupItemsByGranularity(filteredRawItems, granularity);
   }, [filteredRawItems, granularity]);
@@ -278,7 +263,6 @@ export default function AdminDashboardPage() {
     return groupItemsByGranularity(filteredCompareRawItems, granularity);
   }, [compareEnabled, filteredCompareRawItems, granularity]);
 
-  // Attach comparisons to items
   const itemsWithComparison = useMemo(() => {
     if (!compareEnabled || compareGroupedItems.length === 0) {
       return currentGroupedItems;
@@ -286,7 +270,6 @@ export default function AdminDashboardPage() {
     return attachComparisons(currentGroupedItems, compareGroupedItems, granularity);
   }, [currentGroupedItems, compareGroupedItems, compareEnabled, granularity]);
 
-  // Compare totals
   const compareTotalsRaw = useMemo(() => {
     if (!compareEnabled || filteredCompareRawItems.length === 0) return undefined;
     return filteredCompareRawItems.reduce(
@@ -307,12 +290,10 @@ export default function AdminDashboardPage() {
     );
   }, [compareEnabled, filteredCompareRawItems]);
 
-  // Aggregated totals
   const aggregatedTotals: AggregatedTotals = useMemo(() => {
     return calculateTotals(currentGroupedItems, compareTotalsRaw);
   }, [currentGroupedItems, compareTotalsRaw]);
 
-  // Filter by search query & sort
   const finalDisplayItems = useMemo(() => {
     let list = itemsWithComparison;
 
@@ -322,8 +303,8 @@ export default function AdminDashboardPage() {
     }
 
     return [...list].sort((a, b) => {
-      let valA: number = 0;
-      let valB: number = 0;
+      let valA = 0;
+      let valB = 0;
 
       if (sortField === 'period') {
         valA = a.startDate.getTime();
@@ -341,7 +322,6 @@ export default function AdminDashboardPage() {
     });
   }, [itemsWithComparison, searchQuery, sortField, sortDirection]);
 
-  // Toggle Column Sort
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
@@ -351,14 +331,12 @@ export default function AdminDashboardPage() {
     }
   };
 
-  // Export CSV handler
   const handleExportCSV = () => {
     const granularityName = granularity === 'DAILY' ? 'ngay' : granularity === 'WEEKLY' ? 'tuan' : 'thang';
     const filename = `lamon-traffic-${granularityName}-${new Date().toISOString().slice(0, 10)}.csv`;
     exportToCSV(finalDisplayItems, aggregatedTotals, granularity, compareEnabled, filename);
   };
 
-  // Copy TSV to Clipboard for Excel pasting
   const handleCopyClipboard = async () => {
     const headers = ['Thời gian', ...CHANNELS.map((c) => c.label), 'Tổng cộng'];
     const rows = finalDisplayItems.map((item) => [
@@ -395,7 +373,6 @@ export default function AdminDashboardPage() {
     }
   };
 
-  // Day-of-week analysis
   const dayOfWeekAnalysis = useMemo(() => {
     if (!data?.items?.length) return [];
     const daysMap: Record<number, { name: string; totalClicks: number; dayCount: number }> = {
@@ -428,13 +405,11 @@ export default function AdminDashboardPage() {
     return [...dayOfWeekAnalysis].sort((a, b) => b.avgClicks - a.avgClicks)[0];
   }, [dayOfWeekAnalysis]);
 
-  // Peak period in current selection
   const peakItem = useMemo(() => {
     if (!finalDisplayItems.length) return null;
     return [...finalDisplayItems].sort((a, b) => b.total - a.total)[0];
   }, [finalDisplayItems]);
 
-  // Top source in current selection
   const topCurrentSource = useMemo(() => {
     let topName = 'Direct';
     let topKey: ChannelKey = 'direct';
@@ -453,7 +428,6 @@ export default function AdminDashboardPage() {
 
   const granularityLabel = granularity === 'DAILY' ? 'Theo Ngày' : granularity === 'WEEKLY' ? 'Theo Tuần' : 'Theo Tháng';
 
-  // Sparkline data point arrays
   const totalSparklinePoints = useMemo(() => {
     const pts = finalDisplayItems.map((i) => i.total);
     return pts.length > 0 ? pts.slice(-10) : [];
@@ -466,8 +440,8 @@ export default function AdminDashboardPage() {
   }, [finalDisplayItems, topCurrentSource.key]);
 
   return (
-    <div className="min-h-screen bg-[#f4f5f9] flex">
-      {/* 1. LEFT SIDEBAR MENU (Concept Template) */}
+    <div className="min-h-screen orbital-bg flex text-slate-100">
+      {/* 1. LEFT ORBITAL RAIL */}
       <Sidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
@@ -479,13 +453,12 @@ export default function AdminDashboardPage() {
         onLogout={handleLogout}
       />
 
-      {/* 2. MAIN CONTENT WRAPPER */}
+      {/* 2. MAIN HUD WORKSPACE */}
       <div
         className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out ${
           sidebarCollapsed ? 'lg:pl-[72px]' : 'lg:pl-64'
         }`}
       >
-        {/* Top Navigation Bar */}
         <TopNav
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           isCollapsed={sidebarCollapsed}
@@ -498,86 +471,107 @@ export default function AdminDashboardPage() {
           lastUpdated={data?.lastUpdated}
         />
 
-        {/* Dashboard Main Container */}
-        <main className="p-3 sm:p-5 lg:p-8 space-y-3.5 sm:space-y-4 md:space-y-6 flex-1">
-          {/* Breadcrumb & Section Title */}
-          <div className="flex items-center justify-between gap-2" id="dashboardOverview">
+        <main className="p-3 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 flex-1">
+          {/* HUD Command Header */}
+          <div className="flex flex-wrap items-center justify-between gap-2" id="dashboardOverview">
             <div>
-              <h1 className="text-base sm:text-2xl font-black text-slate-800 tracking-tight font-sans">
-                Thống Kê Lưu Lượng & Tải Game
+              <h1 className="text-base sm:text-2xl font-black text-white tracking-wide uppercase font-sans flex items-center gap-2">
+                <span>Trung Tâm Điều Hành Lưu Lượng</span>
+                <span className="text-[10px] sm:text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-500/15 border border-cyan-400/35 text-cyan-200">
+                  LIVE HUD
+                </span>
               </h1>
-              <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
-                Bảng điều khiển lưu lượng truy cập đa kênh & phân tích lượt tải game Lamon Game
+              <p className="hidden sm:block text-xs sm:text-sm text-slate-300 mt-0.5">
+                Theo dõi dữ liệu Google Sheets đa kênh &amp; phân bổ lượt tải Lamon Game
               </p>
             </div>
 
-            {/* Quick Export Button */}
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <button
-                onClick={handleExportCSV}
-                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-[11px] sm:text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition cursor-pointer"
-              >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-                <span className="hidden xs:inline">Xuất Báo Cáo</span>
-                <span className="xs:hidden">Xuất File</span>
-              </button>
-            </div>
+            <button
+              onClick={handleExportCSV}
+              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/40 text-xs sm:text-[13px] font-bold text-cyan-200 shadow-[0_0_12px_rgba(34,211,238,0.18)] transition cursor-pointer"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-emerald-300" />
+              <span>Xuất Báo Cáo</span>
+            </button>
           </div>
 
-          {/* Error Notice */}
           {error && (
-            <div className="p-3 sm:p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-3">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-400/40 text-rose-200 text-xs sm:text-sm flex items-center gap-3">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
               <span>{error}</span>
             </div>
           )}
 
-          {/* ------------------------------------------------------------ */}
-          {/* FILTER & CONTROL BAR (Granularity, Date Range, Compare) */}
-          {/* ------------------------------------------------------------ */}
-          <section className="bg-white rounded-xl border border-slate-200/90 p-3 sm:p-5 shadow-xs space-y-3 sm:space-y-3.5">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 sm:gap-3 pb-2.5 sm:pb-3 border-b border-slate-100">
-              {/* Granularity switch */}
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 flex-shrink-0">
-                  <SlidersHorizontal className="w-3.5 h-3.5 text-[#5969ff]" />
+          {/* HUD CONTROL BAR (Compact collapsible on mobile, full on desktop) */}
+          <section className="hud-panel hud-corners rounded-xl p-3 sm:p-4 space-y-2.5 sm:space-y-3">
+            {/* Mobile Compact Bar */}
+            <div className="flex md:hidden items-center justify-between gap-2">
+              <div className="flex items-center p-0.5 bg-[#040c1f] rounded-lg border border-cyan-500/25">
+                {[
+                  { key: 'DAILY', label: 'Ngày' },
+                  { key: 'WEEKLY', label: 'Tuần' },
+                  { key: 'MONTHLY', label: 'Tháng' },
+                ].map((g) => (
+                  <button
+                    key={g.key}
+                    onClick={() => setGranularity(g.key as Granularity)}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition cursor-pointer ${
+                      granularity === g.key
+                        ? 'bg-cyan-500 text-slate-950'
+                        : 'text-slate-300'
+                    }`}
+                  >
+                    {g.label}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen((prev) => !prev)}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                  mobileFiltersOpen
+                    ? 'bg-cyan-500 text-slate-950 border-cyan-400'
+                    : 'bg-[#040c1f] text-cyan-200 border-cyan-500/30'
+                }`}
+              >
+                <CalendarDays className="w-3.5 h-3.5" />
+                <span>{mobileFiltersOpen ? 'Đóng lọc' : 'Lọc & So sánh'}</span>
+              </button>
+            </div>
+
+            <div className={`${mobileFiltersOpen ? 'flex' : 'hidden'} md:flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 pb-2.5 border-b border-cyan-500/20`}>
+              {/* Granularity (Desktop) */}
+              <div className="hidden md:flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-cyan-200 uppercase tracking-wider flex items-center gap-1.5 flex-shrink-0">
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Chu kỳ:</span>
                 </span>
-                <div className="flex items-center p-0.5 sm:p-1 bg-[#f1f3f7] rounded-xl border border-slate-200/80">
-                  <button
-                    onClick={() => setGranularity('DAILY')}
-                    className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition cursor-pointer ${granularity === 'DAILY'
-                      ? 'bg-[#5969ff] text-white shadow-xs font-bold'
-                      : 'text-slate-600 hover:text-slate-900'
+                <div className="flex items-center p-0.5 bg-[#040c1f] rounded-lg border border-cyan-500/25">
+                  {[
+                    { key: 'DAILY', label: 'Theo Ngày' },
+                    { key: 'WEEKLY', label: 'Theo Tuần' },
+                    { key: 'MONTHLY', label: 'Theo Tháng' },
+                  ].map((g) => (
+                    <button
+                      key={g.key}
+                      onClick={() => setGranularity(g.key as Granularity)}
+                      className={`px-3 py-1.5 rounded-md text-xs font-semibold transition cursor-pointer ${
+                        granularity === g.key
+                          ? 'bg-cyan-500 text-slate-950 font-black shadow-[0_0_10px_rgba(34,211,238,0.4)]'
+                          : 'text-slate-200 hover:text-white'
                       }`}
-                  >
-                    Theo Ngày
-                  </button>
-                  <button
-                    onClick={() => setGranularity('WEEKLY')}
-                    className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition cursor-pointer ${granularity === 'WEEKLY'
-                      ? 'bg-[#5969ff] text-white shadow-xs font-bold'
-                      : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                  >
-                    Theo Tuần
-                  </button>
-                  <button
-                    onClick={() => setGranularity('MONTHLY')}
-                    className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold transition cursor-pointer ${granularity === 'MONTHLY'
-                      ? 'bg-[#5969ff] text-white shadow-xs font-bold'
-                      : 'text-slate-600 hover:text-slate-900'
-                      }`}
-                  >
-                    Theo Tháng
-                  </button>
+                    >
+                      {g.label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Date Presets (Smooth horizontal slider on mobile, wrap on tablet/desktop) */}
+              {/* Date Presets */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap no-scrollbar">
-                <span className="text-[11px] sm:text-xs font-bold text-slate-400 mr-1 flex items-center gap-1 flex-shrink-0">
-                  <CalendarDays className="w-3.5 h-3.5 text-[#5969ff]" />
+                <span className="text-xs font-mono font-bold text-cyan-200 mr-1 flex items-center gap-1 flex-shrink-0 uppercase">
+                  <CalendarDays className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Khoảng ngày:</span>
                 </span>
 
@@ -597,10 +591,11 @@ export default function AdminDashboardPage() {
                     <button
                       key={p.key}
                       onClick={() => setDatePreset(p.key as DatePreset)}
-                      className={`px-2.5 py-1 sm:py-1.2 rounded-lg text-[11px] sm:text-xs font-medium transition cursor-pointer flex-shrink-0 ${isActive
-                        ? 'bg-[#5969ff] text-white shadow-xs font-bold'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-                        }`}
+                      className={`px-2.5 py-1.5 rounded-md text-xs font-medium transition cursor-pointer flex-shrink-0 ${
+                        isActive
+                          ? 'bg-cyan-500 text-slate-950 font-black shadow-[0_0_10px_rgba(34,211,238,0.35)]'
+                          : 'bg-[#040c1f]/90 text-slate-200 border border-cyan-500/20 hover:border-cyan-400/45 hover:text-white'
+                      }`}
                     >
                       {p.label}
                     </button>
@@ -609,103 +604,84 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            {/* Custom Date Range Picker (Advanced Interactive Panel) */}
             {datePreset === 'CUSTOM' ? (
-              <div className="p-3.5 sm:p-4 rounded-xl bg-gradient-to-r from-sky-50/50 via-blue-50/30 to-indigo-50/40 border border-sky-200 shadow-2xs space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-sky-100/80">
+              <div className={`${mobileFiltersOpen ? 'block' : 'hidden'} md:block p-3 rounded-xl bg-[#040c1f]/90 border border-cyan-400/30 space-y-2.5`}>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-cyan-500/20">
                   <div className="flex items-center gap-2">
-                    <CalendarDays className="w-4 h-4 text-[#0284c7]" />
-                    <span className="text-xs font-bold text-slate-800">
-                      Bộ Lọc Khoảng Ngày Tùy Chỉnh
-                    </span>
+                    <CalendarDays className="w-4 h-4 text-cyan-400" />
+                    <span className="text-xs font-bold text-white">Bộ Lọc Khoảng Ngày Tùy Chỉnh</span>
                     {customDateDiffDays > 0 && (
-                      <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-full bg-sky-100 text-[#0284c7] border border-sky-200">
-                        {customDateDiffDays} ngày được chọn
+                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-400/30">
+                        {customDateDiffDays} ngày
                       </span>
                     )}
                   </div>
 
-                  {/* Quick Fill Shortcuts */}
                   <div className="flex flex-wrap items-center gap-1.5 text-xs">
-                    <span className="text-[11px] text-slate-400 font-medium mr-1">Điền nhanh:</span>
-                    <button
-                      type="button"
-                      onClick={() => handleSetCustomPreset(7)}
-                      className="px-2.5 py-1 rounded-md bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 text-slate-700 hover:text-sky-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs"
-                    >
-                      7 ngày gần nhất
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleSetCustomPreset(14)}
-                      className="px-2.5 py-1 rounded-md bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 text-slate-700 hover:text-sky-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs"
-                    >
-                      14 ngày gần nhất
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleSetCustomPreset(30)}
-                      className="px-2.5 py-1 rounded-md bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 text-slate-700 hover:text-sky-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs"
-                    >
-                      30 ngày gần nhất
-                    </button>
+                    <span className="text-[11px] text-slate-400 mr-1">Điền nhanh:</span>
+                    {[7, 14, 30].map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => handleSetCustomPreset(d)}
+                        className="px-2.5 py-1 rounded-md bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-200 text-[11px] font-semibold transition cursor-pointer"
+                      >
+                        {d} ngày gần nhất
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                {/* Date Inputs */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex flex-wrap items-center gap-2.5">
-                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-300 shadow-2xs focus-within:border-[#5969ff] focus-within:ring-1 focus-within:ring-[#5969ff]">
-                      <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">Từ:</span>
+                    <div className="flex items-center gap-2 bg-[#06132b] px-3 py-1.5 rounded-lg border border-cyan-500/30">
+                      <span className="text-xs font-semibold text-slate-400">Từ:</span>
                       <input
                         type="date"
                         value={customStartDate}
                         onChange={(e) => setCustomStartDate(e.target.value)}
-                        className="bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
+                        className="bg-transparent text-xs font-mono font-bold text-white focus:outline-none cursor-pointer"
                       />
                     </div>
-
-                    <span className="text-slate-400 text-xs font-bold">→</span>
-
-                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-300 shadow-2xs focus-within:border-[#5969ff] focus-within:ring-1 focus-within:ring-[#5969ff]">
-                      <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">Đến:</span>
+                    <span className="text-cyan-400 text-xs font-bold">→</span>
+                    <div className="flex items-center gap-2 bg-[#06132b] px-3 py-1.5 rounded-lg border border-cyan-500/30">
+                      <span className="text-xs font-semibold text-slate-400">Đến:</span>
                       <input
                         type="date"
                         value={customEndDate}
                         onChange={(e) => setCustomEndDate(e.target.value)}
-                        className="bg-transparent text-xs font-bold text-slate-800 focus:outline-none cursor-pointer"
+                        className="bg-transparent text-xs font-mono font-bold text-white focus:outline-none cursor-pointer"
                       />
                     </div>
                   </div>
 
-                  {/* Status / Error display */}
                   {isCustomDateInvalid ? (
-                    <div className="flex items-center gap-1.5 text-xs text-rose-600 font-bold bg-rose-50 px-2.5 py-1.5 rounded-lg border border-rose-200">
-                      <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                    <div className="flex items-center gap-1.5 text-xs text-rose-300 font-bold bg-rose-500/15 px-2.5 py-1.5 rounded-lg border border-rose-400/35">
+                      <AlertCircle className="w-3.5 h-3.5" />
                       <span>Ngày bắt đầu không được lớn hơn ngày kết thúc!</span>
                     </div>
                   ) : (
-                    <div className="text-xs text-slate-500 flex items-center gap-1.5 font-medium">
-                      <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                    <div className="text-xs text-slate-300 flex items-center gap-1.5 font-mono">
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
                       <span>
-                        Đang lọc: <strong>{currentStartDate ? formatDateVi(currentStartDate) : '...'}</strong> —{' '}
-                        <strong>{currentEndDate ? formatDateVi(currentEndDate) : '...'}</strong>
+                        {currentStartDate ? formatDateVi(currentStartDate) : '...'} —{' '}
+                        {currentEndDate ? formatDateVi(currentEndDate) : '...'}
                       </span>
                     </div>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-0.5">
-                <div className="text-xs text-slate-500 flex items-center gap-2 font-medium">
-                  <span className="w-2 h-2 rounded-full bg-[#5969ff] animate-ping" />
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
+                <div className="text-xs text-slate-400 flex items-center gap-2 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
                   <span>
-                    Đang hiển thị:{' '}
-                    <strong className="text-slate-800">
+                    RANGE:{' '}
+                    <strong className="text-white">
                       {currentStartDate ? formatDateVi(currentStartDate) : 'Bắt đầu'}
                     </strong>{' '}
                     —{' '}
-                    <strong className="text-slate-800">
+                    <strong className="text-white">
                       {currentEndDate ? formatDateVi(currentEndDate) : 'Hiện tại'}
                     </strong>
                   </span>
@@ -713,46 +689,53 @@ export default function AdminDashboardPage() {
               </div>
             )}
 
-            {/* Comparison Controls */}
-            <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-2.5">
+            {/* Comparison Controls (Always accessible on desktop, inside toggle on mobile) */}
+            <div className={`${mobileFiltersOpen ? 'flex' : 'hidden'} md:flex pt-2 border-t border-cyan-500/20 flex-wrap items-center justify-between gap-2`}>
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => setCompareEnabled(!compareEnabled)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer active:scale-95 ${compareEnabled
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                    }`}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                    compareEnabled
+                      ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.4)]'
+                      : 'bg-[#040c1f] text-slate-300 border-cyan-500/25 hover:border-cyan-400/50'
+                  }`}
                 >
                   <GitCompare className="w-3.5 h-3.5" />
-                  <span>{compareEnabled ? 'Đang So Sánh (BẬT)' : 'So sánh với kỳ khác'}</span>
+                  <span>{compareEnabled ? 'So Sánh: BẬT' : 'So sánh kỳ khác'}</span>
                 </button>
 
                 {compareEnabled && (
-                  <div className="flex items-center gap-2 bg-emerald-50 p-1.5 rounded-lg border border-emerald-200 text-xs">
+                  <div className="flex items-center gap-2 bg-[#040c1f] p-1 rounded-lg border border-emerald-400/35 text-xs">
                     <select
                       value={comparisonMode}
                       onChange={(e) => setComparisonMode(e.target.value as ComparisonMode)}
-                      className="bg-transparent text-emerald-800 font-bold focus:outline-none cursor-pointer"
+                      className="bg-transparent text-emerald-300 font-bold focus:outline-none cursor-pointer"
                     >
-                      <option value="PREVIOUS_PERIOD">Kỳ liền trước (Tuần/Tháng trước)</option>
-                      <option value="YOY">Cùng kỳ năm trước (YoY)</option>
-                      <option value="CUSTOM">Tùy chọn khoảng so sánh...</option>
+                      <option value="PREVIOUS_PERIOD" className="bg-[#06132b]">
+                        Kỳ liền trước
+                      </option>
+                      <option value="YOY" className="bg-[#06132b]">
+                        Cùng kỳ năm trước (YoY)
+                      </option>
+                      <option value="CUSTOM" className="bg-[#06132b]">
+                        Tùy chọn khoảng so sánh...
+                      </option>
                     </select>
 
                     {comparisonMode === 'CUSTOM' && (
-                      <div className="flex items-center gap-1.5 border-l border-emerald-200 pl-2">
+                      <div className="flex items-center gap-1.5 border-l border-emerald-400/30 pl-2">
                         <input
                           type="date"
                           value={customCompStartDate}
                           onChange={(e) => setCustomCompStartDate(e.target.value)}
-                          className="bg-white border border-emerald-300 rounded px-2 py-0.5 text-xs text-slate-800"
+                          className="bg-[#06132b] border border-emerald-400/35 rounded px-2 py-0.5 text-xs text-white font-mono"
                         />
-                        <span className="text-emerald-700">-</span>
+                        <span className="text-emerald-300">-</span>
                         <input
                           type="date"
                           value={customCompEndDate}
                           onChange={(e) => setCustomCompEndDate(e.target.value)}
-                          className="bg-white border border-emerald-300 rounded px-2 py-0.5 text-xs text-slate-800"
+                          className="bg-[#06132b] border border-emerald-400/35 rounded px-2 py-0.5 text-xs text-white font-mono"
                         />
                       </div>
                     )}
@@ -762,26 +745,20 @@ export default function AdminDashboardPage() {
             </div>
           </section>
 
-          {/* ------------------------------------------------------------ */}
-          {/* ROW 1: 4 KPI CARDS WITH BOTTOM SPARKLINE CHARTS (Concept Style) */}
-          {/* ------------------------------------------------------------ */}
+          {/* ROW 1: 4 HUD SPARKLINE KPI CARDS */}
           <section className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-            {/* Card 1: Total Revenue -> Tổng Lượt Click */}
             <SparklineCard
               title="Tổng Lượt Click"
               value={loading ? '...' : aggregatedTotals.grandTotal.toLocaleString()}
               subValue="clicks"
-              theme="blue"
+              theme="cyan"
               delta={
                 compareEnabled && aggregatedTotals.comparison
                   ? {
-                    value: `${aggregatedTotals.comparison.grandTotal.isPositive ? '+' : ''}${aggregatedTotals.comparison.grandTotal.percent}%`,
-                    isPositive: aggregatedTotals.comparison.grandTotal.isPositive,
-                  }
-                  : {
-                    value: '+6.59%',
-                    isPositive: true,
-                  }
+                      value: `${aggregatedTotals.comparison.grandTotal.isPositive ? '+' : ''}${aggregatedTotals.comparison.grandTotal.percent}%`,
+                      isPositive: aggregatedTotals.comparison.grandTotal.isPositive,
+                    }
+                  : { value: '+6.59%', isPositive: true }
               }
               subtext={
                 compareEnabled && aggregatedTotals.comparison
@@ -791,37 +768,27 @@ export default function AdminDashboardPage() {
               dataPoints={totalSparklinePoints}
             />
 
-            {/* Card 2: Affiliate Revenue -> Kênh Dẫn Đầu */}
             <SparklineCard
               title="Kênh Hút Traffic Nhất"
               value={topCurrentSource.name}
               subValue={`${topCurrentSource.clicks.toLocaleString()} clicks`}
               theme="pink"
-              delta={{
-                value: `${topCurrentSource.share}%`,
-                isPositive: true,
-              }}
+              delta={{ value: `${topCurrentSource.share}%`, isPositive: true }}
               subtext={`Chiếm ${topCurrentSource.share}% thị phần toàn bộ lượt click`}
               dataPoints={topChannelSparklinePoints}
             />
 
-            {/* Card 3: Refunds -> Đỉnh Điểm Kỷ Lục */}
             <SparklineCard
               title="Thời Điểm Cao Điểm Nhất"
               value={peakItem ? peakItem.total.toLocaleString() : 'N/A'}
               subValue="clicks"
-              theme="cyan"
+              theme="blue"
               badgeText="Kỷ Lục"
               badgeType="info"
-              subtext={
-                peakItem
-                  ? `Thời gian: ${peakItem.label} (${peakItem.subLabel || ''})`
-                  : 'Chưa có dữ liệu'
-              }
+              subtext={peakItem ? `${peakItem.label} (${peakItem.subLabel || ''})` : 'Chưa có dữ liệu'}
               dataPoints={[18, 25, 42, 38, 65, 54, 88, 72, 105, 95]}
             />
 
-            {/* Card 4: Avg. Revenue Per User -> Ngày Vàng Trong Tuần */}
             <SparklineCard
               title="Ngày Vàng Trong Tuần"
               value={bestDayOfWeek ? bestDayOfWeek.name : 'Đang tính'}
@@ -834,59 +801,86 @@ export default function AdminDashboardPage() {
             />
           </section>
 
-          {/* ------------------------------------------------------------ */}
-          {/* ROW: CONVERSION RATE & DOWNLOAD PLATFORMS (Option 3 Upgrade) */}
-          {/* ------------------------------------------------------------ */}
-          <ConversionFunnelCard
-            items={currentGroupedItems}
-            grandTotal={aggregatedTotals.grandTotal}
-            granularityLabel={granularityLabel}
-            compareEnabled={compareEnabled}
-          />
+          {/* MOBILE COCKPIT TAB SWITCHER (Hidden on desktop lg+) */}
+          <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-[#050e23] border border-cyan-500/25 lg:hidden">
+            {[
+              { key: 'orbital', label: 'Orbital HUD' },
+              { key: 'conversion', label: 'Tải & Thiết Bị' },
+              { key: 'acquisition', label: 'Kênh Traffic' },
+            ].map((t) => (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => setMobileCockpitTab(t.key as 'orbital' | 'conversion' | 'acquisition')}
+                className={`py-2 px-2 rounded-lg text-xs font-bold transition cursor-pointer ${
+                  mobileCockpitTab === t.key
+                    ? 'bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(34,211,238,0.4)]'
+                    : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
 
-          {/* ------------------------------------------------------------ */}
-          {/* ROW 2: DUAL CARDS (Recent Orders Table & Customer Acquisition) */}
-          {/* ------------------------------------------------------------ */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start" id="dataTableSection">
-            {/* Left Column (8 cols): Detailed Traffic Data Table */}
-            <div className="lg:col-span-8">
-              <TrafficTable
-                items={finalDisplayItems}
-                totals={aggregatedTotals}
-                loading={loading}
-                granularity={granularity}
-                granularityLabel={granularityLabel}
-                showPercentShare={showPercentShare}
-                setShowPercentShare={setShowPercentShare}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                sortField={sortField}
-                sortDirection={sortDirection}
-                onSort={handleSort}
-                compareEnabled={compareEnabled}
-                onCopyClipboard={handleCopyClipboard}
-                copiedSuccess={copiedSuccess}
-                onExportCSV={handleExportCSV}
-                lastUpdated={data?.lastUpdated}
-              />
+          {/* ROW 2: ORBITAL 3-COLUMN COCKPIT (Desktop: 3 cols side-by-side | Mobile: active tab only) */}
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch" id="orbitalHubSection">
+            <div className={`lg:col-span-3 flex-col ${mobileCockpitTab === 'conversion' ? 'flex' : 'hidden lg:flex'}`}>
+              <div className="flex-1 flex flex-col [&>div]:flex-1">
+                <ConversionFunnelCard
+                  items={currentGroupedItems}
+                  grandTotal={aggregatedTotals.grandTotal}
+                  granularityLabel={granularityLabel}
+                  compareEnabled={compareEnabled}
+                />
+              </div>
             </div>
 
-            {/* Right Column (4 cols): Customer Acquisition Breakdown Card */}
-            <div className="lg:col-span-4">
-              <AcquisitionCard
-                items={currentGroupedItems}
-                grandTotal={aggregatedTotals.grandTotal}
-              />
+            <div className={`lg:col-span-5 flex-col ${mobileCockpitTab === 'orbital' ? 'flex' : 'hidden lg:flex'}`}>
+              <div className="flex-1 flex flex-col [&>div]:flex-1">
+                <OrbitalTrafficHub
+                  items={currentGroupedItems}
+                  totals={aggregatedTotals}
+                  topSource={topCurrentSource}
+                  peakItem={peakItem}
+                  bestDayName={bestDayOfWeek?.name}
+                  lastUpdated={data?.lastUpdated}
+                />
+              </div>
+            </div>
+
+            <div className={`lg:col-span-4 flex-col ${mobileCockpitTab === 'acquisition' ? 'flex' : 'hidden lg:flex'}`}>
+              <div className="flex-1 flex flex-col [&>div]:flex-1">
+                <AcquisitionCard items={currentGroupedItems} grandTotal={aggregatedTotals.grandTotal} />
+              </div>
             </div>
           </section>
 
-          {/* ------------------------------------------------------------ */}
-          {/* ROW 3: BẢNG XẾP HẠNG & HIỆU QUẢ 4 GAME LAMON */}
-          {/* ------------------------------------------------------------ */}
-          <GamePerformanceCard
-            items={currentGroupedItems}
-            grandTotal={aggregatedTotals.grandTotal}
-          />
+          {/* ROW 3: DETAILED TRAFFIC TELEMETRY MATRIX */}
+          <section id="dataTableSection">
+            <TrafficTable
+              items={finalDisplayItems}
+              totals={aggregatedTotals}
+              loading={loading}
+              granularity={granularity}
+              granularityLabel={granularityLabel}
+              showPercentShare={showPercentShare}
+              setShowPercentShare={setShowPercentShare}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              sortField={sortField}
+              sortDirection={sortDirection}
+              onSort={handleSort}
+              compareEnabled={compareEnabled}
+              onCopyClipboard={handleCopyClipboard}
+              copiedSuccess={copiedSuccess}
+              onExportCSV={handleExportCSV}
+              lastUpdated={data?.lastUpdated}
+            />
+          </section>
+
+          {/* ROW 4: 4 GAMES HUD MATRIX */}
+          <GamePerformanceCard items={currentGroupedItems} grandTotal={aggregatedTotals.grandTotal} />
         </main>
       </div>
     </div>

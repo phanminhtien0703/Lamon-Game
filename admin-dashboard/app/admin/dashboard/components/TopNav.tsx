@@ -1,20 +1,17 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
 import {
   Menu,
   Search,
   RefreshCw,
   Radio,
-  Bell,
-  Grid,
   LogOut,
   ExternalLink,
   ChevronDown,
-  User,
   PanelLeftClose,
   PanelLeftOpen,
+  Orbit,
 } from 'lucide-react';
 
 interface TopNavProps {
@@ -41,7 +38,27 @@ export default function TopNav({
   lastUpdated,
 }: TopNavProps) {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [now, setNow] = useState<{ time: string; date: string } | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Live HUD clock matching reference top-right telemetry
+  useEffect(() => {
+    const updateClock = () => {
+      const d = new Date();
+      setNow({
+        time: d.toLocaleTimeString('en-GB', { hour12: false }),
+        date: d.toLocaleDateString('vi-VN', {
+          weekday: 'short',
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }),
+      });
+    };
+    updateClock();
+    const timer = setInterval(updateClock, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -58,14 +75,19 @@ export default function TopNav({
     };
   }, [profileDropdownOpen]);
 
+  const jumpTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
-    <header className="h-14 sm:h-16 bg-white border-b border-slate-200/90 px-3 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-sm transition-all duration-300">
-      {/* Left: Sidebar Toggles & Breadcrumb */}
-      <div className="flex items-center gap-2 sm:gap-3">
+    <header className="h-14 sm:h-16 bg-[#050e22]/90 backdrop-blur-md border-b border-cyan-500/25 px-3 sm:px-6 lg:px-7 flex items-center justify-between sticky top-0 z-30 shadow-[0_4px_24px_rgba(0,0,0,0.45)] transition-all duration-300">
+      {/* Left: Sidebar Toggles, Orbital Title & Top HUD Nav Tabs */}
+      <div className="flex items-center gap-2 sm:gap-4 min-w-0">
         {/* Mobile Sidebar Toggle Button */}
         <button
           onClick={onToggleSidebar}
-          className="lg:hidden p-1.5 sm:p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer"
+          className="lg:hidden p-1.5 sm:p-2 rounded-lg text-cyan-300 hover:text-white hover:bg-cyan-500/15 border border-cyan-500/20 transition cursor-pointer"
           aria-label="Mở menu"
         >
           <Menu className="w-5 h-5" />
@@ -75,60 +97,88 @@ export default function TopNav({
         {onToggleCollapse && (
           <button
             onClick={onToggleCollapse}
-            className="hidden lg:flex items-center justify-center p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer"
+            className="hidden lg:flex items-center justify-center p-2 rounded-lg text-cyan-300/80 hover:text-cyan-200 hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/30 transition cursor-pointer"
             title={isCollapsed ? 'Mở rộng menu bên trái (Ctrl+B)' : 'Thu gọn menu bên trái (Ctrl+B)'}
             aria-label={isCollapsed ? 'Mở rộng menu' : 'Thu gọn menu'}
           >
             {isCollapsed ? (
-              <PanelLeftOpen className="w-5 h-5 text-[#5969ff]" />
+              <PanelLeftOpen className="w-5 h-5 text-cyan-400" />
             ) : (
-              <PanelLeftClose className="w-5 h-5 text-slate-600" />
+              <PanelLeftClose className="w-5 h-5" />
             )}
           </button>
         )}
 
-        {/* Mobile Brand Title */}
-        <div className="lg:hidden flex items-center gap-1.5 sm:gap-2">
-          <img
-            src="/images/logo.png"
-            alt="Lamon Game"
-            className="w-6 h-6 sm:w-7 sm:h-7 rounded-md object-contain"
-          />
-          <span className="text-sm sm:text-base font-black text-[#38bdf8] uppercase tracking-wider font-sans">
-            LAMON GAME
-          </span>
+        {/* Orbital Brand Title */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cyan-500/15 border border-cyan-400/40 flex items-center justify-center shadow-[0_0_12px_rgba(34,211,238,0.25)]">
+            <Orbit className="w-4 h-4 text-cyan-300" />
+          </div>
+          <div className="leading-tight">
+            <span className="text-sm sm:text-base font-black text-white tracking-wider uppercase block">
+              LAMON ORBITAL
+            </span>
+            <span className="hidden sm:block text-[10px] text-cyan-200/85 font-mono tracking-[0.16em] uppercase">
+              ANALYTICS HUD
+            </span>
+          </div>
         </div>
 
-        {/* Desktop Breadcrumbs */}
-        <div className="hidden lg:flex items-center gap-2 text-xs">
-          <span className="font-semibold text-slate-400 hover:text-slate-600 transition">
-            Dashboard
-          </span>
-          <span className="text-slate-300">/</span>
-          <span className="font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md">
-            Lamon Game Analytics
-          </span>
-        </div>
+        {/* Desktop HUD Section Tabs */}
+        <nav className="hidden xl:flex items-center gap-1 ml-3 pl-4 border-l border-cyan-500/20 text-xs font-bold tracking-wider uppercase">
+          {[
+            { label: 'Tổng Quan', id: 'dashboardOverview' },
+            { label: 'Orbital Traffic', id: 'orbitalHubSection' },
+            { label: 'Dữ Liệu', id: 'dataTableSection' },
+            { label: 'Hiệu Quả Game', id: 'gamePerformanceSection' },
+          ].map((nav, i) => (
+            <button
+              key={nav.id}
+              type="button"
+              onClick={() => jumpTo(nav.id)}
+              className={`px-3 py-1.5 rounded-md transition cursor-pointer ${
+                i === 0
+                  ? 'text-cyan-200 bg-cyan-500/15 border-b-2 border-cyan-400 shadow-[0_2px_10px_rgba(34,211,238,0.2)]'
+                  : 'text-slate-400 hover:text-cyan-200 hover:bg-cyan-500/10'
+              }`}
+            >
+              {nav.label}
+            </button>
+          ))}
+        </nav>
       </div>
 
-      {/* Right: Search, Live Status, Refresh, Notifications, Profile */}
-      <div className="flex items-center gap-1.5 sm:gap-4">
-        {/* Search Bar (Concept Template Style) */}
-        <div className="relative hidden md:block w-48 lg:w-64">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+      {/* Right: Search, Live Telemetry Clock, Sync Status, Refresh, Profile */}
+      <div className="flex items-center gap-1.5 sm:gap-3">
+        {/* Search Bar */}
+        <div className="relative hidden md:block w-44 lg:w-56">
+          <Search className="w-3.5 h-3.5 text-cyan-400/70 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search..."
-            className="w-full pl-9 pr-3 py-1.5 bg-[#f1f3f7] border border-transparent hover:border-slate-300 focus:border-[#5969ff] focus:bg-white rounded-lg text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#5969ff]/20 transition"
+            placeholder="Tìm ngày, tuần, tháng..."
+            className="w-full pl-8 pr-3 py-1.5 bg-[#040a18]/90 border border-cyan-500/25 hover:border-cyan-400/45 focus:border-cyan-400 rounded-lg text-xs font-medium text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-400/40 transition"
           />
         </div>
 
+        {/* Live Telemetry Clock */}
+        {now && (
+          <div className="hidden lg:flex flex-col items-end pr-2.5 border-r border-cyan-500/20 font-mono leading-tight">
+            <span className="text-sm sm:text-base font-black text-white tracking-wider tabular-nums">
+              {now.time}
+            </span>
+            <span className="text-[11px] text-cyan-200/85 uppercase">{now.date}</span>
+          </div>
+        )}
+
         {/* Live Indicator Pill */}
-        <div className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-600 text-[11px] sm:text-xs font-semibold">
-          <Radio className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-pulse text-emerald-500" />
-          <span className="hidden sm:inline">Live Sync (8s)</span>
+        <div
+          title={lastUpdated ? `Cập nhật lúc ${lastUpdated}` : 'Đang đồng bộ mỗi 8 giây'}
+          className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-md bg-emerald-500/15 border border-emerald-400/35 text-emerald-300 text-[11px] sm:text-xs font-mono font-bold"
+        >
+          <Radio className="w-3 h-3 animate-pulse text-emerald-400" />
+          <span className="hidden sm:inline">SYNC 8S</span>
         </div>
 
         {/* Manual Refresh */}
@@ -136,58 +186,29 @@ export default function TopNav({
           onClick={onRefresh}
           disabled={refreshing}
           title="Đồng bộ số liệu mới nhất"
-          className="p-1.5 sm:p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition disabled:opacity-50 cursor-pointer active:scale-95"
+          className="p-1.5 sm:p-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/25 text-cyan-300 hover:text-white transition disabled:opacity-50 cursor-pointer active:scale-95"
         >
-          <RefreshCw
-            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${refreshing ? 'animate-spin text-[#5969ff]' : ''}`}
-          />
+          <RefreshCw className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${refreshing ? 'animate-spin text-cyan-200' : ''}`} />
         </button>
 
-        {/* Notifications Icon (Concept Style) */}
-        <button
-          title="Thông báo hệ thống"
-          className="relative p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition cursor-pointer"
-        >
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white" />
-        </button>
-
-        {/* Apps Grid Icon */}
-        <div className="relative">
-          <button
-            title="Liên kết nhanh game"
-            className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition cursor-pointer"
-          >
-            <Grid className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Divider */}
-        <div className="h-6 w-[1px] bg-slate-200" />
-
-        {/* Profile Avatar Dropdown (Concept Header Right) */}
+        {/* Profile Avatar Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-            className="flex items-center gap-2 p-1 pl-1.5 rounded-full hover:bg-slate-100 transition cursor-pointer"
+            className="flex items-center gap-1.5 p-1 pl-1.5 rounded-full bg-[#061229] border border-cyan-500/25 hover:border-cyan-400/50 transition cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#5969ff] to-cyan-400 flex items-center justify-center text-white font-bold text-xs shadow-sm ring-2 ring-white">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-indigo-500 flex items-center justify-center text-slate-950 font-black text-xs shadow-[0_0_12px_rgba(34,211,238,0.4)]">
               A
             </div>
-            <span className="hidden sm:inline text-xs font-bold text-slate-700">
-              Admin
-            </span>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+            <span className="hidden sm:inline text-xs font-bold text-slate-200 pr-0.5">Admin</span>
+            <ChevronDown className="w-3.5 h-3.5 text-cyan-300/70" />
           </button>
 
-          {/* Profile Dropdown Menu */}
           {profileDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 text-xs animate-in fade-in slide-in-from-top-2 duration-150">
-              <div className="px-3.5 py-2.5 border-b border-slate-100">
-                <p className="font-bold text-slate-800">Admin Manager</p>
-                <p className="text-[11px] text-slate-400 truncate">
-                  admin@lamongame.com
-                </p>
+            <div className="absolute right-0 mt-2 w-52 bg-[#06132b] rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.65)] border border-cyan-500/35 py-1.5 z-50 text-xs">
+              <div className="px-3.5 py-2.5 border-b border-cyan-500/20">
+                <p className="font-bold text-white">Admin Manager</p>
+                <p className="text-[11px] text-cyan-300/70 truncate">admin@lamongame.com</p>
               </div>
 
               <div className="py-1">
@@ -195,20 +216,20 @@ export default function TopNav({
                   href="/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-3.5 py-2 text-slate-600 hover:bg-slate-50 hover:text-[#5969ff] transition"
+                  className="flex items-center gap-2 px-3.5 py-2 text-slate-300 hover:bg-cyan-500/10 hover:text-cyan-200 transition"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>Trang chủ Cổng Game</span>
                 </a>
               </div>
 
-              <div className="border-t border-slate-100 pt-1">
+              <div className="border-t border-cyan-500/20 pt-1">
                 <button
                   onClick={() => {
                     setProfileDropdownOpen(false);
                     onLogout();
                   }}
-                  className="w-full flex items-center gap-2 px-3.5 py-2 text-rose-600 hover:bg-rose-50 transition font-semibold cursor-pointer"
+                  className="w-full flex items-center gap-2 px-3.5 py-2 text-rose-400 hover:bg-rose-500/10 transition font-semibold cursor-pointer"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   <span>Đăng xuất</span>
