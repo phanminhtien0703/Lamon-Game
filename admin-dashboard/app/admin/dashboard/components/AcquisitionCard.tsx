@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-import { PieChart as PieChartIcon, Flame, ExternalLink } from 'lucide-react';
+import { PieChart as PieChartIcon } from 'lucide-react';
 import { CHANNELS, ChannelKey, GroupedTrackingItem } from '../types';
 
 interface AcquisitionCardProps {
@@ -12,7 +12,6 @@ interface AcquisitionCardProps {
 export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardProps) {
   const [hoverKey, setHoverKey] = useState<string | null>(null);
 
-  // Calculate channel totals
   const channelData = useMemo(() => {
     const sums = {} as Record<ChannelKey, number>;
     CHANNELS.forEach((ch) => {
@@ -38,7 +37,6 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
     }).sort((a, b) => b.clicks - a.clicks);
   }, [items, grandTotal]);
 
-  // Donut chart path generation
   const donutPaths = useMemo(() => {
     const size = 180;
     const center = size / 2;
@@ -83,26 +81,25 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
     : channelData[0];
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200/90 shadow-sm p-3.5 sm:p-5 flex flex-col justify-between">
-      {/* Header */}
+    <div className="hud-panel hud-corners rounded-xl p-3.5 sm:p-5 flex flex-col justify-between">
       <div>
-        <div className="flex items-center justify-between pb-2.5 sm:pb-3 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-2.5 sm:pb-3 border-b border-cyan-500/20">
           <div>
-            <h3 className="text-xs sm:text-sm font-bold text-slate-800 tracking-tight">
-              Customer Acquisition
+            <h3 className="text-sm sm:text-[15px] font-extrabold uppercase tracking-wider text-white">
+              Channel Radar
             </h3>
-            <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
-              Cơ cấu đóng góp giữa các nguồn traffic
+            <p className="text-[11px] sm:text-xs text-slate-300 mt-0.5">
+              Cơ cấu đóng góp các nguồn traffic
             </p>
           </div>
-          <div className="p-1.5 sm:p-2 rounded-lg bg-blue-50 text-[#5969ff]">
-            <PieChartIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <div className="p-2 rounded-lg bg-cyan-500/15 border border-cyan-400/30 text-cyan-300">
+            <PieChartIcon className="w-4 h-4" />
           </div>
         </div>
 
-        {/* Donut Chart Visual & Active Highlight */}
-        <div className="flex items-center justify-center my-3 sm:my-4 relative">
-          <svg width={160} height={160} className="sm:w-[180px] sm:h-[180px] overflow-visible">
+        {/* Glowing HUD Donut */}
+        <div className="flex items-center justify-center my-2.5 sm:my-4 relative">
+          <svg viewBox="0 0 180 180" className="w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] overflow-visible">
             {donutPaths.map((slice) => {
               if (!slice.pathData) return null;
               const isHovered = hoverKey === slice.key;
@@ -112,8 +109,8 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
                   key={slice.key}
                   d={slice.pathData}
                   fill={slice.color}
-                  opacity={hoverKey ? (isHovered ? 1 : 0.4) : 0.9}
-                  stroke="#ffffff"
+                  opacity={hoverKey ? (isHovered ? 1 : 0.35) : 0.92}
+                  stroke="#050e23"
                   strokeWidth={2}
                   className="transition-all duration-200 cursor-pointer"
                   onMouseEnter={() => setHoverKey(slice.key)}
@@ -123,22 +120,21 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
             })}
           </svg>
 
-          {/* Center Text in Donut */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
-            <span className="text-[9px] sm:text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+            <span className="text-[10px] sm:text-[11px] font-mono font-bold text-cyan-200 uppercase tracking-wider">
               {activeChannel?.label || 'Tổng Clicks'}
             </span>
-            <span className="text-base sm:text-lg font-extrabold text-slate-800">
+            <span className="text-base sm:text-xl font-black font-mono text-white">
               {activeChannel?.clicks.toLocaleString() || grandTotal.toLocaleString()}
             </span>
-            <span className="text-[9px] sm:text-[10px] font-bold text-[#5969ff] bg-blue-50 px-1.5 py-0.2 rounded-full">
+            <span className="text-[10px] sm:text-[11px] font-mono font-bold text-cyan-200 bg-cyan-500/15 border border-cyan-400/35 px-2 py-0.5 rounded-full mt-0.5">
               {activeChannel ? `${activeChannel.percent}%` : '100%'}
             </span>
           </div>
         </div>
 
-        {/* Channel Breakdown List with Progress Bars */}
-        <div className="space-y-1.5 sm:space-y-2.5 mt-1 sm:mt-2">
+        {/* Channel Breakdown List (2-col grid on mobile to stay compact, 1-col on desktop) */}
+        <div className="grid grid-cols-2 sm:grid-cols-1 gap-1.5 mt-1">
           {channelData.map((ch) => {
             const isHovered = hoverKey === ch.key;
 
@@ -147,30 +143,29 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
                 key={ch.key}
                 onMouseEnter={() => setHoverKey(ch.key)}
                 onMouseLeave={() => setHoverKey(null)}
-                className={`p-1.5 sm:p-2 rounded-lg transition cursor-pointer ${
-                  isHovered ? 'bg-slate-50 ring-1 ring-slate-200' : 'hover:bg-slate-50/70'
+                className={`p-2 rounded-lg transition cursor-pointer ${
+                  isHovered
+                    ? 'bg-cyan-500/15 border border-cyan-400/40'
+                    : 'bg-[#040c1f]/60 border border-transparent hover:border-cyan-500/20'
                 }`}
               >
-                <div className="flex items-center justify-between text-[11px] sm:text-xs mb-1">
-                  <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="flex items-center justify-between text-xs sm:text-[13px] mb-1">
+                  <div className="flex items-center gap-2">
                     <span
-                      className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: ch.color }}
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: ch.color, boxShadow: `0 0 8px ${ch.color}` }}
                     />
-                    <span className="font-semibold text-slate-700">{ch.label}</span>
+                    <span className="font-semibold text-slate-100">{ch.label}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2">
-                    <span className="font-bold text-slate-800">
-                      {ch.clicks.toLocaleString()}
-                    </span>
-                    <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 w-10 sm:w-11 text-right">
+                  <div className="flex items-center gap-2 font-mono">
+                    <span className="font-bold text-white">{ch.clicks.toLocaleString()}</span>
+                    <span className="text-[11px] font-semibold text-cyan-200 w-11 text-right">
                       {ch.percent}%
                     </span>
                   </div>
                 </div>
 
-                {/* Mini Progress Bar */}
-                <div className="w-full h-1 sm:h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-[#030816] rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{
@@ -185,9 +180,8 @@ export default function AcquisitionCard({ items, grandTotal }: AcquisitionCardPr
         </div>
       </div>
 
-      {/* Footer Meta */}
-      <div className="pt-2.5 sm:pt-3 border-t border-slate-100 text-center text-[11px] sm:text-xs text-slate-400 mt-2.5 sm:mt-3">
-        Tổng cộng <strong className="text-slate-700">{grandTotal.toLocaleString()} clicks</strong> trong chu kỳ được chọn
+      <div className="pt-2.5 border-t border-cyan-500/20 text-center text-xs font-mono text-slate-300 mt-3">
+        Tổng: <strong className="text-cyan-300">{grandTotal.toLocaleString()} clicks</strong> trong chu kỳ
       </div>
     </div>
   );

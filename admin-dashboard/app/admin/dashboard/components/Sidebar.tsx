@@ -4,9 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard,
-  BarChart3,
   Share2,
-  Calendar,
   FileSpreadsheet,
   LogOut,
   X,
@@ -16,6 +14,7 @@ import {
   ChevronsRight,
   Download,
   Trophy,
+  Orbit,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -50,7 +49,7 @@ export default function Sidebar({
     }
   };
 
-  const isSubTabActive = ['conversion', 'games', 'table'].includes(activeTab);
+  const isSubTabActive = ['orbital', 'conversion', 'games', 'table'].includes(activeTab);
 
   return (
     <>
@@ -58,21 +57,21 @@ export default function Sidebar({
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-40 lg:hidden transition-opacity"
           aria-hidden="true"
         />
       )}
 
-      {/* Main Sidebar Container */}
+      {/* Main Orbital HUD Sidebar Rail */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 bg-[#0e0c28] text-slate-300 z-50 flex flex-col justify-between border-r border-[#222144]/70 transition-all duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 bg-[#040a18]/95 backdrop-blur-xl text-slate-300 z-50 flex flex-col justify-between border-r border-cyan-500/20 shadow-[4px_0_24px_rgba(0,0,0,0.5)] transition-all duration-300 ease-in-out lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } ${isCollapsed ? 'lg:w-[72px] w-64' : 'w-64'}`}
       >
         {/* Top: Brand Header */}
         <div>
           <div
-            className={`h-16 flex items-center border-b border-[#222144]/60 bg-[#0e0c28] transition-all duration-300 ${
+            className={`h-16 flex items-center border-b border-cyan-500/20 bg-[#050d1f] transition-all duration-300 ${
               isCollapsed
                 ? 'lg:px-3 px-5 justify-between lg:justify-center'
                 : 'px-5 justify-between'
@@ -81,19 +80,19 @@ export default function Sidebar({
             <Link
               href="/admin/dashboard"
               className="flex items-center gap-2.5 group"
-              title="Lamon Game Admin Dashboard"
+              title="Lamon Game Orbital HUD"
             >
               <img
                 src="/images/logo.png"
                 alt="Lamon Game"
-                className="w-8 h-8 rounded-lg object-contain bg-white/10 p-0.5 shadow-md flex-shrink-0"
+                className="w-8 h-8 rounded-lg object-contain bg-cyan-500/10 border border-cyan-400/30 p-0.5 shadow-[0_0_12px_rgba(34,211,238,0.25)] flex-shrink-0"
               />
               <div className={isCollapsed ? 'lg:hidden' : 'block'}>
-                <span className="text-lg font-black text-[#38bdf8] tracking-wider uppercase font-sans">
+                <span className="text-base font-black text-cyan-300 tracking-wider uppercase font-sans">
                   LAMON GAME
                 </span>
-                <span className="text-[10px] text-slate-400 font-semibold block -mt-1 tracking-widest uppercase">
-                  Admin Analytics
+                <span className="text-[9px] text-cyan-400/70 font-mono font-bold block -mt-0.5 tracking-[0.2em] uppercase">
+                  ORBITAL HUD
                 </span>
               </div>
             </Link>
@@ -102,12 +101,10 @@ export default function Sidebar({
             <button
               onClick={onToggleCollapse}
               title={isCollapsed ? 'Mở rộng menu' : 'Thu gọn menu'}
-              className={`hidden lg:flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer ${
-                isCollapsed ? 'mt-0' : ''
-              }`}
+              className="hidden lg:flex items-center justify-center p-1.5 rounded-lg text-cyan-300/70 hover:text-cyan-200 hover:bg-cyan-500/10 transition cursor-pointer"
             >
               {isCollapsed ? (
-                <ChevronsRight className="w-4 h-4 text-[#38bdf8]" />
+                <ChevronsRight className="w-4 h-4 text-cyan-400" />
               ) : (
                 <ChevronsLeft className="w-4 h-4" />
               )}
@@ -123,23 +120,21 @@ export default function Sidebar({
             </button>
           </div>
 
-          {/* Navigation Items (Scrollable) */}
+          {/* Navigation Items */}
           <nav
             className={`py-3.5 space-y-5 overflow-y-auto max-h-[calc(100vh-140px)] text-sm transition-all duration-300 ${
               isCollapsed ? 'lg:px-2 px-3.5' : 'px-3.5'
             }`}
           >
-            {/* Section 1: MENU */}
             <div>
               {isCollapsed ? (
-                <div className="hidden lg:block w-8 h-[1px] bg-white/10 mx-auto my-2" />
+                <div className="hidden lg:block w-8 h-[1px] bg-cyan-500/20 mx-auto my-2" />
               ) : (
-                <div className="px-3 pb-2 text-[11px] font-bold text-slate-400/80 uppercase tracking-wider">
-                  Menu
+                <div className="px-3 pb-2 text-[10px] font-mono font-bold text-cyan-400/70 uppercase tracking-[0.2em]">
+                  Command Rail
                 </div>
               )}
               <ul className="space-y-1">
-                {/* 1. Parent Tab: Dashboard */}
                 <li>
                   <button
                     onClick={() => {
@@ -157,14 +152,14 @@ export default function Sidebar({
                         : 'justify-between px-3.5 py-2.5'
                     } ${
                       activeTab === 'dashboard'
-                        ? 'bg-[#5969ff] text-white shadow-md shadow-[#5969ff]/30 font-bold'
+                        ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_16px_rgba(34,211,238,0.22)] font-bold'
                         : isSubTabActive
-                        ? 'bg-white/10 text-white font-bold'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5'
+                        ? 'bg-cyan-500/10 text-cyan-200 border border-cyan-500/25 font-bold'
+                        : 'text-slate-300 hover:text-white hover:bg-cyan-500/10'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <LayoutDashboard className="w-4 h-4 flex-shrink-0 text-[#38bdf8]" />
+                      <LayoutDashboard className="w-4 h-4 flex-shrink-0 text-cyan-400" />
                       <span className={isCollapsed ? 'lg:hidden' : 'inline'}>Dashboard</span>
                     </div>
                     {!isCollapsed && (
@@ -176,71 +171,87 @@ export default function Sidebar({
                     )}
                   </button>
 
-                  {/* Sub-tabs under Dashboard (Expanded state) */}
+                  {/* Sub-tabs (Expanded state) */}
                   {!isCollapsed && isDashboardOpen && (
-                    <ul className="mt-1 ml-3.5 pl-3 border-l border-[#222144] space-y-1">
-                      {/* Sub-tab 1: Tỷ Lệ Tải & Thiết Bị */}
+                    <ul className="mt-1.5 ml-3.5 pl-3 border-l border-cyan-500/25 space-y-1">
+                      <li>
+                        <button
+                          onClick={() => scrollToId('orbitalHubSection', 'orbital')}
+                          title="Orbital Traffic Hub"
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
+                            activeTab === 'orbital'
+                              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/40 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-cyan-500/10'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <Orbit className="w-4 h-4 flex-shrink-0 text-cyan-400" />
+                            <span className="truncate">Orbital Traffic</span>
+                          </div>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/15 text-cyan-300 font-mono font-bold flex-shrink-0">
+                            HUD
+                          </span>
+                        </button>
+                      </li>
+
                       <li>
                         <button
                           onClick={() => scrollToId('conversionSection', 'conversion')}
                           title="Tỷ Lệ Tải & Thiết Bị"
                           className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
                             activeTab === 'conversion'
-                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
-                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/40 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-cyan-500/10'
                           }`}
                         >
                           <div className="flex items-center gap-2.5 truncate">
                             <Download className="w-4 h-4 flex-shrink-0 text-sky-400" />
-                            <span className="truncate">Tỷ Lệ Tải & Thiết Bị</span>
+                            <span className="truncate">Tỷ Lệ Tải &amp; Thiết Bị</span>
                           </div>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold flex-shrink-0">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 font-mono font-bold flex-shrink-0">
                             CR%
                           </span>
                         </button>
                       </li>
 
-                      {/* Sub-tab 2: Hiệu Quả 4 Game */}
                       <li>
                         <button
                           onClick={() => scrollToId('gamePerformanceSection', 'games')}
                           title="Hiệu Quả 4 Game"
                           className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
                             activeTab === 'games'
-                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
-                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/40 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-cyan-500/10'
                           }`}
                         >
                           <div className="flex items-center gap-2.5 truncate">
                             <Trophy className="w-4 h-4 flex-shrink-0 text-amber-400" />
                             <span className="truncate">Hiệu Quả 4 Game</span>
                           </div>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold flex-shrink-0">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 font-mono font-bold flex-shrink-0">
                             TOP
                           </span>
                         </button>
                       </li>
 
-                      {/* Sub-tab 3: Bảng Dữ Liệu Chi Tiết */}
                       <li>
                         <button
                           onClick={() => scrollToId('dataTableSection', 'table')}
                           title="Bảng Dữ Liệu Chi Tiết"
                           className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition cursor-pointer ${
                             activeTab === 'table'
-                              ? 'bg-[#5969ff] text-white shadow-sm shadow-[#5969ff]/30 font-bold'
-                              : 'text-slate-300 hover:text-white hover:bg-white/5'
+                              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/40 font-bold'
+                              : 'text-slate-300 hover:text-white hover:bg-cyan-500/10'
                           }`}
                         >
                           <div className="flex items-center gap-2.5 truncate">
-                            <Share2 className="w-4 h-4 flex-shrink-0" />
+                            <Share2 className="w-4 h-4 flex-shrink-0 text-indigo-400" />
                             <span className="truncate">Bảng Dữ Liệu Chi Tiết</span>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
                         </button>
                       </li>
 
-                      {/* Sub-tab 4: Xuất Báo Cáo Excel */}
                       <li>
                         <button
                           onClick={() => {
@@ -248,13 +259,13 @@ export default function Sidebar({
                             onClose();
                           }}
                           title="Xuất Báo Cáo Excel (CSV)"
-                          className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-white/5 transition cursor-pointer"
+                          className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-emerald-500/10 transition cursor-pointer"
                         >
                           <div className="flex items-center gap-2.5 truncate">
                             <FileSpreadsheet className="w-4 h-4 flex-shrink-0 text-emerald-400" />
                             <span className="truncate">Xuất Báo Cáo Excel</span>
                           </div>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold flex-shrink-0">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-mono font-bold flex-shrink-0">
                             CSV
                           </span>
                         </button>
@@ -264,15 +275,28 @@ export default function Sidebar({
 
                   {/* Sub-tabs in Collapsed Icon Mode */}
                   {isCollapsed && (
-                    <ul className="mt-1 space-y-1">
+                    <ul className="mt-1.5 space-y-1">
+                      <li>
+                        <button
+                          onClick={() => scrollToId('orbitalHubSection', 'orbital')}
+                          title="Orbital Traffic"
+                          className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
+                            activeTab === 'orbital'
+                              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/40'
+                              : 'text-slate-400 hover:text-cyan-200 hover:bg-cyan-500/10'
+                          }`}
+                        >
+                          <Orbit className="w-4 h-4 text-cyan-400" />
+                        </button>
+                      </li>
                       <li>
                         <button
                           onClick={() => scrollToId('conversionSection', 'conversion')}
                           title="Tỷ Lệ Tải & Thiết Bị"
                           className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
                             activeTab === 'conversion'
-                              ? 'bg-[#5969ff] text-white shadow-sm'
-                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/40'
+                              : 'text-slate-400 hover:text-cyan-200 hover:bg-cyan-500/10'
                           }`}
                         >
                           <Download className="w-4 h-4 text-sky-400" />
@@ -284,8 +308,8 @@ export default function Sidebar({
                           title="Hiệu Quả 4 Game"
                           className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
                             activeTab === 'games'
-                              ? 'bg-[#5969ff] text-white shadow-sm'
-                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/40'
+                              : 'text-slate-400 hover:text-cyan-200 hover:bg-cyan-500/10'
                           }`}
                         >
                           <Trophy className="w-4 h-4 text-amber-400" />
@@ -297,11 +321,11 @@ export default function Sidebar({
                           title="Bảng Dữ Liệu Chi Tiết"
                           className={`w-full flex items-center justify-center p-2 rounded-lg text-xs transition cursor-pointer ${
                             activeTab === 'table'
-                              ? 'bg-[#5969ff] text-white shadow-sm'
-                              : 'text-slate-400 hover:text-white hover:bg-white/5'
+                              ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-400/40'
+                              : 'text-slate-400 hover:text-cyan-200 hover:bg-cyan-500/10'
                           }`}
                         >
-                          <Share2 className="w-4 h-4" />
+                          <Share2 className="w-4 h-4 text-indigo-400" />
                         </button>
                       </li>
                       <li>
@@ -311,7 +335,7 @@ export default function Sidebar({
                             onClose();
                           }}
                           title="Xuất Báo Cáo Excel (CSV)"
-                          className="w-full flex items-center justify-center p-2 rounded-lg text-xs text-emerald-400 hover:text-emerald-300 hover:bg-white/5 transition cursor-pointer"
+                          className="w-full flex items-center justify-center p-2 rounded-lg text-xs text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition cursor-pointer"
                         >
                           <FileSpreadsheet className="w-4 h-4" />
                         </button>
@@ -322,26 +346,26 @@ export default function Sidebar({
               </ul>
             </div>
 
-            {/* Section 2: TRẠNG THÁI HỆ THỐNG */}
+            {/* Section 2: SYSTEM STATUS */}
             <div>
               {isCollapsed ? (
                 <div
                   title="Google Sheets: Live Sync 8s"
-                  className="hidden lg:flex items-center justify-center p-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-emerald-400"
+                  className="hidden lg:flex items-center justify-center p-2 rounded-xl bg-cyan-500/5 border border-cyan-500/20 text-emerald-400"
                 >
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse" />
                 </div>
               ) : (
                 <>
-                  <div className="px-3 pb-2 text-[11px] font-bold text-slate-400/80 uppercase tracking-wider">
-                    Hệ Thống
+                  <div className="px-3 pb-2 text-[10px] font-mono font-bold text-cyan-400/70 uppercase tracking-[0.2em]">
+                    System Status
                   </div>
-                  <div className="p-3 rounded-xl bg-white/[0.04] border border-white/[0.06] space-y-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-400 font-medium">Google Sheets:</span>
+                  <div className="p-3 rounded-xl bg-[#07152e]/80 border border-cyan-500/20 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-mono">
+                      <span className="text-slate-400">Sheets Link:</span>
                       <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                        <span>Live 8s</span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981] animate-pulse" />
+                        <span>ONLINE 8s</span>
                       </div>
                     </div>
                     <div className="text-[11px] text-slate-400 leading-tight">
@@ -355,7 +379,7 @@ export default function Sidebar({
         </div>
 
         {/* Bottom: User Profile & Logout */}
-        <div className="p-3.5 border-t border-[#222144]/60 bg-[#0c0a24]">
+        <div className="p-3.5 border-t border-cyan-500/20 bg-[#030816]">
           <div
             className={`flex items-center ${
               isCollapsed
@@ -369,16 +393,12 @@ export default function Sidebar({
               }`}
               title="Admin Manager (admin@lamongame.com)"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#5969ff] to-cyan-400 flex items-center justify-center text-white font-bold text-xs shadow-md flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-400 to-indigo-500 flex items-center justify-center text-slate-950 font-black text-xs shadow-[0_0_12px_rgba(34,211,238,0.35)] flex-shrink-0">
                 A
               </div>
               <div className={isCollapsed ? 'lg:hidden' : 'block min-w-0'}>
-                <div className="text-xs font-bold text-white truncate">
-                  Admin Manager
-                </div>
-                <div className="text-[10px] text-slate-400 truncate">
-                  admin@lamongame.com
-                </div>
+                <div className="text-xs font-bold text-white truncate">Admin Manager</div>
+                <div className="text-[10px] text-cyan-300/70 truncate">admin@lamongame.com</div>
               </div>
             </div>
 
